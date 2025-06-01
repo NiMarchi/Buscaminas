@@ -1,6 +1,5 @@
-#pragma once
-#ifndef _CONSTANTS_H_
-#define _CONSTANTS_H_
+#ifndef CONSTANTES_H
+#define CONSTANTES_H
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720

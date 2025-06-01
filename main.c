@@ -5,17 +5,16 @@
 #include <stdbool.h>
 #include <string.h>
 #include <Windows.h>
+
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
-#include "initField.h"
-#include "fillField.h"
-#include "printEngine.h"
-#include "sumMineField.h"
-#include "openSpaceField.h"
-#include "game.h"
-#include "constants.h"
+
+#include "constantes.h"
+#include "campo.h"
+#include "impresion.h"
+#include "juego.h"
 
 // Variables globales de SDL.
 SDL_Window *window = NULL;

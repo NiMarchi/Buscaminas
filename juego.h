@@ -1,11 +1,12 @@
-#pragma once
-#ifndef _GAME_H_
-#define _GAME_H_
+#ifndef JUEGO_H
+#define JUEGO_H
 
 #include <stdbool.h>
+
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include "initField.h"
+
+#include "campo.h"
 
 bool checkWin(const field_t *f, const field_t *c);
 bool checkLose(const field_t *f, const field_t *c, const int *inpt);

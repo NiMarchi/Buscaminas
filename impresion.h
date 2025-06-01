@@ -1,8 +1,8 @@
-#pragma once
-#ifndef _PRINTFIELD_H_
-#define _PRINTFIELD_H_
+#ifndef IMPRESION_H
+#define IMPRESION_H
 
 #include <stdbool.h>
+
 #include <SDL.h>
 #include <SDL_ttf.h>
 

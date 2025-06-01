@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdbool.h>
+
 #include <SDL.h>
-#include "printEngine.h"
-#include "game.h"
-#include "constants.h"
+
+#include "constantes.h"
+#include "impresion.h"
+#include "juego.h"
 
 // Imprime una línea de alerta.
 void printAlert(SDL_Renderer *renderer, SDL_Surface *alertTextSurface, SDL_Texture *alertTextTexture, TTF_Font *font, const SDL_Color color) {
