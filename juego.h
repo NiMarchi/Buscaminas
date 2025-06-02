@@ -3,17 +3,12 @@
 
 #include <stdbool.h>
 
-#include <SDL.h>
-#include <SDL_ttf.h>
-
 #include "campo.h"
 
 bool checkWin(const field_t *f, const field_t *c);
 bool checkLose(const field_t *f, const field_t *c, const int *inpt);
-void printFinish(SDL_Renderer *renderer, SDL_Surface *finaleTextSurface, SDL_Texture *finaleTextTexture, TTF_Font *font, SDL_Color color, bool win);
-void printTitle(SDL_Renderer *renderer, SDL_Surface *titleTextSurface, SDL_Texture *titleTextTexture, TTF_Font *font, SDL_Color color);
 char* substring(char *destination, const char *source, int beg, int n);
-void setup_stage(const int w, const int h, const int m);
+void setup_stage(int w, int h, int m);
 void wait_interval();
 void update();
 void render();

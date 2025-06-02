@@ -5,98 +5,59 @@
 
 #include "constantes.h"
 #include "impresion.h"
-#include "juego.h"
+
+// Función auxiliar para renderizar texto sobre un rectángulo.
+void renderTextBox(SDL_Renderer *renderer, TTF_Font *font, const SDL_Color color, const SDL_Rect *rect, const char *text, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+	SDL_SetRenderDrawColor(renderer, r, g, b, a);
+	SDL_RenderFillRect(renderer, rect);
+
+	SDL_Surface *surface = TTF_RenderText_Blended(font, text, color);
+	if (!surface) return;
+
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+	if (!texture) {
+		SDL_FreeSurface(surface);
+		return;
+	}
+
+	SDL_RenderCopy(renderer, texture, NULL, rect);
+	SDL_FreeSurface(surface);
+	SDL_DestroyTexture(texture);
+}
 
 // Imprime una línea de alerta.
-void printAlert(SDL_Renderer *renderer, SDL_Surface *alertTextSurface, SDL_Texture *alertTextTexture, TTF_Font *font, const SDL_Color color) {
-	const int length = snprintf(NULL, 0, "%s", ALERT);
-	char* aux = malloc(length + 1);
+void printAlert(SDL_Renderer *renderer, TTF_Font *font, const SDL_Color color) {
 	const SDL_Rect alert_banner = {
-		(int)ALERT_BANNER_X,
-		(int)ALERT_BANNER_Y,
-		(int)ALERT_BANNER_W,
-		(int)ALERT_BANNER_H
+		ALERT_BANNER_X, ALERT_BANNER_Y,
+		ALERT_BANNER_W, ALERT_BANNER_H
 	};
-
-	snprintf(aux, length + 1, "%s", ALERT);
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 127);
-
-	SDL_RenderFillRect(renderer, &alert_banner);
-
-	alertTextSurface = TTF_RenderText_Blended(font, aux, color);
-	alertTextTexture = SDL_CreateTextureFromSurface(renderer, alertTextSurface);
-	SDL_RenderCopy(renderer, alertTextTexture, NULL, &alert_banner);
-	SDL_FreeSurface(alertTextSurface);
-	SDL_DestroyTexture(alertTextTexture);
+	renderTextBox(renderer, font, color, &alert_banner, ALERT, 255, 0, 0, 127);
 }
 
 // Imprime una línea de victoria/derrota.
-void printFinish(SDL_Renderer *renderer, SDL_Surface *finaleTextSurface, SDL_Texture *finaleTextTexture, TTF_Font *font, const SDL_Color color, const bool win) {
-	char *aux;
-	int length;
+void printFinish(SDL_Renderer *renderer, TTF_Font *font, const SDL_Color color, const bool win) {
 	const SDL_Rect finish_banner = {
-		(int)FINISH_BANNER_X,
-		(int)FINISH_BANNER_Y,
-		(int)FINISH_BANNER_W,
-		(int)FINISH_BANNER_H
+		FINISH_BANNER_X, FINISH_BANNER_Y,
+		FINISH_BANNER_W, FINISH_BANNER_H
 	};
 
 	if (win) {
-		length = snprintf(NULL, 0, "%s", WIN_TEXT);
-		aux = malloc(length + 1);
-		snprintf(aux, length + 1, "%s", WIN_TEXT);
-		SDL_SetRenderDrawColor(renderer, 0, 255, 0, 127);
+		renderTextBox(renderer, font, color, &finish_banner, WIN_TEXT, 0, 255, 0, 127);
 	} else {
-		length = snprintf(NULL, 0, "%s", LOSE_TEXT);
-		aux = malloc(length + 1);
-		snprintf(aux, length + 1, "%s", LOSE_TEXT);
-		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 127);
+		renderTextBox(renderer, font, color, &finish_banner, LOSE_TEXT, 255, 0, 0, 127);
 	}
-
-	SDL_RenderFillRect(renderer, &finish_banner);
-
-	finaleTextSurface = TTF_RenderText_Blended(font, aux, color);
-	finaleTextTexture = SDL_CreateTextureFromSurface(renderer, finaleTextSurface);
-	SDL_RenderCopy(renderer, finaleTextTexture, NULL, &finish_banner);
-	SDL_FreeSurface(finaleTextSurface);
-	SDL_DestroyTexture(finaleTextTexture);
 }
 
 // Imprime título con versión.
-void printTitle(SDL_Renderer *renderer, SDL_Surface *aboutTextSurface, SDL_Texture *aboutTextTexture, TTF_Font *font, const SDL_Color color) {
-	const int length = snprintf(NULL, 0, "%s", AUTHOR);
-	char *aux = malloc(length + 1);
+void printTitle(SDL_Renderer *renderer, TTF_Font *font, const SDL_Color color) {
 	const SDL_Rect title_banner = {
-		(int)TITLE_X,
-		(int)TITLE_Y,
-		(int)TITLE_W,
-		(int)TITLE_H
+		TITLE_X, TITLE_Y,
+		TITLE_W, TITLE_H
 	};
-
-	snprintf(aux, length + 1, "%s", AUTHOR);
-
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-	SDL_RenderFillRect(renderer, &title_banner);
-
-	aboutTextSurface = TTF_RenderText_Blended(font, aux, color);
-	aboutTextTexture = SDL_CreateTextureFromSurface(renderer, aboutTextSurface);
-	SDL_RenderCopy(renderer, aboutTextTexture, NULL, &title_banner);
-	SDL_FreeSurface(aboutTextSurface);
-	SDL_DestroyTexture(aboutTextTexture);
+	renderTextBox(renderer, font, color, &title_banner, AUTHOR, 0, 0, 0, 0);
 }
 
-void printTextLine(SDL_Renderer *renderer, SDL_Surface *formTextSurface, SDL_Texture *formTextTexture, TTF_Font *font, const SDL_Color color, const SDL_Rect rect, char *text, const int r, const int g, const int b, const int a) {
-	const int length = snprintf(NULL, 0, "%s", text);
-	char *aux = malloc(length + 1);
-
-	snprintf(aux, length + 1, "%s", text);
-
-	SDL_SetRenderDrawColor(renderer, r, g, b, a);
-	SDL_RenderFillRect(renderer, &rect);
-
-	formTextSurface = TTF_RenderText_Blended(font, aux, color);
-	formTextTexture = SDL_CreateTextureFromSurface(renderer, formTextSurface);
-	SDL_RenderCopy(renderer, formTextTexture, NULL, &rect);
-	SDL_FreeSurface(formTextSurface);
-	SDL_DestroyTexture(formTextTexture);
+// Imprime una línea de texto genérica.
+void printTextLine(SDL_Renderer *renderer, TTF_Font *font, const SDL_Color color, const SDL_Rect rect, const char *text, const int r, const int g, const int b, const int a) {
+	renderTextBox(renderer, font, color, &rect, text, r, g, b, a);
 }
