@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "constantes.h"
 #include "campo.h"
@@ -9,42 +10,33 @@
 
 // Comprueba si el jugador venció el juego.
 bool checkWin(const field_t *f, const field_t *c) {
-    // Si cada casilla superior está cubierta Y la inferior es una mina, O si la casilla superior tiene una bandera Y la inferior es una mina, O si la casilla superior es igual a la inferior, CONTINÚA. Si no, el jugador aún no ha ganado.
-    for (int i = 1; i < c->x - 1; i++) {
-        for (int j = 1; j < c->y - 1; j++) {
-            if ((c->mat[i][j] == COVER && f->mat[i][j] == MINE) || (c->mat[i][j] == FLAG && f->mat[i][j] == MINE) || (c->mat[i][j] == f->mat[i][j])) {
-                continue;
-            }
-            return false;
-        }
-    }
-    return true;
+	for (int i = 1; i < c->x - 1; i++) {
+		for (int j = 1; j < c->y - 1; j++) {
+			const int cover = c->mat[i][j]; // Valor de la casilla cubierta.
+			const int field = f->mat[i][j]; // Valor de la casilla con mina/pista.
+
+			// Si la casilla está cubierta o marcada, debe haber una mina debajo.
+			// Si la casilla está descubierta, debe coincidir con el campo inferior.
+			if (!((cover == COVER && field == MINE) || (cover == FLAG && field == MINE) || (cover == field))) {
+				return false; // Si alguna condición no se cumple, el jugador aún no ha ganado.
+			}
+		}
+	}
+
+	// Si todas las casillas cumplen con las condiciones, el jugador ha ganado.
+	return true;
 }
 
 // Comprueba si el jugador perdió el juego.
 bool checkLose(const field_t *f, const field_t *c, const int *inpt) {
-    // Si la casilla inferior es una mina Y la casilla superior no es una bandera Y el jugador eligió 'abrir' como movimiento, el jugador pierde.
-    if (f->mat[inpt[0]][inpt[1]] == MINE && c->mat[inpt[0]][inpt[1]] != FLAG && inpt[2] == OPEN_F) {
-        return true;
-    }
-    return false;
+	return f->mat[inpt[0]][inpt[1]] == MINE && c->mat[inpt[0]][inpt[1]] != FLAG && inpt[2] == OPEN_F;
 }
 
 // Función para implementar la función de subcadena en C.
-char *substring(char *destination, const char *source, const int beg, int n) {
-    // Extrae 'n' caracteres de la cadena fuente comenzando desde el índice beg y los copia en la cadena de destino.
-    while (n > 0) {
-        *destination = *(source + beg);
-        destination++;
-        source++;
-        n--;
-    }
-
-    // Cadena de destino de terminación nula.
-    *destination = '\0';
-
-    // Devolver la cadena de destino.
-    return destination;
+char *substring(char *destination, const char *source, const int beg, const int n) {
+	strncpy(destination, source + beg, n);
+	destination[n] = '\0';
+	return destination;
 }
 
 // Inicializa los parámetros del juego.
@@ -64,78 +56,68 @@ void setup_stage(const int w, const int h, const int m) {
     countMines(f); // Calcula la cantidad de minas y llena los vertederos en los alrededores de (minas).
 }
 
-// Cuando finaliza un juego, espera 3 segundos y detiene la música antes de volver al menú principal.
+// Espera un intervalo si el jugador ha ganado o perdido antes de volver al menú principal.
 void wait_interval() {
-    if (win || lose) {
-        SDL_Delay(5000);
-        main_menu_is_running = true;
-        stage_is_running = false;
-        Mix_HaltMusic();
-    }
+	if (win || lose) {
+		SDL_Delay(5000); // Espera 5 segundos.
+		Mix_HaltMusic(); // Detiene la música.
+		main_menu_is_running = true; // Vuelve al menú principal.
+		stage_is_running = false; // Finaliza la etapa de juego.
+	}
 }
 
-// Procesar estados de objetos del juego en el juego.
+// Actualiza el estado del juego por cada frame.
 void update() {
-	// Dormir la ejecución hasta que alcancemos el tiempo de cuadro objetivo en milisegundos.
-	const int time_to_wait = FRAME_TARGET_TIME - (SDL_GetTicks() - last_frame_time);
+    // Calcula el tiempo restante hasta alcanzar el frame objetivo.
+    const int time_to_wait = FRAME_TARGET_TIME - (SDL_GetTicks() - last_frame_time);
 
-	// Solo llama al retraso si somos demasiado rápidos para procesar este cuadro.
-	if (time_to_wait > 0 && time_to_wait <= FRAME_TARGET_TIME) {
-		SDL_Delay(time_to_wait);
-	}
+    // Si el frame se ejecutó más rápido de lo esperado, espera para mantener una tasa de FPS estable.
+    if (time_to_wait > 0 && time_to_wait <= FRAME_TARGET_TIME) {
+        SDL_Delay(time_to_wait);
+    }
 
-	// Obtenga un factor de tiempo delta convertido a segundos para usarlo para actualizar mis objetos.
-	delta_time = (SDL_GetTicks() - last_frame_time) / 1000.0f;
+    // Calcula el tiempo transcurrido (delta) entre frames en segundos.
+    delta_time = (SDL_GetTicks() - last_frame_time) / 1000.0f;
+    last_frame_time = SDL_GetTicks();
 
-	last_frame_time = SDL_GetTicks();
+    // Si el juego está activo y los campos están cargados.
+    if (f && c) {
+        if (canInteract) {
+            openField(f, c, ij_selected[0], ij_selected[1], ij_selected[2], &mineRemainingInt);
+        }
 
-	//TODO: Here is where we can update the state of our objects
+        // Actualiza el contador de minas restantes como cadena.
+        sprintf(mineRemainingStr, "%d", mineRemainingInt);
+        mineRemainingConcat[17] = '\0'; // Reset para evitar basura.
+        strcat(mineRemainingConcat, mineRemainingStr);
 
-	// Si los campos superiores e inferiores aún están asignados, el jugador puede abrir/marcar fichas y luego el juego verifica si ganó o perdió.
-	if (f != NULL && c != NULL) {
-		if (canInteract) {
-			openField(f, c, ij_selected[0], ij_selected[1], ij_selected[2], &mineRemainingInt);
-		}
+        // Verifica si el jugador ganó o perdió.
+        win = checkWin(f, c);
+        lose = checkLose(f, c, ij_selected);
+        canInteract = false;
+    }
 
-		sprintf(mineRemainingStr, "%d", mineRemainingInt); // Transformar la cantidad de mina en una cadena, para su posterior exhibición.
-		mineRemainingConcat[17] = '\0'; // Restablece la cadena para evitar anexiones infinitas.
-		strcat(mineRemainingConcat, mineRemainingStr); // Concatena el número de minas restantes con el texto de información fijo.
+    // Cambia el color del texto de minas restantes según cuántas quedan.
+    if (mineRemainingInt < 0) {
+        colorInfo = (SDL_Color){RED_INFO_NEGATIVE, GREEN_INFO_NEGATIVE, BLUE_INFO_NEGATIVE};
+    } else if (mineRemainingInt > 0) {
+        colorInfo = (SDL_Color){RED_INFO_POSITIVE, GREEN_INFO_POSITIVE, BLUE_INFO_POSITIVE};
+    } else {
+        colorInfo = (SDL_Color){RED_INFO_NEUTRAL, GREEN_INFO_NEUTRAL, BLUE_INFO_NEUTRAL};
+    }
 
-		win = checkWin(f, c);
-		lose = checkLose(f, c, ij_selected);
-		canInteract = canInteract = false;
-	}
+    // Actualiza el desplazamiento del fondo para la animación vertical.
+    if (bgScrollRect1.y > WINDOW_HEIGHT) {
+    	bgScrollRect1.y = 0;
+    }
+    if (bgScrollRect2.y > 0) {
+    	bgScrollRect2.y = -WINDOW_HEIGHT;
+    }
+    bgScrollRect1.y += SLIDING_SPEED;
+    bgScrollRect2.y += SLIDING_SPEED;
 
-	if (mineRemainingInt < 0) {
-		colorInfo.r = RED_INFO_NEGATIVE;
-		colorInfo.g = GREEN_INFO_NEGATIVE;
-		colorInfo.b = BLUE_INFO_NEGATIVE;
-	} else if(mineRemainingInt > 0) {
-		colorInfo.r = RED_INFO_POSITIVE;
-		colorInfo.g = GREEN_INFO_POSITIVE;
-		colorInfo.b = BLUE_INFO_POSITIVE;
-	} else {
-		colorInfo.r = RED_INFO_NEUTRAL;
-		colorInfo.g = GREEN_INFO_NEUTRAL;
-		colorInfo.b = BLUE_INFO_NEUTRAL;
-	}
-
-	// Si el tamaño del fondo de pantalla izquierdo llega al lado más a la derecha, se reinicia al inicio.
-	if (bgScrollRect1.y > WINDOW_HEIGHT) {
-		bgScrollRect1.y = 0;
-	}
-	if(bgScrollRect2.y > 0) {
-		bgScrollRect2.y = -WINDOW_HEIGHT;
-	}
-	bgScrollRect1.y += SLIDING_SPEED; // Diapositiva de fondo 1 hacia abajo.
-	bgScrollRect2.y += SLIDING_SPEED; // Diapositiva de fondo 2 hacia abajo.
-
-	// Cambia el ángulo de presentación.
-	if (angle > 360) {
-		angle = 0;
-	} else {
-		angle++;
-	}
+    // Rota el ángulo del renderizado (Decorativo).
+    angle = (angle > 360) ? 0 : angle + 1;
 }
 
 // Procesar la representación de objetos en el juego.
@@ -404,8 +386,7 @@ void render() {
 		centerFieldX = ((WINDOW_WIDTH / 2) - (c->x * (TILE_SIDE_SIZE + TILE_SPACING)) / 2);
 		centerFieldY = ((WINDOW_HEIGHT / 2) - (c->y * (TILE_SIDE_SIZE + TILE_SPACING)) / 2);
 
-		//TODO: Here is where we can start drawing ou game objects
-
+		// Dibuja los objetos de juego.
 		for (i = 0; i < c->x; i++) {
 			for (j = 0; j < c->y; j++) {
 				xi = (tile.x + tile.w) * i + centerFieldX + X_FINE_ADJUSTEMENT;

@@ -44,17 +44,15 @@ mineAmountTextboxRect, okButtonRect, infoRect, tileSquareRect;
 extern bool game_is_running, stage_is_running, main_menu_is_running, select_menu_is_running;
 extern bool clickedL, clickedR, win, lose, canInteract, showMines, resetIJ, soundEffectPlayed;
 
-extern int last_frame_time, angle;
-extern int length, option, formField;
-extern int alpha1, alpha2, alpha3, alpha4;
-extern int i, j, counter1, counter2, counter3;
-extern int ij_selected[3];
+extern int last_frame_time, angle, mineRemainingInt;
+extern int centerFieldX, centerFieldY, centerFormTextX, centerFormInputX;
 extern int xm, ym, xi, xf, yi, yf;
 extern int button_x, button_y, button_w, button_h;
-extern int w, h, m;
-extern int centerFieldX, centerFieldY, centerFormTextX, centerFormInputX;
-extern int mineRemainingInt;
-
+extern int counter1, counter2, counter3;
+extern int w, h, m, i, j;
+extern int length, formField, option;
+extern int alpha1, alpha2, alpha3, alpha4;
+extern int ij_selected[3];
 extern float delta_time;
 extern char *aux;
 extern char paramInput1[3], paramInput2[3], paramInput3[4], mineRemainingStr[4], mineRemainingConcat[18];
