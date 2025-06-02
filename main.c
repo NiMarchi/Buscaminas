@@ -15,66 +15,7 @@
 #include "campo.h"
 #include "impresion.h"
 #include "juego.h"
-
-// Variables globales de SDL.
-SDL_Window *window = NULL;
-SDL_Renderer *renderer = NULL;
-SDL_Event event;
-
-SDL_Color colorTip = COLOR_TIP;
-SDL_Color colorTitle = COLOR_TITLE;
-SDL_Color colorInfo;
-SDL_Color colorForm = COLOR_FORM;
-SDL_Color colorButton = COLOR_BUTTON;
-SDL_Color colorSelectInput = COLOR_SEL_INPT;
-SDL_Color colorAlert = COLOR_ALERT;
-SDL_Color colorMenuText = COLOR_MENU_TEXT;
-
-TTF_Font *font_main, *font_secondary;
-
-Mix_Music *backgroundMusicMenu, *backgroundMusicStage;
-Mix_Chunk *soundEffectL, *soundEffectR, *soundEffectMine, *soundEffectMenu, *soundEffectVictory;
-
-SDL_Surface *aboutTextSurface, *bgScrollSurface, *menuPresentationSurface, *menuTitlePresentationSurface, *menuButtonTextSurface1,
-*menuButtonTextSurface2, *labelSurface, *textInputSurface, *okButtonSurface, *alertTextSurface, *infoTextSurface, *tileTextSurface,
-*mineIconSurface, *mineBoomIconSurface, *mineDeathIconSurface, *flagIconSurface, *edgeIconSurface, *coverIconSurface, *finaleTextSurface;
-
-SDL_Texture *aboutTextTexture, *bgScrollTexture, *menuPresentationTexture, *menuTitlePresentationTexture, *menuButtonTextTexture1,
-*menuButtonTextTexture2, *labelTexture, *textInputTexture, *okButtonTexture, *alertTextTexture, *infoTextTexture, *tileTextTexture,
-*mineIconTexture, *mineBoomIconTexture, *mineDeathIconTexture, *flagIconTexture, *edgeIconTexture, *coverIconTexture, *finaleTextTexture;
-
-SDL_Rect bgScrollRect1, bgScrollRect2, menuPresentationRect1, menuPresentationRect2, menuTitlePresentationRect, menuButtonRect1,
-menuButtonRect2, widthFieldLabelRect, widthFieldTextboxRect, heightFieldLabelRect, heightFieldTextboxRect, mineAmountLabelRect,
-mineAmountTextboxRect, okButtonRect, infoRect, tileSquareRect;
-
-// Variables globales del juego.
-bool game_is_running = false;
-bool stage_is_running = false;
-bool main_menu_is_running = false;
-bool select_menu_is_running = false;
-bool clickedL = false;
-bool clickedR = false;
-bool win = false;
-bool lose = false;
-bool canInteract = false;
-bool showMines = false;
-bool resetIJ = true;
-bool soundEffectPlayed = false;
-
-int last_frame_time = 0, angle = 0;
-int length, option = RESET_OPTION, formField = 0;
-int alpha1 = ALPHA_UNSELECTED, alpha2 = ALPHA_UNSELECTED, alpha3 = ALPHA_UNSELECTED, alpha4 = ALPHA_UNSELECTED;
-int i, j, counter1 = 1, counter2 = 1, counter3 = 1;
-int ij_selected[3];
-int xm, ym, xi, xf, yi, yf;
-int button_x, button_y, button_w, button_h;
-int w, h, m;
-int centerFieldX, centerFieldY, centerFormTextX, centerFormInputX;
-int mineRemainingInt;
-float delta_time = 0.0f;
-char *aux;
-char paramInput1[3], paramInput2[3], paramInput3[4], mineRemainingStr[4], mineRemainingConcat[18] = MINE_INGAME_INFO;
-field_t *f, *c;
+#include "variables.h"
 
 // Inicializa la ventana.
 bool initialize_window(void) {
