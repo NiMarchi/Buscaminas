@@ -143,6 +143,26 @@ void destroy_window() {
 	SDL_FreeSurface(coverIconSurface);
 	SDL_FreeSurface(finaleTextSurface);
 
+	SDL_DestroyTexture(aboutTextTexture);
+	SDL_DestroyTexture(bgScrollTexture);
+	SDL_DestroyTexture(menuPresentationTexture);
+	SDL_DestroyTexture(menuTitlePresentationTexture);
+	SDL_DestroyTexture(menuButtonTextTexture1);
+	SDL_DestroyTexture(menuButtonTextTexture2);
+	SDL_DestroyTexture(labelTexture);
+	SDL_DestroyTexture(textInputTexture);
+	SDL_DestroyTexture(okButtonTexture);
+	SDL_DestroyTexture(alertTextTexture);
+	SDL_DestroyTexture(infoTextTexture);
+	SDL_DestroyTexture(tileTextTexture);
+	SDL_DestroyTexture(mineIconTexture);
+	SDL_DestroyTexture(mineBoomIconTexture);
+	SDL_DestroyTexture(mineDeathIconTexture);
+	SDL_DestroyTexture(flagIconTexture);
+	SDL_DestroyTexture(edgeIconTexture);
+	SDL_DestroyTexture(coverIconTexture);
+	SDL_DestroyTexture(finaleTextTexture);
+
 	TTF_CloseFont(font_main);
 	TTF_CloseFont(font_secondary);
 	TTF_Quit();
