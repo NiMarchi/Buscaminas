@@ -6,111 +6,121 @@
 #include "constantes.h"
 #include "variables.h"
 
-// Inicializa la ventana.
-bool initialize_window() {
-	// Inicializa SDL, si no puede, emite un mensaje de error.
+// Carga imagen y devuelve superficie.
+SDL_Surface* load_surface(const char* path) {
+	SDL_Surface* surface = IMG_Load(path);
+	if (!surface) {
+		fprintf(stderr, "Error al cargar imagen %s: %s\n", path, IMG_GetError());
+	}
+	return surface;
+}
+
+// Crea textura desde superficie.
+SDL_Texture* create_texture(SDL_Surface* surface) {
+	if (!surface) {
+		return NULL;
+	}
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+	if (!texture) {
+		fprintf(stderr, "Error al crear textura: %s\n", SDL_GetError());
+	}
+	return texture;
+}
+
+// Inicializa todos los subsistemas SDL necesarios.
+bool initialize_sdl_systems() {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-		fprintf(stderr, ERROR_SDL_INIT);
+		fprintf(stderr, "Error al inicializar SDL: %s\n", SDL_GetError());
 		return false;
 	}
-
-	// Crear ventana con esos parámetros.
-	window = SDL_CreateWindow(
-		WINDOW_TITLE, // Título en la barra de título.
-		SDL_WINDOWPOS_CENTERED, // Posición de la pantalla X.
-		SDL_WINDOWPOS_CENTERED, // Posición de la pantalla Y.
-		WINDOW_WIDTH, // Ancho de ventana.
-		WINDOW_HEIGHT, // Altura de la ventana.
-		SDL_WINDOW_ALLOW_HIGHDPI // Bandera para soporte HiDPI.
-	);
-
-	// Si no puede crear la ventana, aparecerá un mensaje de error.
-	if (!window) {
-		fprintf(stderr, ERROR_SDL_WINDOW);
-		return false;
-	}
-
-	// Inicializa el renderizado SDL.
-	renderer = SDL_CreateRenderer(window, -1, 0);
-
-	// Si no puede crear el renderizado, aparecerá un mensaje de error.
-	if (!renderer) {
-		fprintf(stderr, ERROR_SDL_RENDERER);
-		return false;
-	}
-
-	// Inicializa font_main a través de SDL_TTF.
 	if (TTF_Init() != 0) {
-		fprintf(stderr, ERROR_SDL_TTF);
+		fprintf(stderr, "Error al inicializar SDL_ttf: %s\n", TTF_GetError());
 		return false;
 	}
-	font_main = TTF_OpenFont(FONT_PATH_MAIN, FONT_SIZE);
-	font_secondary = TTF_OpenFont(FONT_PATH_SECONDARY, FONT_SIZE);
+	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
+		fprintf(stderr, "Error al inicializar SDL_image: %s\n", IMG_GetError());
+		return false;
+	}
+	if (Mix_OpenAudio(44800, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+		fprintf(stderr, "Error al inicializar SDL_mixer: %s\n", Mix_GetError());
+		return false;
+	}
+	return true;
+}
 
-	// Establece el canal alfa para la fusión.
+// Función principal de inicialización.
+bool initialize_window() {
+	if (!initialize_sdl_systems()) {
+		return false;
+	}
+
+	window = SDL_CreateWindow(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
+	if (!window) {
+		fprintf(stderr, "Error al crear la ventana: %s\n", SDL_GetError());
+		return false;
+	}
+
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	if (!renderer) {
+		fprintf(stderr, "Error al crear el renderer: %s\n", SDL_GetError());
+		return false;
+	}
+
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
-	// Cargar soporte para formatos de imagen PNG.
-	const int flags = IMG_INIT_PNG;
-	const int started = IMG_Init(flags);
-	if ((started & flags) != flags) {
-		fprintf(stderr, ERROR_SDL_INIT_PNG);
+	// Carga fuentes.
+	font_main = TTF_OpenFont(FONT_PATH_MAIN, FONT_SIZE);
+	font_secondary = TTF_OpenFont(FONT_PATH_SECONDARY, FONT_SIZE);
+	if (!font_main || !font_secondary) {
+		fprintf(stderr, "Error al cargar fuentes.\n");
 		return false;
 	}
 
-	// Establece íconos e imágenes para los activos.
-	bgScrollSurface = IMG_Load(BACKGROUND_WALLPAPER);
-	menuPresentationSurface = IMG_Load(PRESENTATION);
-	menuButtonTextSurface1 = IMG_Load(NEW_OK_BUTTON);
-	menuButtonTextSurface2 = IMG_Load(QUIT_BUTTON);
-	okButtonSurface = IMG_Load(NEW_OK_BUTTON);
-	mineBoomIconSurface = IMG_Load(MINE_BOOM_ICON);
-	mineDeathIconSurface = IMG_Load(MINE_DEATH_ICON);
-	edgeIconSurface = IMG_Load(EDGE_ICON);
-	flagIconSurface = IMG_Load(FLAG_ICON);
-	coverIconSurface = IMG_Load(COVER_ICON);
+	// Carga superficies y texturas.
+	bgScrollSurface = load_surface(BACKGROUND_WALLPAPER);
+	bgScrollTexture = create_texture(bgScrollSurface);
 
-	bgScrollTexture = SDL_CreateTextureFromSurface(renderer, bgScrollSurface);
-	menuPresentationTexture = SDL_CreateTextureFromSurface(renderer, menuPresentationSurface);
-	menuButtonTextTexture1 = SDL_CreateTextureFromSurface(renderer, menuButtonTextSurface1);
-	menuButtonTextTexture2 = SDL_CreateTextureFromSurface(renderer, menuButtonTextSurface2);
-	okButtonTexture = SDL_CreateTextureFromSurface(renderer, okButtonSurface);
-	mineDeathIconTexture = SDL_CreateTextureFromSurface(renderer, mineDeathIconSurface);
-	edgeIconTexture = SDL_CreateTextureFromSurface(renderer, edgeIconSurface);
-	flagIconTexture = SDL_CreateTextureFromSurface(renderer, flagIconSurface);
-	coverIconTexture = SDL_CreateTextureFromSurface(renderer, coverIconSurface);
-	mineBoomIconTexture = SDL_CreateTextureFromSurface(renderer, mineBoomIconSurface);
+	menuPresentationSurface = load_surface(PRESENTATION);
+	menuPresentationTexture = create_texture(menuPresentationSurface);
 
-	// Si no puede crear audio, aparecerá un mensaje de error.
-	if (Mix_OpenAudio(44800, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
-		fprintf(stderr, ERROR_SDL_AUDIO);
-		return false;
-	}
-	backgroundMusicMenu = Mix_LoadMUS(BACKGROUND_MUSIC_MENU); // Loads background music in menus.
-	backgroundMusicStage = Mix_LoadMUS(BACKGROUND_MUSIC_STAGE); // Loads background music in stage.
-	soundEffectL = Mix_LoadWAV(SOUND_EFFECT_L); // Loads sound effect for left mouse click.
-	soundEffectR = Mix_LoadWAV(SOUND_EFFECT_R); // Loads sound effect for right mouse click.
-	soundEffectMenu = Mix_LoadWAV(SOUND_EFFECT_MENU); // Loads sound effect for menu hover/click.
-	soundEffectMine = Mix_LoadWAV(SOUND_EFFECT_MINE); // Loads sound effect for defeat.
-	soundEffectVictory = Mix_LoadWAV(SOUND_EFFECT_VICTORY); // Loads sound effect for victory.
+	menuButtonTextSurface1 = load_surface(NEW_OK_BUTTON);
+	menuButtonTextTexture1 = create_texture(menuButtonTextSurface1);
 
-	// Inicializa las coordenadas de la animación de fondo.
-	bgScrollRect1.x = 0;
-	bgScrollRect1.y = 0;
-	bgScrollRect1.w = WINDOW_WIDTH;
-	bgScrollRect1.h = WINDOW_HEIGHT;
-	bgScrollRect2.x = 0;
-	bgScrollRect2.y = -WINDOW_HEIGHT;
-	bgScrollRect2.w = WINDOW_WIDTH;
-	bgScrollRect2.h = WINDOW_HEIGHT;
+	menuButtonTextSurface2 = load_surface(QUIT_BUTTON);
+	menuButtonTextTexture2 = create_texture(menuButtonTextSurface2);
 
-	// Inicializa las coordenadas de información de cantidad de minas en el juego.
-	infoRect.x = 0;
-	infoRect.y = 0;
-	infoRect.w = 200;
-	infoRect.h = 20;
+	okButtonSurface = load_surface(NEW_OK_BUTTON);
+	okButtonTexture = create_texture(okButtonSurface);
 
-	// Devuelve verdadero si la función inicializó correctamente.
+	mineBoomIconSurface = load_surface(MINE_BOOM_ICON);
+	mineBoomIconTexture = create_texture(mineBoomIconSurface);
+
+	mineDeathIconSurface = load_surface(MINE_DEATH_ICON);
+	mineDeathIconTexture = create_texture(mineDeathIconSurface);
+
+	edgeIconSurface = load_surface(EDGE_ICON);
+	edgeIconTexture = create_texture(edgeIconSurface);
+
+	flagIconSurface = load_surface(FLAG_ICON);
+	flagIconTexture = create_texture(flagIconSurface);
+
+	coverIconSurface = load_surface(COVER_ICON);
+	coverIconTexture = create_texture(coverIconSurface);
+
+	// Carga música y efectos de sonido.
+	backgroundMusicMenu = Mix_LoadMUS(BACKGROUND_MUSIC_MENU);
+	backgroundMusicStage = Mix_LoadMUS(BACKGROUND_MUSIC_STAGE);
+	soundEffectL = Mix_LoadWAV(SOUND_EFFECT_L);
+	soundEffectR = Mix_LoadWAV(SOUND_EFFECT_R);
+	soundEffectMenu = Mix_LoadWAV(SOUND_EFFECT_MENU);
+	soundEffectMine = Mix_LoadWAV(SOUND_EFFECT_MINE);
+	soundEffectVictory = Mix_LoadWAV(SOUND_EFFECT_VICTORY);
+
+	// Inicializa rectángulos.
+	bgScrollRect1 = (SDL_Rect){0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
+	bgScrollRect2 = (SDL_Rect){0, -WINDOW_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT};
+	infoRect = (SDL_Rect){0, 0, 200, 20};
+
 	return true;
 }
 
