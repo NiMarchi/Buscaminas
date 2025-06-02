@@ -33,7 +33,7 @@ set(SDL2_MIXER_INCLUDE_DIR "${SDL2_MIXER_PATH}/include/SDL2")
 include_directories(${SDL2_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIR})
 
 # Ejecutable
-add_executable(Buscaminas main.c constantes.h campo.c campo.h impresion.c impresion.h juego.c juego.h variables.c variables.h)
+add_executable(Buscaminas main.c constantes.h campo.c campo.h impresion.c impresion.h juego.c juego.h menu.c menu.h variables.c variables.h ventana.c ventana.h)
 
 # Linkear librerías SDL2 y forzar consola
 target_link_libraries(Buscaminas -mconsole ${SDL2_LIBRARY} ${SDL2_TTF_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY})
