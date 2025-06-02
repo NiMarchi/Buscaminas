@@ -2,233 +2,219 @@
 #include "juego.h"
 #include "variables.h"
 
-// Inicializa los parámetros del menú.
 void setup_main_menu() {
-	// Establece 1 tamaño de imagen de presentación.
-	menuPresentationRect1.w = 128;
+	// Constantes de tamaño.
+	const int icon_size = 128;
+	const int title_width = 750;
+	const int title_height = 128;
+
+	// Imagen de presentación izquierda.
+	menuPresentationRect1.w = icon_size;
+	menuPresentationRect1.h = icon_size;
 	menuPresentationRect1.x = WINDOW_WIDTH / 16;
-	menuPresentationRect1.h = 128;
-	menuPresentationRect1.y = WINDOW_HEIGHT / 4 - menuPresentationRect1.h / 2;
+	menuPresentationRect1.y = WINDOW_HEIGHT / 4 - icon_size / 2;
 
-	// Establece el tamaño de la imagen de presentación en 2.
-	menuPresentationRect2.w = 128;
+	// Imagen de presentación derecha.
+	menuPresentationRect2.w = icon_size;
+	menuPresentationRect2.h = icon_size;
 	menuPresentationRect2.x = WINDOW_WIDTH / 1.2;
-	menuPresentationRect2.h = 128;
-	menuPresentationRect2.y = WINDOW_HEIGHT / 4 - menuPresentationRect1.h / 2;
+	menuPresentationRect2.y = menuPresentationRect1.y;
 
-	// Establece el tamaño del título de la presentación.
-	menuTitlePresentationRect.w = 750;
+	// Título de presentación.
+	menuTitlePresentationRect.w = title_width;
+	menuTitlePresentationRect.h = title_height;
 	menuTitlePresentationRect.x = WINDOW_WIDTH / 5;
-	menuTitlePresentationRect.h = 128;
-	menuTitlePresentationRect.y = WINDOW_HEIGHT / 4 - menuTitlePresentationRect.h / 2;
+	menuTitlePresentationRect.y = WINDOW_HEIGHT / 4 - title_height / 2;
 
-	// Establece el tamaño del botón.
+	// Botón (Centralizado).
 	button_x = BUTTON_X;
 	button_y = BUTTON_Y;
 	button_w = BUTTON_W;
 	button_h = BUTTON_H;
 
-	// Nueva posición del botón del juego.
-	menuButtonRect1.x = button_x + ((WINDOW_WIDTH / 2) - button_w / 2);
-	menuButtonRect1.y = button_y + ((WINDOW_HEIGHT / 2) - button_h / 3);
+	// Botón "Nuevo juego".
 	menuButtonRect1.w = button_w;
 	menuButtonRect1.h = button_h;
+	menuButtonRect1.x = button_x + ((WINDOW_WIDTH - button_w) / 2);
+	menuButtonRect1.y = button_y + ((WINDOW_HEIGHT / 2) - button_h / 3);
 
-	// Posición del botón para salir del juego.
-	menuButtonRect2.x = menuButtonRect1.x;
-	menuButtonRect2.y = menuButtonRect1.y + BUTTON_SPACING;
-	menuButtonRect2.w = button_w;
-	menuButtonRect2.h = button_h;
+	// Botón "Salir".
+	menuButtonRect2 = menuButtonRect1;
+	menuButtonRect2.y += BUTTON_SPACING;
 }
 
-// Procesar las entradas del usuario mediante el mouse/teclado en el menú.
+// Función auxiliar para cerrar el juego y salir de todos los estados.
+void handle_quit() {
+	game_is_running = false;
+	main_menu_is_running = false;
+	select_menu_is_running = false;
+	stage_is_running = false;
+}
+
+// Función auxiliar para manejar el estado de los botones del mouse.
+void handle_mouse_button(const SDL_Event *event, const bool pressed) {
+	if (event->button.button == SDL_BUTTON_LEFT) {
+		clickedL = pressed;
+	}
+	if (event->button.button == SDL_BUTTON_RIGHT) {
+		clickedR = pressed;
+	}
+}
+
+// Función principal para procesar la entrada del usuario.
 void process_input() {
+	// Inicia la entrada de texto (Para SDL_TEXTINPUT).
 	SDL_StartTextInput();
+
 	while (SDL_PollEvent(&event)) {
-		// Si el menú principal está ejecutándose...
-		if (main_menu_is_running && !select_menu_is_running && !stage_is_running) {
+		// Determinar en qué estado del juego estamos.
+		const bool in_main_menu = main_menu_is_running && !select_menu_is_running && !stage_is_running;
+		const bool in_select_menu = !main_menu_is_running && select_menu_is_running && !stage_is_running;
+		const bool in_stage = !main_menu_is_running && !select_menu_is_running && stage_is_running;
+
+		// Estado: Menú principal.
+		if (in_main_menu) {
+			// Reiniciar variables del juego.
 			showMines = false;
 			resetIJ = true;
-			win = false;
-			lose = false;
-			ij_selected[0] = 0;
-			ij_selected[1] = 0;
-			ij_selected[2] = 0;
+			win = lose = false;
+			ij_selected[0] = ij_selected[1] = ij_selected[2] = 0;
 			counter1 = counter2 = counter3 = formField = 0;
+
+			// Limpiar los campos de entrada.
 			memset(paramInput1, 0, sizeof paramInput1);
 			memset(paramInput2, 0, sizeof paramInput2);
 			memset(paramInput3, 0, sizeof paramInput3);
 
-			// Si la música del menú de fondo no se reproduce, comienza a reproducirse.
+			// Reproducir música del menú si no está sonando.
 			if (!Mix_PlayingMusic()) {
 				Mix_PlayMusic(backgroundMusicMenu, -1);
 			}
+		}
 
-			// ... Esperar un evento de entrada.
-			switch (event.type) {
-				// Si se hace clic en el botón X de la ventana, se cierra.
-				case SDL_QUIT:
-					game_is_running = false;
-					main_menu_is_running = false;
-					select_menu_is_running = false;
-					stage_is_running = false;
-					break;
-				// Si se presiona una tecla...
-				case SDL_KEYDOWN:
-					// ... Y es la tecla Escape, para salir del juego.
-					if (event.key.keysym.sym == SDLK_ESCAPE) {
-						game_is_running = false;
-						main_menu_is_running = false;
-						select_menu_is_running = false;
-						stage_is_running = false;
-					}
-					// ... Y es la flecha hacia abajo, vaya al botón de abajo.
-					if (event.key.keysym.sym == SDLK_DOWN && option < 1) {
-						option++;
-					}
-					// ... Y es la flecha hacia arriba, vaya al botón de arriba.
-					if (event.key.keysym.sym == SDLK_UP && option > 0) {
-						option--;
-					}
-					// ... Y es el Retorno, selecciona ...
-					if (event.key.keysym.sym == SDLK_RETURN) {
-						// ... El nuevo botón de juego.
-						if (option == 0) {
-							option = RESET_OPTION;
-							main_menu_is_running = false;
-							select_menu_is_running = true;
-							stage_is_running = false;
-						} else if (option == 1) {
-							// ... El botón para salir del juego.
-							game_is_running = false;
-							main_menu_is_running = false;
+		// Procesar eventos.
+		switch (event.type) {
+			// Evento: Cierre de ventana.
+			case SDL_QUIT:
+				handle_quit();
+				break;
+
+			// Evento: Tecla presionada.
+			case SDL_KEYDOWN:
+				switch (event.key.keysym.sym) {
+					// Tecla ESCAPE.
+					case SDLK_ESCAPE:
+						if (in_stage) {
+							Mix_HaltMusic(); // Detener música del escenario.
+							main_menu_is_running = true;
 							select_menu_is_running = false;
 							stage_is_running = false;
-						}
-					}
-					break;
-				// Si se presiona el botón izquierdo del ratón, se activa su variable.
-				case SDL_MOUSEBUTTONDOWN:
-					clickedL = event.button.button == SDL_BUTTON_LEFT;
-					break;
-				// Si se suelta el botón izquierdo del ratón, se desactiva su variable.
-				case SDL_MOUSEBUTTONUP:
-					clickedL = !event.button.button == SDL_BUTTON_LEFT;
-					break;
-				default:
-					break;
-			}
-		} else if (!main_menu_is_running && select_menu_is_running && !stage_is_running) {
-			// Si el menú de selección está en ejecución...
-			switch (event.type) {
-				// Si se hace clic en el botón X de la ventana, se cierra.
-				case SDL_QUIT:
-					game_is_running = false;
-					main_menu_is_running = false;
-					select_menu_is_running = false;
-					stage_is_running = false;
-					break;
-					// Si se presiona una tecla...
-				case SDL_KEYDOWN:
-					// ... Y es la tecla Escape, regresa al menú principal.
-					if (event.key.keysym.sym == SDLK_ESCAPE) {
-						option = RESET_OPTION;
-						main_menu_is_running = true;
-						select_menu_is_running = false;
-						stage_is_running = false;
-					}
-					// ... Y es la flecha hacia abajo, vaya a la opción de abajo.
-					if (event.key.keysym.sym == SDLK_DOWN && option < 3) {
-						formField++;
-						option++;
-					}
-					// ... Y es la flecha hacia arriba, ve a la opción de arriba.
-					if (event.key.keysym.sym == SDLK_UP && option > 0) {
-						formField--;
-						option--;
-					}
-					if (event.key.keysym.sym == SDLK_BACKSPACE && strlen(paramInput1) > 0 && (formField == 0 || option == 0)) {
-						substring(paramInput1, paramInput1, 0, strlen(paramInput1) - 1);
-						counter1 -= TEXT_BOX_FINE_ADJUSTMENT;
-					} else if (event.key.keysym.sym == SDLK_BACKSPACE && strlen(paramInput2) > 0 && (formField == 1 || option == 1)) {
-						substring(paramInput2, paramInput2, 0, strlen(paramInput2) - 1);
-						counter2 -= TEXT_BOX_FINE_ADJUSTMENT;
-					} else if (event.key.keysym.sym == SDLK_BACKSPACE && strlen(paramInput3) > 0 && (formField == 2 || option == 2)) {
-						substring(paramInput3, paramInput3, 0, strlen(paramInput3) - 1);
-						counter3 -= TEXT_BOX_FINE_ADJUSTMENT;
-					}
-					break;
-				case SDL_TEXTINPUT:
-					if (event.text.text[0] != '0' && event.text.text[0] != '1' && event.text.text[0] != '2' && event.text.text[0] != '3' && event.text.text[0] != '4' && event.text.text[0] != '5' && event.text.text[0] != '6' && event.text.text[0] != '7' && event.text.text[0] != '8' && event.text.text[0] != '9') {
 
-					} else {
-						if (paramInput1[1] == '\0' && (formField == 0 || option == 0)) {
+							// Reproducir música del menú.
+							if (!Mix_PlayingMusic()) {
+								Mix_PlayMusic(backgroundMusicMenu, -1);
+							}
+						} else if (in_select_menu) {
+							option = RESET_OPTION;
+							main_menu_is_running = true;
+							select_menu_is_running = false;
+						} else {
+							handle_quit();
+						}
+						break;
+
+					// Flecha hacia abajo.
+					case SDLK_DOWN:
+						if (option < (in_main_menu ? 1 : 3)) {
+							option++;
+							if (in_select_menu) formField++;
+						}
+						break;
+
+					// Flecha hacia arriba.
+					case SDLK_UP:
+						if (option > 0) {
+							option--;
+							if (in_select_menu) formField--;
+						}
+						break;
+
+					// Tecla ENTER.
+					case SDLK_RETURN:
+						if (in_main_menu) {
+							if (option == 0) {
+								option = RESET_OPTION;
+								main_menu_is_running = false;
+								select_menu_is_running = true;
+							} else if (option == 1) {
+								handle_quit();
+							}
+						}
+						break;
+
+					// Tecla BACKSPACE (Borrar caracteres).
+					case SDLK_BACKSPACE:
+						if (in_select_menu) {
+							if ((formField == 0 || option == 0) && strlen(paramInput1) > 0) {
+								substring(paramInput1, paramInput1, 0, (int)strlen(paramInput1) - 1);
+								counter1 -= TEXT_BOX_FINE_ADJUSTMENT;
+							} else if ((formField == 1 || option == 1) && strlen(paramInput2) > 0) {
+								substring(paramInput2, paramInput2, 0, (int)strlen(paramInput2) - 1);
+								counter2 -= TEXT_BOX_FINE_ADJUSTMENT;
+							} else if ((formField == 2 || option == 2) && strlen(paramInput3) > 0) {
+								substring(paramInput3, paramInput3, 0, (int)strlen(paramInput3) - 1);
+								counter3 -= TEXT_BOX_FINE_ADJUSTMENT;
+							}
+						}
+						break;
+					default:
+						break;
+				}
+				break;
+
+			// Evento: Entrada de texto (Sólo números permitidos).
+			case SDL_TEXTINPUT:
+				if (in_select_menu) {
+					const char c = event.text.text[0];
+					if (c >= '0' && c <= '9') {
+						if ((formField == 0 || option == 0) && paramInput1[1] == '\0') {
 							SDL_SetTextInputRect(&widthFieldLabelRect);
 							strcat(paramInput1, event.text.text);
 							counter1 += TEXT_BOX_FINE_ADJUSTMENT;
-						} else if (paramInput2[1] == '\0' && (formField == 1 || option == 1)) {
+						} else if ((formField == 1 || option == 1) && paramInput2[1] == '\0') {
 							SDL_SetTextInputRect(&widthFieldLabelRect);
 							strcat(paramInput2, event.text.text);
 							counter2 += TEXT_BOX_FINE_ADJUSTMENT;
-						} else if (paramInput3[2] == '\0' && (formField == 2 || option == 2)) {
+						} else if ((formField == 2 || option == 2) && paramInput3[2] == '\0') {
 							SDL_SetTextInputRect(&widthFieldLabelRect);
 							strcat(paramInput3, event.text.text);
 							counter3 += TEXT_BOX_FINE_ADJUSTMENT;
 						}
 					}
-					break;
-					// Si se presiona el botón izquierdo o derecho del ratón, se activan sus variables.
-				case SDL_MOUSEBUTTONDOWN:
-					clickedL = event.button.button == SDL_BUTTON_LEFT;
-					break;
-					// Si se suelta el botón izquierdo o derecho del ratón, se desactivan sus variables.
-				case SDL_MOUSEBUTTONUP:
-					clickedL = !event.button.button == SDL_BUTTON_LEFT;
-					break;
-				default:
-					break;
-			}
-		} else if (!main_menu_is_running && !select_menu_is_running && stage_is_running) {
-			// Si el escenario está en marcha...
-			// Si no se reproduce música de fondo del escenario, comienza a reproducirse.
-			if (!Mix_PlayingMusic()) {
-				Mix_PlayMusic(backgroundMusicStage, -1);
-			}
+				}
+				break;
 
-			// ... Esperar un evento de entrada.
-			switch (event.type) {
-				// Si se hace clic en el botón X de la ventana, se cierra.
-				case SDL_QUIT:
-					game_is_running = false;
-					main_menu_is_running = false;
-					select_menu_is_running = false;
-					stage_is_running = false;
-					break;
-				// Si se presiona una tecla...
-				case SDL_KEYDOWN:
-					// ... Y es la tecla Escape, regresa al menú principal.
-					if (event.key.keysym.sym == SDLK_ESCAPE) {
-						Mix_HaltMusic(); // Stops playing stage music.
-						main_menu_is_running = true;
-						select_menu_is_running = false;
-						stage_is_running = false;
-					}
-					break;
-				// Si se presiona el botón izquierdo o derecho del ratón, se activan sus variables.
-				case SDL_MOUSEBUTTONDOWN:
-					clickedL = event.button.button == SDL_BUTTON_LEFT;
-					clickedR = event.button.button == SDL_BUTTON_RIGHT;
-					break;
-				// Si se suelta el botón izquierdo o derecho del ratón, se desactivan sus variables.
-				case SDL_MOUSEBUTTONUP:
-					clickedL = !event.button.button == SDL_BUTTON_LEFT;
-					clickedR = !event.button.button == SDL_BUTTON_RIGHT;
-					break;
-				default:
-					break;
-			}
+			// Evento: Botón del mouse presionado.
+			case SDL_MOUSEBUTTONDOWN:
+				handle_mouse_button(&event, true);
+				break;
+
+			// Evento: Botón del mouse soltado.
+			case SDL_MOUSEBUTTONUP:
+				handle_mouse_button(&event, false);
+				break;
+
+			default:
+				break;
+		}
+
+		// Estado: Escenario (stage), reproducir música si no suena.
+		if (in_stage && !Mix_PlayingMusic()) {
+			Mix_PlayMusic(backgroundMusicStage, -1);
 		}
 	}
+
+	// Detener entrada de texto y capturar posición actual del mouse.
 	SDL_StopTextInput();
 	SDL_GetMouseState(&xm, &ym);
 }
