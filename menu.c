@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "constantes.h"
 #include "juego.h"
 #include "variables.h"
@@ -127,7 +129,9 @@ void process_input() {
 					case SDLK_DOWN:
 						if (option < (in_main_menu ? 1 : 3)) {
 							option++;
-							if (in_select_menu) formField++;
+							if (in_select_menu) {
+								formField++;
+							}
 						}
 						break;
 
@@ -135,7 +139,9 @@ void process_input() {
 					case SDLK_UP:
 						if (option > 0) {
 							option--;
-							if (in_select_menu) formField--;
+							if (in_select_menu) {
+								formField--;
+							}
 						}
 						break;
 
@@ -172,20 +178,22 @@ void process_input() {
 				}
 				break;
 
-			// Evento: Entrada de texto (Sólo números permitidos).
+			// Evento: Entrada de texto.
 			case SDL_TEXTINPUT:
 				if (in_select_menu) {
 					const char c = event.text.text[0];
+					if (c != ' ' && (formField == 0 || option == 0) && paramInput1[9] == '\0') {
+						SDL_SetTextInputRect(&widthFieldLabelRect);
+						strcat(paramInput1, event.text.text);
+						counter1 += TEXT_BOX_FINE_ADJUSTMENT;
+					}
+					// Solo admite numeros como entrada.
 					if (c >= '0' && c <= '9') {
-						if ((formField == 0 || option == 0) && paramInput1[1] == '\0') {
-							SDL_SetTextInputRect(&widthFieldLabelRect);
-							strcat(paramInput1, event.text.text);
-							counter1 += TEXT_BOX_FINE_ADJUSTMENT;
-						} else if ((formField == 1 || option == 1) && paramInput2[1] == '\0') {
+						 if ((formField == 1 || option == 1) && paramInput2[1] == '\0') {
 							SDL_SetTextInputRect(&widthFieldLabelRect);
 							strcat(paramInput2, event.text.text);
 							counter2 += TEXT_BOX_FINE_ADJUSTMENT;
-						} else if ((formField == 2 || option == 2) && paramInput3[2] == '\0') {
+						 } else if ((formField == 2 || option == 2) && paramInput3[2] == '\0') {
 							SDL_SetTextInputRect(&widthFieldLabelRect);
 							strcat(paramInput3, event.text.text);
 							counter3 += TEXT_BOX_FINE_ADJUSTMENT;

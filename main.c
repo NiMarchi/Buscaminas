@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		if(stage_is_running) {
-			setup_stage(w, h, m); // Inicializa los parámetros del campo minado.
+			setup_stage(h, m); // Inicializa los parámetros del campo minado.
 		}
 
 		while (stage_is_running) {

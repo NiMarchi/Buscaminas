@@ -4,11 +4,9 @@
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
 
-#define WIDTH_MIN 2
-#define WIDTH_MAX 31
-#define HEIGHT_MIN 2
-#define HEIGHT_MAX 16
-#define MINE_MIN 0
+#define FIELD_SIZE_MIN 8
+#define FIELD_SIZE_MAX 32
+#define MINE_MIN 5
 
 #define ALERT "Parametros Invalidos"
 
@@ -20,12 +18,13 @@
 #define BUTTON_H 100
 #define BUTTON_SPACING 150
 
-#define WIDTH_TEXT "Ingrese el ancho del campo: (min 3, max 30)"
-#define HEIGHT_TEXT "Ingrese la altura del campo: (min 3, max 15)"
-#define MINE_AMOUNT_TEXT "Introduzca el numero de minas: (min 1, max ancho * max alto - 1)"
+#define PLAYER_NAME "Nombre del jugador: (Max 10 caracteres)"
+#define FIELD_SIZE "Dimensiones del campo: (Min 8, Max 32)"
+#define MINE_AMOUNT_TEXT "Cantidad de minas: (Min 5, Max 50% de las dimensiones)"
 #define OK_BUTTON_TEXT " OK "
 
 #define MINE_INGAME_INFO "Minas Restantes: "
+#define PLAYER_NAME_INFO "Nombre del Jugador: "
 
 #define WIDTH_TEXT_Y 80
 #define WIDTH_TEXT_W WINDOW_WIDTH / 1.75

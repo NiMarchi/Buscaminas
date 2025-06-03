@@ -38,7 +38,7 @@ extern SDL_Texture *aboutTextTexture, *bgScrollTexture, *menuPresentationTexture
 
 extern SDL_Rect bgScrollRect1, bgScrollRect2, menuPresentationRect1, menuPresentationRect2, menuTitlePresentationRect, menuButtonRect1,
 menuButtonRect2, widthFieldLabelRect, widthFieldTextboxRect, heightFieldLabelRect, heightFieldTextboxRect, mineAmountLabelRect,
-mineAmountTextboxRect, okButtonRect, infoRect, tileSquareRect;
+mineAmountTextboxRect, okButtonRect, infoRect, infoPlayer, tileSquareRect;
 
 // Variables del juego
 extern bool game_is_running, stage_is_running, main_menu_is_running, select_menu_is_running;
@@ -49,13 +49,13 @@ extern int centerFieldX, centerFieldY, centerFormTextX, centerFormInputX;
 extern int xm, ym, xi, xf, yi, yf;
 extern int button_x, button_y, button_w, button_h;
 extern int counter1, counter2, counter3;
-extern int w, h, m, i, j;
+extern int h, m, i, j;
 extern int length, formField, option;
 extern int alpha1, alpha2, alpha3, alpha4;
 extern int ij_selected[3];
 extern float delta_time;
 extern char *aux;
-extern char paramInput1[3], paramInput2[3], paramInput3[4], mineRemainingStr[4], mineRemainingConcat[18];
+extern char paramInput1[15], paramInput2[5], paramInput3[5], mineRemainingStr[5], infoPlayerName[25], mineRemainingConcat[20];
 
 extern field_t *f, *c;
 

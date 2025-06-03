@@ -31,7 +31,7 @@ SDL_Texture *aboutTextTexture = NULL, *bgScrollTexture = NULL, *menuPresentation
 
 SDL_Rect bgScrollRect1, bgScrollRect2, menuPresentationRect1, menuPresentationRect2, menuTitlePresentationRect, menuButtonRect1,
 menuButtonRect2, widthFieldLabelRect, widthFieldTextboxRect, heightFieldLabelRect, heightFieldTextboxRect, mineAmountLabelRect,
-mineAmountTextboxRect, okButtonRect, infoRect, tileSquareRect;
+mineAmountTextboxRect, okButtonRect, infoRect, infoPlayer, tileSquareRect;
 
 bool game_is_running = false, stage_is_running = false, main_menu_is_running = false, select_menu_is_running = false;
 bool clickedL = false, clickedR = false, win = false, lose = false, canInteract = false, showMines = false, resetIJ = true, soundEffectPlayed = false;
@@ -41,12 +41,12 @@ int centerFieldX = 0, centerFieldY = 0, centerFormTextX = 0, centerFormInputX = 
 int xm = 0, ym = 0, xi = 0, xf = 0, yi = 0, yf = 0;
 int button_x = 0, button_y = 0, button_w = 0, button_h = 0;
 int counter1 = 1, counter2 = 1, counter3 = 1;
-int w = 0, h = 0, m = 0, i = 0, j = 0;
+int h = 0, m = 0, i = 0, j = 0;
 int length = 0, formField = 0, option = RESET_OPTION;
 int alpha1 = ALPHA_UNSELECTED, alpha2 = ALPHA_UNSELECTED, alpha3 = ALPHA_UNSELECTED, alpha4 = ALPHA_UNSELECTED;
 int ij_selected[3] = {0};
 float delta_time = 0.0f;
 char *aux = NULL;
-char paramInput1[3] = {0}, paramInput2[3] = {0}, paramInput3[4] = {0}, mineRemainingStr[4] = {0}, mineRemainingConcat[18] = MINE_INGAME_INFO;
+char paramInput1[15] = {0}, paramInput2[5] = {0}, paramInput3[5] = {0}, mineRemainingStr[5] = {0}, infoPlayerName[25] = {0}, mineRemainingConcat[20] = MINE_INGAME_INFO;
 
 field_t *f = NULL, *c = NULL;

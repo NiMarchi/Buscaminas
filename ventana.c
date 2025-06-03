@@ -119,7 +119,8 @@ bool initialize_window() {
 	// Inicializa rectángulos.
 	bgScrollRect1 = (SDL_Rect){0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
 	bgScrollRect2 = (SDL_Rect){0, -WINDOW_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT};
-	infoRect = (SDL_Rect){0, 0, 200, 20};
+	infoRect = (SDL_Rect){0, 0, 250, 20};
+	infoPlayer = (SDL_Rect){0, 20, 250, 20};
 
 	return true;
 }

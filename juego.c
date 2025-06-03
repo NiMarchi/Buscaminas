@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 #include "constantes.h"
 #include "campo.h"
@@ -40,20 +41,24 @@ char *substring(char *destination, const char *source, const int beg, const int 
 }
 
 // Inicializa los parámetros del juego.
-void setup_stage(const int w, const int h, const int m) {
+void setup_stage(const int h, const int m) {
     tile.x = TILE_SPACING; // Espaciado de mosaicos entre sí.
     tile.y = TILE_SPACING; // Espaciado de mosaicos entre sí.
     tile.w = TILE_SIDE_SIZE; // Tamaño del lado del azulejo.
     tile.h = TILE_SIDE_SIZE; // Tamaño del lado del azulejo.
 
-    f = initField(w, h, m); // Asigna el campo inferior, donde se escribirán las minas y las puntas.
-    c = initCover(w, h); // Asigna el campo superior, donde el jugador se descubrirá.
+    f = initField(h, h, m); // Asigna el campo inferior, donde se escribirán las minas y las puntas.
+    c = initCover(h, h); // Asigna el campo superior, donde el jugador se descubrirá.
     fillFieldEdge(c); // Rellena el campo superior con caracteres de borde.
     fillFieldCover(c); // Llena el campo superior con caracteres de portada.
     fillFieldZero(f); // Rellena el campo inferior con ceros.
     fillFieldEdge(f); // Rellena el campo superior con caracteres de borde.
     fillFieldMine(f); // Llena el campo inferior con minas.
     countMines(f); // Calcula la cantidad de minas y llena los vertederos en los alrededores de (minas).
+
+	memset(infoPlayerName, 0, sizeof infoPlayerName); // Borra el array que muestra el nombre del jugador.
+	strcpy(infoPlayerName, PLAYER_NAME_INFO);
+	strcat(infoPlayerName, paramInput1); // Almacena el nombre del jugador para mostrarlo como información.
 }
 
 // Espera un intervalo si el jugador ha ganado o perdido antes de volver al menú principal.
@@ -248,8 +253,8 @@ void render() {
 		okButtonRect.x = centerFormTextX;
 
 		// Dibuja cada etiqueta de texto.
-		printTextLine(renderer, font_main, colorForm, widthFieldLabelRect, WIDTH_TEXT, 0, 0, 0, 0);
-		printTextLine(renderer, font_main, colorForm, heightFieldLabelRect, HEIGHT_TEXT, 0, 0, 0, 0);
+		printTextLine(renderer, font_main, colorForm, widthFieldLabelRect, PLAYER_NAME, 0, 0, 0, 0);
+		printTextLine(renderer, font_main, colorForm, heightFieldLabelRect, FIELD_SIZE, 0, 0, 0, 0);
 		printTextLine(renderer, font_main, colorForm, mineAmountLabelRect, MINE_AMOUNT_TEXT, 0, 0, 0, 0);
 
 		// Dibuja el botón Aceptar.
@@ -346,10 +351,9 @@ void render() {
 
 			if (formField == 3) {
 				// Convierte cada cadena en un entero.
-				w = strtol(paramInput1, NULL, 10);
 				h = strtol(paramInput2, NULL, 10);
 				m = strtol(paramInput3, NULL, 10);
-				if (w > WIDTH_MIN && w < WIDTH_MAX && h > HEIGHT_MIN && h < HEIGHT_MAX && m > MINE_MIN && m < (w * h)) {
+				if (h > FIELD_SIZE_MIN && h < FIELD_SIZE_MAX && m >= MINE_MIN && m <= floor((double)(h * h) / 2)) {
 					mineRemainingInt = m;
 					select_menu_is_running = false;
 					stage_is_running = true;
@@ -378,6 +382,9 @@ void render() {
 
 		// Imprime la cantidad de mina restante.
 		printTextLine(renderer, font_secondary, colorInfo, infoRect, mineRemainingConcat, 0, 0, 0, 0);
+
+		// Imprime el nombre del jugador.
+		printTextLine(renderer, font_secondary, colorInfo, infoPlayer, infoPlayerName, 0, 0, 0, 0);
 
 		i = 0;
 		j = 0;

@@ -7,7 +7,7 @@
 #include "impresion.h"
 
 // Función auxiliar para renderizar texto sobre un rectángulo.
-void renderTextBox(SDL_Renderer *renderer, TTF_Font *font, const SDL_Color color, const SDL_Rect *rect, const char *text, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+void renderTextBox(SDL_Renderer *renderer, TTF_Font *font, const SDL_Color color, const SDL_Rect *rect, const char *text, const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a) {
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 	SDL_RenderFillRect(renderer, rect);
 
