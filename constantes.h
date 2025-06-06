@@ -1,8 +1,8 @@
 #ifndef CONSTANTES_H
 #define CONSTANTES_H
 
-#define WINDOW_WIDTH 1280
-#define WINDOW_HEIGHT 720
+#define WINDOW_WIDTH 1366
+#define WINDOW_HEIGHT 768
 
 #define FIELD_SIZE_MIN 8
 #define FIELD_SIZE_MAX 32
@@ -21,7 +21,7 @@
 #define PLAYER_NAME "Nombre del jugador: (Max 10 caracteres)"
 #define FIELD_SIZE "Dimensiones del campo: (Min 8, Max 32)"
 #define MINE_AMOUNT_TEXT "Cantidad de minas: (Min 5, Max 50% de las dimensiones)"
-#define OK_BUTTON_TEXT " OK "
+#define OK_BUTTON_TEXT " Empezar "
 
 #define MINE_INGAME_INFO "Minas Restantes: "
 #define PLAYER_NAME_INFO "Nombre del Jugador: "
@@ -91,7 +91,7 @@
 
 #define WINDOW_TITLE "Buscaminas"
 #define TITLE "Buscaminas"
-#define TITLE_H 20
+#define TITLE_H 30
 #define TITLE_X WINDOW_WIDTH / 2
 #define TITLE_Y WINDOW_HEIGHT - TITLE_H
 #define TITLE_W WINDOW_WIDTH - WINDOW_WIDTH / 2
@@ -132,7 +132,7 @@
 #define ERROR_SDL_AUDIO "Error al inicializar SDL Audio.\n"
 #define ERROR_SDL_INIT_PNG "Error al inicializar PNG support.\n"
 
-#define AUTHOR "Buscaminas - v1.0.0.2025"
+#define AUTHOR "NiMarchi - v1.0.0.2025"
 
 #define NEW_GAME_TEXT " Nuevo Juego "
 #define QUIT_GAME_TEXT " Salir del Juego "

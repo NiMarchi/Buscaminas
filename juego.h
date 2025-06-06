@@ -12,5 +12,8 @@ void setup_stage(int h, int m);
 void wait_interval();
 void update();
 void render();
+void saveEventGenericLog(const char *text);
+void saveEventMouseLog(const char *text, int x, int y);
+void saveBlankLineLog();
 
 #endif

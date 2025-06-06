@@ -56,9 +56,13 @@ void setup_stage(const int h, const int m) {
     fillFieldMine(f); // Llena el campo inferior con minas.
     countMines(f); // Calcula la cantidad de minas y llena los vertederos en los alrededores de (minas).
 
+	colorInfo = (SDL_Color){RED_INFO_POSITIVE, GREEN_INFO_POSITIVE, BLUE_INFO_POSITIVE}; // Asigna el color a las letras de los datos del juego (Como la cantidad de minas y nombre del jugador).
+
 	memset(infoPlayerName, 0, sizeof infoPlayerName); // Borra el array que muestra el nombre del jugador.
 	strcpy(infoPlayerName, PLAYER_NAME_INFO);
 	strcat(infoPlayerName, paramInput1); // Almacena el nombre del jugador para mostrarlo como información.
+
+	saveEventGenericLog("Inicio del Juego");
 }
 
 // Espera un intervalo si el jugador ha ganado o perdido antes de volver al menú principal.
@@ -100,15 +104,6 @@ void update() {
         win = checkWin(f, c);
         lose = checkLose(f, c, ij_selected);
         canInteract = false;
-    }
-
-    // Cambia el color del texto de minas restantes según cuántas quedan.
-    if (mineRemainingInt < 0) {
-        colorInfo = (SDL_Color){RED_INFO_NEGATIVE, GREEN_INFO_NEGATIVE, BLUE_INFO_NEGATIVE};
-    } else if (mineRemainingInt > 0) {
-        colorInfo = (SDL_Color){RED_INFO_POSITIVE, GREEN_INFO_POSITIVE, BLUE_INFO_POSITIVE};
-    } else {
-        colorInfo = (SDL_Color){RED_INFO_NEUTRAL, GREEN_INFO_NEUTRAL, BLUE_INFO_NEUTRAL};
     }
 
     // Actualiza el desplazamiento del fondo para la animación vertical.
@@ -353,7 +348,7 @@ void render() {
 				// Convierte cada cadena en un entero.
 				h = strtol(paramInput2, NULL, 10);
 				m = strtol(paramInput3, NULL, 10);
-				if (h > FIELD_SIZE_MIN && h < FIELD_SIZE_MAX && m >= MINE_MIN && m <= floor((double)(h * h) / 2)) {
+				if (h >= FIELD_SIZE_MIN && h <= FIELD_SIZE_MAX && m >= MINE_MIN && m <= floor((double)(h * h) / 2)) {
 					mineRemainingInt = m;
 					select_menu_is_running = false;
 					stage_is_running = true;
@@ -408,6 +403,7 @@ void render() {
 
 				if (xm >= xi && xm <= xf && ym >= yi && ym <= yf && c->mat[i][j] != EDGE_L_R && c->mat[i][j] != EDGE_T_B) {
 					if (clickedL) {
+						saveEventMouseLog("Mouse Click Izquierdo", i, j);
 						// Si aún no se ha abierto la tapa, reproduce el sonido de clic izquierdo.
 						if (c->mat[i][j] != f->mat[i][j]) {
 							Mix_PlayChannel(-1, soundEffectL, 0);
@@ -418,6 +414,7 @@ void render() {
 						ij_selected[2] = OPEN_F;
 					}
 					if (clickedR) {
+						saveEventMouseLog("Mouse Click Derecho", i, j);
 						// Si aún no se ha abierto la cubierta, reproduce el sonido de clic derecho.
 						if (c->mat[i][j] != f->mat[i][j]) {
 							Mix_PlayChannel(-1, soundEffectR, 0);
@@ -490,6 +487,7 @@ void render() {
 
 		// Si el jugador gana, muestra una bandera de victoria y desvincula los campos superiores e inferiores.
 		if (win) {
+			saveEventGenericLog("Victoria");
 			Mix_PlayChannel(-1, soundEffectVictory, 0); // Reproduce un sonido de victoria.
 			printFinish(renderer, font_main, colorTip, true);
 			free(f);
@@ -497,9 +495,11 @@ void render() {
 			free(c);
 			c = NULL;
 			stage_is_running = false;
+			saveEventGenericLog("Fin del Juego");
 		}
 		// Si el jugador gana, muestra un cartel de derrota y desvincula los campos superiores e inferiores.
 		if (lose) {
+			saveEventGenericLog("Derrota");
 			Mix_PlayChannel(-1, soundEffectMine, 0); // Reproduce un sonido de derrota.
 			printFinish(renderer, font_main, colorTip, false);
 			free(f);
@@ -507,8 +507,27 @@ void render() {
 			free(c);
 			c = NULL;
 			stage_is_running = false;
+			saveEventGenericLog("Fin del Juego");
 		}
 
 		SDL_RenderPresent(renderer);
 	}
+}
+
+void saveEventGenericLog(const char *text) {
+	time(&t);
+	info = localtime(&t);
+	strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", info);
+	fprintf(logs, "%s: %s\n", buffer, text);
+}
+
+void saveEventMouseLog(const char *text, const int x, const int y) {
+	time(&t);
+	info = localtime(&t);
+	strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", info);
+	fprintf(logs, "%s: %s. Coordenadas: (x: %d, y: %d)\n", buffer, text, x, y);
+}
+
+void saveBlankLineLog() {
+	fprintf(logs, "\n");
 }

@@ -3,6 +3,7 @@
 
 #include <SDL_image.h>
 
+#include "juego.h"
 #include "constantes.h"
 #include "variables.h"
 
@@ -50,6 +51,12 @@ bool initialize_sdl_systems() {
 
 // Función principal de inicialización.
 bool initialize_window() {
+	logs = fopen("logs.txt", "a");
+	if (logs == NULL) {
+		perror("Error al intentar abrir el archivo de logs");
+		return false;
+	}
+
 	if (!initialize_sdl_systems()) {
 		return false;
 	}
@@ -122,11 +129,17 @@ bool initialize_window() {
 	infoRect = (SDL_Rect){0, 0, 250, 20};
 	infoPlayer = (SDL_Rect){0, 20, 250, 20};
 
+	saveEventGenericLog("Inicialización de Recursos");
+
 	return true;
 }
 
 // Cierra la ventana, libera memoria y finaliza el proceso.
 void destroy_window() {
+	saveEventGenericLog("Liberación de Recursos");
+	saveBlankLineLog();
+	fclose(logs);
+
 	SDL_FreeSurface(aboutTextSurface);
 	SDL_FreeSurface(bgScrollSurface);
 	SDL_FreeSurface(menuPresentationSurface);

@@ -1,5 +1,14 @@
+#include <stdio.h>
+#include <time.h>
+
 #include "variables.h"
 #include "constantes.h"
+
+FILE *logs;
+
+time_t t;
+struct tm *info;
+char buffer[80];
 
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;

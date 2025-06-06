@@ -2,12 +2,21 @@
 #define VARIABLES_H
 
 #include <stdbool.h>
+#include <stdio.h>
+#include <time.h>
 
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 
 #include "campo.h"
+
+extern FILE *logs;
+
+// Variables para manejar la fecha y hora
+extern time_t t;
+extern struct tm *info;
+extern char buffer[80];
 
 // Variables SDL
 extern SDL_Window *window;

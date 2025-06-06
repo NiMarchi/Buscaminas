@@ -137,7 +137,7 @@ void openField(field_t *f, field_t *c, const int x, const int y, const int flag,
         }
         openFieldUtil(f, c, x, y, old);
     } else if (flag == 2) {
-        if (c->mat[x][y] != FLAG && c->mat[x][y] != f->mat[x][y]) {
+        if (*flagQty > 0 && c->mat[x][y] != FLAG && c->mat[x][y] != f->mat[x][y]) {
             c->mat[x][y] = FLAG;
             (*flagQty)--;
         } else if (c->mat[x][y] == FLAG) {
