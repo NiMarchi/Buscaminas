@@ -143,6 +143,8 @@ void render() {
 		// Botones de menú.
 		SDL_RenderCopy(renderer, menuButtonTextTexture1, NULL, &menuButtonRect1);
 		SDL_RenderCopy(renderer, menuButtonTextTexture2, NULL, &menuButtonRect2);
+		SDL_RenderCopy(renderer, menuButtonTextTexture3, NULL, &menuButtonRect3);
+		SDL_RenderCopy(renderer, menuButtonTextTexture4, NULL, &menuButtonRect4);
 
 		// Imprime el título.
 		printTitle(renderer, font_main, colorTitle);
@@ -175,6 +177,22 @@ void render() {
 				stage_is_running = false;
 				clickedL = false;
 			}
+		} else if (xm >= menuButtonRect3.x && xm <= menuButtonRect3.x + menuButtonRect3.w && ym >= menuButtonRect3.y && ym <= menuButtonRect3.y + menuButtonRect3.h) {
+			// De lo contrario, si el mouse está sobre el botón restaurar, se resalta y, si se hace clic, sale del juego.
+			// Si aún no se ha reproducido el efecto de sonido, se reproduce una vez si el mouse permanece dentro del área del botón.
+			if (!soundEffectPlayed) {
+				Mix_PlayChannel(-1, soundEffectMenu, 0);
+				soundEffectPlayed = true;
+			}
+			option = 4;
+		} else if (xm >= menuButtonRect4.x && xm <= menuButtonRect4.x + menuButtonRect4.w && ym >= menuButtonRect4.y && ym <= menuButtonRect4.y + menuButtonRect4.h) {
+			// De lo contrario, si el mouse está sobre el botón historial, se resalta y, si se hace clic, sale del juego.
+			// Si aún no se ha reproducido el efecto de sonido, se reproduce una vez si el mouse permanece dentro del área del botón.
+			if (!soundEffectPlayed) {
+				Mix_PlayChannel(-1, soundEffectMenu, 0);
+				soundEffectPlayed = true;
+			}
+			option = 5;
 		} else {
 			soundEffectPlayed = false; // Si el mouse sale de cualquier área de botones, establece el efecto de sonido para que se reproduzca nuevamente al pasar el mouse sobre él.
 		}
@@ -183,10 +201,26 @@ void render() {
 		if (option == 0) {
 			printTextLine(renderer, font_main, colorMenuText, menuButtonRect1, NEW_GAME_TEXT, 0, 0, 0, 0);
 			printTextLine(renderer, font_main, colorMenuText, menuButtonRect2, QUIT_GAME_TEXT, 0, 0, 0, 127);
+			printTextLine(renderer, font_main, colorMenuText, menuButtonRect3, RESTORE_TEXT, 0, 0, 0, 127);
+			printTextLine(renderer, font_main, colorMenuText, menuButtonRect4, RECORD_TEXT, 0, 0, 0, 127);
 		} else if (option == 1) {
 			// Aspectos destacados del botón para salir del juego.
 			printTextLine(renderer, font_main, colorMenuText, menuButtonRect1, NEW_GAME_TEXT, 0, 0, 0, 127);
 			printTextLine(renderer, font_main, colorMenuText, menuButtonRect2, QUIT_GAME_TEXT, 0, 0, 0, 0);
+			printTextLine(renderer, font_main, colorMenuText, menuButtonRect3, RESTORE_TEXT, 0, 0, 0, 127);
+			printTextLine(renderer, font_main, colorMenuText, menuButtonRect4, RECORD_TEXT, 0, 0, 0, 127);
+		} else if (option == 4) {
+			// Aspectos destacados del botón restaurar.
+			printTextLine(renderer, font_main, colorMenuText, menuButtonRect1, NEW_GAME_TEXT, 0, 0, 0, 127);
+			printTextLine(renderer, font_main, colorMenuText, menuButtonRect2, QUIT_GAME_TEXT, 0, 0, 0, 127);
+			printTextLine(renderer, font_main, colorMenuText, menuButtonRect3, RESTORE_TEXT, 0, 0, 0, 0);
+			printTextLine(renderer, font_main, colorMenuText, menuButtonRect4, RECORD_TEXT, 0, 0, 0, 127);
+		} else if (option == 5) {
+			// Aspectos destacados del botón historial.
+			printTextLine(renderer, font_main, colorMenuText, menuButtonRect1, NEW_GAME_TEXT, 0, 0, 0, 127);
+			printTextLine(renderer, font_main, colorMenuText, menuButtonRect2, QUIT_GAME_TEXT, 0, 0, 0, 127);
+			printTextLine(renderer, font_main, colorMenuText, menuButtonRect3, RESTORE_TEXT, 0, 0, 0, 127);
+			printTextLine(renderer, font_main, colorMenuText, menuButtonRect4, RECORD_TEXT, 0, 0, 0, 0);
 		}
 
 		SDL_RenderPresent(renderer);

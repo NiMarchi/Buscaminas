@@ -16,7 +16,7 @@
 #define BUTTON_Y 0
 #define BUTTON_W 450
 #define BUTTON_H 100
-#define BUTTON_SPACING 150
+#define BUTTON_SPACING 125
 
 #define PLAYER_NAME "Nombre del jugador: (Max 10 caracteres)"
 #define FIELD_SIZE "Dimensiones del campo: (Min 8, Max 32)"
@@ -135,6 +135,8 @@
 #define AUTHOR "NiMarchi - v1.0.0.2025"
 
 #define NEW_GAME_TEXT " Nuevo Juego "
+#define RESTORE_TEXT " Restaurar "
+#define RECORD_TEXT " Historial "
 #define QUIT_GAME_TEXT " Salir del Juego "
 
 #define WIN_TEXT "Winner"

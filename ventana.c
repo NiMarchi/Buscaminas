@@ -93,6 +93,12 @@ bool initialize_window() {
 	menuButtonTextSurface1 = load_surface(NEW_OK_BUTTON);
 	menuButtonTextTexture1 = create_texture(menuButtonTextSurface1);
 
+	menuButtonTextSurface3 = load_surface(NEW_OK_BUTTON);
+	menuButtonTextTexture3 = create_texture(menuButtonTextSurface3);
+
+	menuButtonTextSurface4 = load_surface(NEW_OK_BUTTON);
+	menuButtonTextTexture4 = create_texture(menuButtonTextSurface4);
+
 	menuButtonTextSurface2 = load_surface(QUIT_BUTTON);
 	menuButtonTextTexture2 = create_texture(menuButtonTextSurface2);
 

@@ -37,17 +37,21 @@ extern TTF_Font *font_main, *font_secondary;
 extern Mix_Music *backgroundMusicMenu, *backgroundMusicStage;
 extern Mix_Chunk *soundEffectL, *soundEffectR, *soundEffectMine, *soundEffectMenu, *soundEffectVictory;
 
-extern SDL_Surface *aboutTextSurface, *bgScrollSurface, *menuPresentationSurface, *menuTitlePresentationSurface, *menuButtonTextSurface1,
-*menuButtonTextSurface2, *labelSurface, *textInputSurface, *okButtonSurface, *alertTextSurface, *infoTextSurface, *tileTextSurface,
-*mineIconSurface, *mineBoomIconSurface, *mineDeathIconSurface, *flagIconSurface, *edgeIconSurface, *coverIconSurface, *finaleTextSurface;
+extern SDL_Surface *aboutTextSurface, *bgScrollSurface, *menuPresentationSurface, *menuTitlePresentationSurface,
+*menuButtonTextSurface1, *menuButtonTextSurface2, *menuButtonTextSurface3, *menuButtonTextSurface4,
+*labelSurface, *textInputSurface, *okButtonSurface, *alertTextSurface, *infoTextSurface,
+*tileTextSurface, *mineIconSurface, *mineBoomIconSurface, *mineDeathIconSurface, *flagIconSurface,
+*edgeIconSurface, *coverIconSurface, *finaleTextSurface;
 
-extern SDL_Texture *aboutTextTexture, *bgScrollTexture, *menuPresentationTexture, *menuTitlePresentationTexture, *menuButtonTextTexture1,
-*menuButtonTextTexture2, *labelTexture, *textInputTexture, *okButtonTexture, *alertTextTexture, *infoTextTexture, *tileTextTexture,
-*mineIconTexture, *mineBoomIconTexture, *mineDeathIconTexture, *flagIconTexture, *edgeIconTexture, *coverIconTexture, *finaleTextTexture;
+extern SDL_Texture *aboutTextTexture, *bgScrollTexture, *menuPresentationTexture, *menuTitlePresentationTexture,
+*menuButtonTextTexture1, *menuButtonTextTexture2, *menuButtonTextTexture3, *menuButtonTextTexture4,
+*labelTexture, *textInputTexture, *okButtonTexture, *alertTextTexture, *infoTextTexture,
+*tileTextTexture, *mineIconTexture, *mineBoomIconTexture, *mineDeathIconTexture, *flagIconTexture,
+*edgeIconTexture, *coverIconTexture, *finaleTextTexture;
 
-extern SDL_Rect bgScrollRect1, bgScrollRect2, menuPresentationRect1, menuPresentationRect2, menuTitlePresentationRect, menuButtonRect1,
-menuButtonRect2, widthFieldLabelRect, widthFieldTextboxRect, heightFieldLabelRect, heightFieldTextboxRect, mineAmountLabelRect,
-mineAmountTextboxRect, okButtonRect, infoRect, infoPlayer, tileSquareRect;
+extern SDL_Rect bgScrollRect1, bgScrollRect2, menuPresentationRect1, menuPresentationRect2, menuTitlePresentationRect,
+menuButtonRect1, menuButtonRect2, menuButtonRect3, menuButtonRect4, widthFieldLabelRect, widthFieldTextboxRect, heightFieldLabelRect,
+heightFieldTextboxRect, mineAmountLabelRect, mineAmountTextboxRect, okButtonRect, infoRect, infoPlayer, tileSquareRect;
 
 // Variables del juego
 extern bool game_is_running, stage_is_running, main_menu_is_running, select_menu_is_running;
@@ -56,7 +60,6 @@ extern bool clickedL, clickedR, win, lose, canInteract, showMines, resetIJ, soun
 extern int last_frame_time, angle, mineRemainingInt;
 extern int centerFieldX, centerFieldY, centerFormTextX, centerFormInputX;
 extern int xm, ym, xi, xf, yi, yf;
-extern int button_x, button_y, button_w, button_h;
 extern int counter1, counter2, counter3;
 extern int h, m, i, j;
 extern int length, formField, option;
