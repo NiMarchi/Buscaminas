@@ -415,6 +415,9 @@ void render() {
 		// Imprime el nombre del jugador.
 		printTextLine(renderer, font_secondary, colorInfo, infoPlayer, infoPlayerName, 0, 0, 0, 0);
 
+		// Imprime el tiempo de juego.
+		printTextLine(renderer, font_secondary, colorInfo, infoTimeRect, infoTime, 0, 0, 0, 0);
+
 		i = 0;
 		j = 0;
 

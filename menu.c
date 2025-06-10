@@ -5,34 +5,29 @@
 #include "variables.h"
 
 void setup_main_menu() {
-	// Constantes de tamaño.
-	const int icon_size = 128;
-	const int title_width = 750;
-	const int title_height = 128;
-
 	// Imagen de presentación izquierda.
-	menuPresentationRect1.w = icon_size;
-	menuPresentationRect1.h = icon_size;
+	menuPresentationRect1.w = ICON_SIZE;
+	menuPresentationRect1.h = ICON_SIZE;
 	menuPresentationRect1.x = WINDOW_WIDTH / 16;
-	menuPresentationRect1.y = WINDOW_HEIGHT / 5 - icon_size / 2;
+	menuPresentationRect1.y = WINDOW_HEIGHT / 8 - ICON_SIZE / 2;
 
 	// Imagen de presentación derecha.
-	menuPresentationRect2.w = icon_size;
-	menuPresentationRect2.h = icon_size;
+	menuPresentationRect2.w = ICON_SIZE;
+	menuPresentationRect2.h = ICON_SIZE;
 	menuPresentationRect2.x = WINDOW_WIDTH / 1.2;
 	menuPresentationRect2.y = menuPresentationRect1.y;
 
 	// Título de presentación.
-	menuTitlePresentationRect.w = title_width;
-	menuTitlePresentationRect.h = title_height;
-	menuTitlePresentationRect.x = WINDOW_WIDTH / 2 - title_width / 2;
-	menuTitlePresentationRect.y = WINDOW_HEIGHT / 5 - title_height / 2;
+	menuTitlePresentationRect.w = TITLE_WIDTH;
+	menuTitlePresentationRect.h = TITLE_HEIGHT;
+	menuTitlePresentationRect.x = WINDOW_WIDTH / 2 - TITLE_WIDTH / 2;
+	menuTitlePresentationRect.y = WINDOW_HEIGHT / 8 - TITLE_HEIGHT / 2;
 
 	// Botón "Nuevo juego".
 	menuButtonRect1.w = BUTTON_W;
 	menuButtonRect1.h = BUTTON_H;
 	menuButtonRect1.x = BUTTON_X + ((WINDOW_WIDTH - BUTTON_W) / 2);
-	menuButtonRect1.y = BUTTON_Y + ((WINDOW_HEIGHT / 2 - 100) - BUTTON_H / 2);
+	menuButtonRect1.y = BUTTON_Y + ((WINDOW_HEIGHT / 2 - 150) - BUTTON_H / 2);
 
 	// Botón "Restaurar".
 	menuButtonRect3 = menuButtonRect1;
@@ -40,11 +35,11 @@ void setup_main_menu() {
 
 	// Botón "Historial".
 	menuButtonRect4 = menuButtonRect1;
-	menuButtonRect4.y += 250;
+	menuButtonRect4.y += menuButtonRect1.y + BUTTON_SPACING;
 
 	// Botón "Salir".
 	menuButtonRect2 = menuButtonRect1;
-	menuButtonRect2.y += 375;
+	menuButtonRect2.y += menuButtonRect3.y + BUTTON_SPACING;
 }
 
 // Función auxiliar para cerrar el juego y salir de todos los estados.

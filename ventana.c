@@ -67,6 +67,16 @@ bool initialize_window() {
 		return false;
 	}
 
+	// Establecer icono de la ventana.
+	SDL_Surface* iconSurface = load_surface(WINDOW_ICON);  // Asegúrate de definir WINDOW_ICON correctamente
+	if (iconSurface) {
+		SDL_SetWindowIcon(window, iconSurface);
+		SDL_FreeSurface(iconSurface);
+	} else {
+		fprintf(stderr, "Error al cargar el icono de la ventana: %s\n", SDL_GetError());
+		return false;
+	}
+
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	if (!renderer) {
 		fprintf(stderr, "Error al crear el renderer: %s\n", SDL_GetError());
@@ -134,6 +144,7 @@ bool initialize_window() {
 	bgScrollRect2 = (SDL_Rect){0, -WINDOW_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT};
 	infoRect = (SDL_Rect){0, 0, 250, 20};
 	infoPlayer = (SDL_Rect){0, 20, 250, 20};
+	infoTimeRect = (SDL_Rect){0, 40, 250, 20};
 
 	saveEventGenericLog("Inicialización de Recursos");
 

@@ -4,6 +4,10 @@
 #define WINDOW_WIDTH 1366
 #define WINDOW_HEIGHT 768
 
+#define ICON_SIZE 128
+#define TITLE_WIDTH 750
+#define TITLE_HEIGHT 128
+
 #define FIELD_SIZE_MIN 8
 #define FIELD_SIZE_MAX 32
 #define MINE_MIN 5
@@ -16,7 +20,7 @@
 #define BUTTON_Y 0
 #define BUTTON_W 450
 #define BUTTON_H 100
-#define BUTTON_SPACING 125
+#define BUTTON_SPACING 140
 
 #define PLAYER_NAME "Nombre del jugador: (Max 10 caracteres)"
 #define FIELD_SIZE "Dimensiones del campo: (Min 8, Max 32)"
@@ -25,6 +29,7 @@
 
 #define MINE_INGAME_INFO "Minas Restantes: "
 #define PLAYER_NAME_INFO "Nombre del Jugador: "
+#define TIME_INFO "Tiempo de Juego: "
 
 #define WIDTH_TEXT_Y 80
 #define WIDTH_TEXT_W WINDOW_WIDTH / 1.75
@@ -106,7 +111,7 @@
 #define ALPHA_SELECTED 127
 #define RESET_OPTION 0
 
-#define WINDOW_ICON "../resources/icons/window_icon.bmp"
+#define WINDOW_ICON "../resources/icons/window_icon.png"
 #define MINE_BOOM_ICON "../resources/icons/mine_boom_icon.bmp"
 #define MINE_DEATH_ICON "../resources/icons/mine_death_icon.bmp"
 #define FLAG_ICON "../resources/icons/flag_icon.bmp"

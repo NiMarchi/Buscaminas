@@ -9,7 +9,6 @@
 int main(int argc, char* argv[]) {
 	// Si initialize_window está inicializado, game_is_running es igual a verdadero.
 	game_is_running = initialize_window();
-	main_menu_is_running = game_is_running;
 
 	while (game_is_running) {
 		setup_main_menu();
