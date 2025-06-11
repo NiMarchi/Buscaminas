@@ -8,6 +8,7 @@
 #include "impresion.h"
 #include "juego.h"
 #include "variables.h"
+#include "historial.h"
 
 // Comprueba si el jugador venció el juego.
 bool checkWin(const field_t *f, const field_t *c) {
@@ -548,6 +549,7 @@ void render() {
 			c = NULL;
 			stage_is_running = false;
 			saveEventGenericLog("Fin del Juego");
+			guardar_historial(h, m, paramInput1, elapsedTime, "Victoria");
 		}
 		// Si el jugador gana, muestra un cartel de derrota y desvincula los campos superiores e inferiores.
 		if (lose) {
@@ -560,6 +562,7 @@ void render() {
 			c = NULL;
 			stage_is_running = false;
 			saveEventGenericLog("Fin del Juego");
+			guardar_historial(h, m, paramInput1, elapsedTime, "Derrota");
 		}
 
 		SDL_RenderPresent(renderer);
