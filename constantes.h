@@ -27,9 +27,10 @@
 #define MINE_AMOUNT_TEXT "Cantidad de minas: (Min 5, Max 50% de las dimensiones)"
 #define OK_BUTTON_TEXT " Empezar "
 
-#define MINE_INGAME_INFO "Minas Restantes: "
+#define MINE_INGAME_INFO "Banderas Restantes: "
 #define PLAYER_NAME_INFO "Nombre del Jugador: "
 #define TIME_INFO "Tiempo de Juego: "
+#define TRAMP_INFO "Tecla T: Activar Truco"
 
 #define WIDTH_TEXT_Y 80
 #define WIDTH_TEXT_W WINDOW_WIDTH / 1.75

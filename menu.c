@@ -172,6 +172,16 @@ void process_input() {
 							}
 						}
 						break;
+						// Tecla 'T' (Para activar truco).
+						case SDLK_t:
+							if (stage_is_running) {
+								if (showMines) {
+									showMines = false;
+								} else {
+									showMines = true;
+								}
+							}
+							break;
 					default:
 						break;
 				}

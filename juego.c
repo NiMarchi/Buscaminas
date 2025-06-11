@@ -99,7 +99,7 @@ void update() {
 
         // Actualiza el contador de minas restantes como cadena.
         sprintf(mineRemainingStr, "%d", mineRemainingInt);
-        mineRemainingConcat[17] = '\0'; // Reset para evitar basura.
+        mineRemainingConcat[20] = '\0'; // Reset para evitar basura.
         strcat(mineRemainingConcat, mineRemainingStr);
 
     	// Calcula tiempo y muestra contador.
@@ -429,6 +429,9 @@ void render() {
 
 		// Imprime el tiempo de juego.
 		printTextLine(renderer, font_secondary, colorInfo, infoTimeRect, infoTime, 0, 0, 0, 0);
+
+		// Imprime el tiempo de juego.
+		printTextLine(renderer, font_secondary, colorInfo, infoTrampRect, TRAMP_INFO, 0, 0, 0, 0);
 
 		i = 0;
 		j = 0;

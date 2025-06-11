@@ -145,6 +145,7 @@ bool initialize_window() {
 	infoRect = (SDL_Rect){0, 0, 250, 20};
 	infoPlayer = (SDL_Rect){0, 20, 250, 20};
 	infoTimeRect = (SDL_Rect){0, 40, 250, 20};
+	infoTrampRect = (SDL_Rect){0, 60, 250, 20};
 
 	saveEventGenericLog("Inicialización de Recursos");
 
