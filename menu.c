@@ -27,7 +27,7 @@ void setup_main_menu() {
 	menuButtonRect1.w = BUTTON_W;
 	menuButtonRect1.h = BUTTON_H;
 	menuButtonRect1.x = BUTTON_X + ((WINDOW_WIDTH - BUTTON_W) / 2);
-	menuButtonRect1.y = BUTTON_Y + ((WINDOW_HEIGHT / 2 - 150) - BUTTON_H / 2);
+	menuButtonRect1.y = BUTTON_Y + ((WINDOW_HEIGHT / 2 - 100) - BUTTON_H / 2);
 
 	// Botón "Restaurar".
 	menuButtonRect3 = menuButtonRect1;
@@ -35,11 +35,11 @@ void setup_main_menu() {
 
 	// Botón "Historial".
 	menuButtonRect4 = menuButtonRect1;
-	menuButtonRect4.y += menuButtonRect1.y + BUTTON_SPACING;
+	menuButtonRect4.y += 250;
 
 	// Botón "Salir".
 	menuButtonRect2 = menuButtonRect1;
-	menuButtonRect2.y += menuButtonRect3.y + BUTTON_SPACING;
+	menuButtonRect2.y += 375;
 }
 
 // Función auxiliar para cerrar el juego y salir de todos los estados.

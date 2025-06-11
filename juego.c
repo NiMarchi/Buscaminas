@@ -62,6 +62,8 @@ void setup_stage(const int h, const int m) {
 	strcpy(infoPlayerName, PLAYER_NAME_INFO);
 	strcat(infoPlayerName, paramInput1); // Almacena el nombre del jugador para mostrarlo como información.
 
+	startTime = time(NULL); // Inicializa el tiempo para el conteo.
+
 	saveEventGenericLog("Inicio del Juego");
 }
 
@@ -99,6 +101,16 @@ void update() {
         sprintf(mineRemainingStr, "%d", mineRemainingInt);
         mineRemainingConcat[17] = '\0'; // Reset para evitar basura.
         strcat(mineRemainingConcat, mineRemainingStr);
+
+    	// Calcula tiempo y muestra contador.
+    	currentTime = time(NULL);
+    	const int tiempo_transcurrido = (int)difftime(currentTime, startTime);
+    	const int minutos = tiempo_transcurrido / 60;
+    	const int segundos = tiempo_transcurrido % 60;
+
+    	sprintf(elapsedTime, "%02d:%02d", minutos, segundos);
+    	infoTime[17] = '\0'; // Reset para evitar basura.
+    	strcat(infoTime, elapsedTime);
 
         // Verifica si el jugador ganó o perdió.
         win = checkWin(f, c);

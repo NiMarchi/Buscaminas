@@ -57,9 +57,8 @@ int alpha1 = ALPHA_UNSELECTED, alpha2 = ALPHA_UNSELECTED, alpha3 = ALPHA_UNSELEC
 int ij_selected[3] = {0};
 float delta_time = 0.0f;
 char *aux = NULL;
-char paramInput1[15] = {0}, paramInput2[5] = {0}, paramInput3[5] = {0}, mineRemainingStr[5] = {0}, elapsedTime[5] = {0}, infoPlayerName[25] = {0}, infoTime[20] = TIME_INFO, mineRemainingConcat[20] = MINE_INGAME_INFO;
+char paramInput1[15] = {0}, paramInput2[5] = {0}, paramInput3[5] = {0}, mineRemainingStr[5] = {0}, elapsedTime[5] = {0}, infoPlayerName[25] = {0}, infoTime[25] = TIME_INFO, mineRemainingConcat[20] = MINE_INGAME_INFO;
 
 time_t startTime, currentTime;
-int secondsElapsed = 0;
 
 field_t *f = NULL, *c = NULL;

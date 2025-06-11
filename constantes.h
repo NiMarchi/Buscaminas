@@ -20,7 +20,7 @@
 #define BUTTON_Y 0
 #define BUTTON_W 450
 #define BUTTON_H 100
-#define BUTTON_SPACING 140
+#define BUTTON_SPACING 125
 
 #define PLAYER_NAME "Nombre del jugador: (Max 10 caracteres)"
 #define FIELD_SIZE "Dimensiones del campo: (Min 8, Max 32)"
