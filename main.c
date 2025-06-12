@@ -35,6 +35,12 @@ int main(int argc, char* argv[]) {
 			render(); // Procesar la representación de objetos en etapa.
 			wait_interval(); // Cuando finaliza un juego, espera 3 segundos y detiene la música antes de volver al menú principal.
 		}
+
+		while (history_menu_is_running) {
+			process_input();
+			update();
+			render();
+		}
 	}
 
 	destroy_window(); // Cierra la ventana y finaliza el proceso.

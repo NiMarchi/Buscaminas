@@ -44,7 +44,7 @@ SDL_Rect bgScrollRect1, bgScrollRect2, menuPresentationRect1, menuPresentationRe
 menuButtonRect1, menuButtonRect2, menuButtonRect3, menuButtonRect4, widthFieldLabelRect, widthFieldTextboxRect, heightFieldLabelRect,
 heightFieldTextboxRect, mineAmountLabelRect, mineAmountTextboxRect, okButtonRect, infoRect, infoPlayer, infoTimeRect, infoTrampRect, tileSquareRect;
 
-bool game_is_running = false, stage_is_running = false, main_menu_is_running = true, select_menu_is_running = false;
+bool game_is_running = false, stage_is_running = false, main_menu_is_running = true, select_menu_is_running = false, history_menu_is_running = false;
 bool clickedL = false, clickedR = false, win = false, lose = false, canInteract = false, showMines = false, resetIJ = true, soundEffectPlayed = false;
 
 int last_frame_time = 0, angle = 0, mineRemainingInt = 0;

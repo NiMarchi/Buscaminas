@@ -136,7 +136,7 @@ void update() {
 // Procesar la representación de objetos en el juego.
 void render() {
 	// Si el menú principal está ejecutándose.
-	if (main_menu_is_running && !select_menu_is_running && !stage_is_running) {
+	if (main_menu_is_running && !select_menu_is_running && !stage_is_running && !history_menu_is_running) {
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
@@ -154,10 +154,10 @@ void render() {
 		printTextLine(renderer, font_main, colorTitle, menuTitlePresentationRect, TITLE, 0, 0, 0, 0);
 
 		// Botones de menú.
-		SDL_RenderCopy(renderer, menuButtonTextTexture1, NULL, &menuButtonRect1);
-		SDL_RenderCopy(renderer, menuButtonTextTexture2, NULL, &menuButtonRect2);
-		SDL_RenderCopy(renderer, menuButtonTextTexture3, NULL, &menuButtonRect3);
-		SDL_RenderCopy(renderer, menuButtonTextTexture4, NULL, &menuButtonRect4);
+		SDL_RenderCopy(renderer, menuButtonTextTexture1, NULL, &menuButtonRect1); // Nuevo juego
+		SDL_RenderCopy(renderer, menuButtonTextTexture2, NULL, &menuButtonRect2); // Salir
+		SDL_RenderCopy(renderer, menuButtonTextTexture3, NULL, &menuButtonRect3); // Restaurar
+		SDL_RenderCopy(renderer, menuButtonTextTexture4, NULL, &menuButtonRect4); // Historial
 
 		// Imprime el título.
 		printTitle(renderer, font_main, colorTitle);
@@ -206,38 +206,24 @@ void render() {
 				soundEffectPlayed = true;
 			}
 			option = 5;
+			if (clickedL) {
+				main_menu_is_running = false;
+				history_menu_is_running = true;
+				clickedL = false;
+				cargar_historial_desde_archivo("historial.txt");
+			}
 		} else {
 			soundEffectPlayed = false; // Si el mouse sale de cualquier área de botones, establece el efecto de sonido para que se reproduzca nuevamente al pasar el mouse sobre él.
 		}
 
-		// Aspectos destacados del nuevo botón de juego.
-		if (option == 0) {
-			printTextLine(renderer, font_main, colorMenuText, menuButtonRect1, NEW_GAME_TEXT, 0, 0, 0, 0);
-			printTextLine(renderer, font_main, colorMenuText, menuButtonRect2, QUIT_GAME_TEXT, 0, 0, 0, 127);
-			printTextLine(renderer, font_main, colorMenuText, menuButtonRect3, RESTORE_TEXT, 0, 0, 0, 127);
-			printTextLine(renderer, font_main, colorMenuText, menuButtonRect4, RECORD_TEXT, 0, 0, 0, 127);
-		} else if (option == 1) {
-			// Aspectos destacados del botón para salir del juego.
-			printTextLine(renderer, font_main, colorMenuText, menuButtonRect1, NEW_GAME_TEXT, 0, 0, 0, 127);
-			printTextLine(renderer, font_main, colorMenuText, menuButtonRect2, QUIT_GAME_TEXT, 0, 0, 0, 0);
-			printTextLine(renderer, font_main, colorMenuText, menuButtonRect3, RESTORE_TEXT, 0, 0, 0, 127);
-			printTextLine(renderer, font_main, colorMenuText, menuButtonRect4, RECORD_TEXT, 0, 0, 0, 127);
-		} else if (option == 4) {
-			// Aspectos destacados del botón restaurar.
-			printTextLine(renderer, font_main, colorMenuText, menuButtonRect1, NEW_GAME_TEXT, 0, 0, 0, 127);
-			printTextLine(renderer, font_main, colorMenuText, menuButtonRect2, QUIT_GAME_TEXT, 0, 0, 0, 127);
-			printTextLine(renderer, font_main, colorMenuText, menuButtonRect3, RESTORE_TEXT, 0, 0, 0, 0);
-			printTextLine(renderer, font_main, colorMenuText, menuButtonRect4, RECORD_TEXT, 0, 0, 0, 127);
-		} else if (option == 5) {
-			// Aspectos destacados del botón historial.
-			printTextLine(renderer, font_main, colorMenuText, menuButtonRect1, NEW_GAME_TEXT, 0, 0, 0, 127);
-			printTextLine(renderer, font_main, colorMenuText, menuButtonRect2, QUIT_GAME_TEXT, 0, 0, 0, 127);
-			printTextLine(renderer, font_main, colorMenuText, menuButtonRect3, RESTORE_TEXT, 0, 0, 0, 127);
-			printTextLine(renderer, font_main, colorMenuText, menuButtonRect4, RECORD_TEXT, 0, 0, 0, 0);
-		}
+		// Dibuja texto resaltado según opción.
+		printTextLine(renderer, font_main, colorMenuText, menuButtonRect1, NEW_GAME_TEXT, 0, 0, 0, (option == 0) ? 0 : 127);
+		printTextLine(renderer, font_main, colorMenuText, menuButtonRect2, QUIT_GAME_TEXT, 0, 0, 0, (option == 1) ? 0 : 127);
+		printTextLine(renderer, font_main, colorMenuText, menuButtonRect3, RESTORE_TEXT, 0, 0, 0, (option == 4) ? 0 : 127);
+		printTextLine(renderer, font_main, colorMenuText, menuButtonRect4, RECORD_TEXT, 0, 0, 0, (option == 5) ? 0 : 127);
 
 		SDL_RenderPresent(renderer);
-	} else if (!main_menu_is_running && select_menu_is_running && !stage_is_running) {
+	} else if (!main_menu_is_running && select_menu_is_running && !stage_is_running && !history_menu_is_running) {
 		// Si el menú de selección está en ejecución.
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
@@ -408,7 +394,7 @@ void render() {
 		}
 
 		SDL_RenderPresent(renderer);
-	} else if (!main_menu_is_running && !select_menu_is_running && stage_is_running) {
+	} else if (!main_menu_is_running && !select_menu_is_running && stage_is_running && !history_menu_is_running) {
 		// Si el juego se está ejecutando.
 		SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
 		SDL_RenderClear(renderer);
@@ -563,6 +549,41 @@ void render() {
 			stage_is_running = false;
 			saveEventGenericLog("Fin del Juego");
 			guardar_historial(h, m, paramInput1, elapsedTime, "Derrota");
+		}
+
+		SDL_RenderPresent(renderer);
+	} else if (!main_menu_is_running && !select_menu_is_running && !stage_is_running && history_menu_is_running) {
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+		SDL_RenderClear(renderer);
+
+		// Fondo.
+		SDL_RenderCopy(renderer, bgScrollTexture, NULL, &bgScrollRect1);
+		SDL_RenderCopy(renderer, bgScrollTexture, NULL, &bgScrollRect2);
+
+		// Título centrado arriba.
+		const SDL_Rect historyTitleRect = { (WINDOW_WIDTH - 600) / 2, 50, 600, 80 };
+		printTextLine(renderer, font_main, colorTitle, historyTitleRect, "Historial de Partidas", 0, 0, 0, 0);
+
+		// Mostrar las entradas del historial.
+		for (int i = 0; i < historial_count; i++) {
+			const int startY = 150;
+			SDL_Rect entryRect = {
+				(WINDOW_WIDTH - 800) / 2,
+				startY + i * 60,
+				800,
+				50
+			};
+
+			// Color según victoria o derrota.
+			if (strstr(historial_lineas[i], "Victoria")) {
+				SDL_SetRenderDrawColor(renderer, 0, 128, 0, 255); // Verde
+			} else {
+				SDL_SetRenderDrawColor(renderer, 128, 0, 0, 255); // Rojo
+			}
+			SDL_RenderFillRect(renderer, &entryRect);
+
+			// Texto por encima del rectángulo.
+			printTextLine(renderer, font_secondary, colorInfo, entryRect, historial_lineas[i], 0, 0, 0, 0);
 		}
 
 		SDL_RenderPresent(renderer);

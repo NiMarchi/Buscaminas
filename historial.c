@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_REGISTROS 10
-#define MAX_LINEA 150
+#include "historial.h"
+
+char historial_lineas[MAX_HISTORIAL_ENTRIES][MAX_LINE_LENGTH];
+int historial_count = 0;
 
 typedef struct {
     char tam[10];
@@ -66,4 +68,23 @@ void guardar_historial(const int tam, const int minas, const char *nombre, const
     } else {
         perror("No se pudo abrir el archivo para escribir");
     }
+}
+
+void cargar_historial_desde_archivo(const char *ruta) {
+    FILE *file = fopen(ruta, "r");
+    if (!file) {
+        perror("No se pudo abrir historial.txt");
+        return;
+    }
+
+    historial_count = 0;
+    while (fgets(historial_lineas[historial_count], MAX_LINE_LENGTH, file) && historial_count < MAX_HISTORIAL_ENTRIES) {
+        // Quita salto de línea
+        size_t len = strlen(historial_lineas[historial_count]);
+        if (len > 0 && historial_lineas[historial_count][len - 1] == '\n') {
+            historial_lineas[historial_count][len - 1] = '\0';
+        }
+        historial_count++;
+    }
+    fclose(file);
 }

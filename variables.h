@@ -54,7 +54,7 @@ menuButtonRect1, menuButtonRect2, menuButtonRect3, menuButtonRect4, widthFieldLa
 heightFieldTextboxRect, mineAmountLabelRect, mineAmountTextboxRect, okButtonRect, infoRect, infoPlayer, infoTimeRect, infoTrampRect, tileSquareRect;
 
 // Variables del juego
-extern bool game_is_running, stage_is_running, main_menu_is_running, select_menu_is_running;
+extern bool game_is_running, stage_is_running, main_menu_is_running, select_menu_is_running, history_menu_is_running;
 extern bool clickedL, clickedR, win, lose, canInteract, showMines, resetIJ, soundEffectPlayed;
 
 extern int last_frame_time, angle, mineRemainingInt;

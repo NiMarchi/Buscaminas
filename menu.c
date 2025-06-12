@@ -67,9 +67,10 @@ void process_input() {
 
 	while (SDL_PollEvent(&event)) {
 		// Determinar en qué estado del juego estamos.
-		const bool in_main_menu = main_menu_is_running && !select_menu_is_running && !stage_is_running;
-		const bool in_select_menu = !main_menu_is_running && select_menu_is_running && !stage_is_running;
-		const bool in_stage = !main_menu_is_running && !select_menu_is_running && stage_is_running;
+		const bool in_main_menu = main_menu_is_running && !select_menu_is_running && !stage_is_running && !history_menu_is_running;
+		const bool in_select_menu = !main_menu_is_running && select_menu_is_running && !stage_is_running && !history_menu_is_running;
+		const bool in_stage = !main_menu_is_running && !select_menu_is_running && stage_is_running && !history_menu_is_running;
+		const bool in_history_menu = history_menu_is_running && !main_menu_is_running && !select_menu_is_running && !stage_is_running;
 
 		// Estado: Menú principal.
 		if (in_main_menu) {
@@ -119,6 +120,9 @@ void process_input() {
 							option = RESET_OPTION;
 							main_menu_is_running = true;
 							select_menu_is_running = false;
+						} else if (in_history_menu) {
+							main_menu_is_running = true;
+							history_menu_is_running = false;
 						} else {
 							handle_quit();
 						}
@@ -126,7 +130,7 @@ void process_input() {
 
 					// Flecha hacia abajo.
 					case SDLK_DOWN:
-						if (option < (in_main_menu ? 1 : 3)) {
+						if (option < (in_main_menu ? 5 : 3)) {
 							option++;
 							if (in_select_menu) {
 								formField++;
@@ -153,6 +157,9 @@ void process_input() {
 								select_menu_is_running = true;
 							} else if (option == 1) {
 								handle_quit();
+							} else if (option == 5) {
+								main_menu_is_running = false;
+								history_menu_is_running = true;
 							}
 						}
 						break;
@@ -172,16 +179,13 @@ void process_input() {
 							}
 						}
 						break;
-						// Tecla 'T' (Para activar truco).
-						case SDLK_t:
-							if (stage_is_running) {
-								if (showMines) {
-									showMines = false;
-								} else {
-									showMines = true;
-								}
-							}
-							break;
+					// Tecla 'T' (Para activar truco).
+					case SDLK_t:
+						if (stage_is_running) {
+							showMines = !showMines;
+						}
+						break;
+
 					default:
 						break;
 				}
@@ -198,11 +202,11 @@ void process_input() {
 					}
 					// Solo admite numeros como entrada.
 					if (c >= '0' && c <= '9') {
-						 if ((formField == 1 || option == 1) && paramInput2[1] == '\0') {
+						if ((formField == 1 || option == 1) && paramInput2[1] == '\0') {
 							SDL_SetTextInputRect(&widthFieldLabelRect);
 							strcat(paramInput2, event.text.text);
 							counter2 += TEXT_BOX_FINE_ADJUSTMENT;
-						 } else if ((formField == 2 || option == 2) && paramInput3[2] == '\0') {
+						} else if ((formField == 2 || option == 2) && paramInput3[2] == '\0') {
 							SDL_SetTextInputRect(&widthFieldLabelRect);
 							strcat(paramInput3, event.text.text);
 							counter3 += TEXT_BOX_FINE_ADJUSTMENT;
