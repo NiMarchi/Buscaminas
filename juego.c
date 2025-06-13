@@ -9,6 +9,7 @@
 #include "juego.h"
 #include "variables.h"
 #include "historial.h"
+#include "restaurar.h"
 
 // Comprueba si el jugador venció el juego.
 bool checkWin(const field_t *f, const field_t *c) {
@@ -198,6 +199,16 @@ void render() {
 				soundEffectPlayed = true;
 			}
 			option = 4;
+			if (clickedL) {
+				if (cargar_partida(&f, &c, paramInput1, elapsedTime, &mineRemainingInt, &h, &m)) {
+					main_menu_is_running = false;
+					select_menu_is_running = false;
+					stage_is_running = true;
+					option = RESET_OPTION;
+					Mix_HaltMusic();
+				}
+				clickedL = false;
+			}
 		} else if (xm >= menuButtonRect4.x && xm <= menuButtonRect4.x + menuButtonRect4.w && ym >= menuButtonRect4.y && ym <= menuButtonRect4.y + menuButtonRect4.h) {
 			// De lo contrario, si el mouse está sobre el botón historial, se resalta y, si se hace clic, sale del juego.
 			// Si aún no se ha reproducido el efecto de sonido, se reproduce una vez si el mouse permanece dentro del área del botón.
@@ -209,8 +220,8 @@ void render() {
 			if (clickedL) {
 				main_menu_is_running = false;
 				history_menu_is_running = true;
-				clickedL = false;
 				cargar_historial_desde_archivo("historial.txt");
+				clickedL = false;
 			}
 		} else {
 			soundEffectPlayed = false; // Si el mouse sale de cualquier área de botones, establece el efecto de sonido para que se reproduzca nuevamente al pasar el mouse sobre él.
@@ -529,26 +540,24 @@ void render() {
 			saveEventGenericLog("Victoria");
 			Mix_PlayChannel(-1, soundEffectVictory, 0); // Reproduce un sonido de victoria.
 			printFinish(renderer, font_main, colorTip, true);
-			free(f);
-			f = NULL;
-			free(c);
-			c = NULL;
+			free(f); f = NULL;
+			free(c); c = NULL;
 			stage_is_running = false;
 			saveEventGenericLog("Fin del Juego");
 			guardar_historial(h, m, paramInput1, elapsedTime, "Victoria");
+			eliminar_partida_guardada();
 		}
 		// Si el jugador gana, muestra un cartel de derrota y desvincula los campos superiores e inferiores.
 		if (lose) {
 			saveEventGenericLog("Derrota");
 			Mix_PlayChannel(-1, soundEffectMine, 0); // Reproduce un sonido de derrota.
 			printFinish(renderer, font_main, colorTip, false);
-			free(f);
-			f = NULL;
-			free(c);
-			c = NULL;
+			free(f); f = NULL;
+			free(c); c = NULL;
 			stage_is_running = false;
 			saveEventGenericLog("Fin del Juego");
 			guardar_historial(h, m, paramInput1, elapsedTime, "Derrota");
+			eliminar_partida_guardada();
 		}
 
 		SDL_RenderPresent(renderer);

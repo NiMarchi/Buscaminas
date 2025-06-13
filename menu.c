@@ -3,6 +3,7 @@
 #include "constantes.h"
 #include "juego.h"
 #include "variables.h"
+#include "restaurar.h"
 
 void setup_main_menu() {
 	// Imagen de presentación izquierda.
@@ -96,6 +97,9 @@ void process_input() {
 		switch (event.type) {
 			// Evento: Cierre de ventana.
 			case SDL_QUIT:
+				if (stage_is_running) {
+					guardar_partida(f, c, paramInput1, elapsedTime, mineRemainingInt);
+				}
 				saveEventGenericLog("Cierre de Ventana");
 				handle_quit();
 				break;
@@ -105,6 +109,9 @@ void process_input() {
 				switch (event.key.keysym.sym) {
 					// Tecla ESCAPE.
 					case SDLK_ESCAPE:
+						if (stage_is_running) {
+							guardar_partida(f, c, paramInput1, elapsedTime, mineRemainingInt);
+						}
 						saveEventGenericLog("Tecla Presionada: Escape");
 						if (in_stage) {
 							Mix_HaltMusic(); // Detener música del escenario.
