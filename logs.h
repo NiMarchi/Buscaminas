@@ -1,8 +1,8 @@
 #ifndef LOGS_H
 #define LOGS_H
 
-void saveEventGenericLog(char *text);
-void saveEventMouseLog(char *text, int x, int y);
+void saveEventGenericLog(const char *text);
+void saveEventMouseLog(const char *text, const int x, const int y);
 void saveBlankLineLog();
 
 #endif
