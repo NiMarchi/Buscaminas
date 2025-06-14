@@ -2,6 +2,7 @@
 #include <time.h>
 
 #include "campo.h"
+#include "constantes.h"
 
 struct tile tile;
 

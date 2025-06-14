@@ -2,9 +2,8 @@
 #include <string.h>
 
 #include "historial.h"
-
-char historial_lineas[MAX_HISTORIAL_ENTRIES][MAX_LINE_LENGTH];
-int historial_count = 0;
+#include "constantes.h"
+#include "variables.h"
 
 void guardar_historial(const int tam, const int minas, const char *nombre, const char *tiempo, const char *resultado) {
     Registro registros[MAX_REGISTROS];

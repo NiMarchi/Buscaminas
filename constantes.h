@@ -22,6 +22,24 @@
 #define BUTTON_H 100
 #define BUTTON_SPACING 125
 
+#define OPEN_F 1
+#define FLAG_F 2
+#define MINE 20
+#define MINE_TRIG 21
+#define BLANK 0
+#define COVER 10
+#define FLAG 50
+#define EDGE_T_B 100
+#define EDGE_L_R 101
+
+#define MAX_REGISTROS 10
+#define MAX_LINEA 150
+
+#define MAX_HISTORIAL_ENTRIES 10
+#define MAX_LINE_LENGTH 256
+
+#define MAX_NAME_LENGTH 32
+
 #define PLAYER_NAME "Nombre del jugador: (Max 10 caracteres)"
 #define FIELD_SIZE "Dimensiones del campo: (Min 8, Max 32)"
 #define MINE_AMOUNT_TEXT "Cantidad de minas: (Min 5, Max 50% de las dimensiones)"

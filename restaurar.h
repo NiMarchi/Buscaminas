@@ -4,8 +4,6 @@
 #include "campo.h"
 #include "constantes.h"
 
-#define MAX_NAME_LENGTH 32
-
 typedef struct {
     int width;
     int height;

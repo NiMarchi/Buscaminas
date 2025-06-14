@@ -10,6 +10,7 @@
 #include <SDL_mixer.h>
 
 #include "campo.h"
+#include "constantes.h"
 
 extern FILE *logs;
 
@@ -54,6 +55,9 @@ extern char *aux;
 extern char paramInput1[15], paramInput2[5], paramInput3[5], mineRemainingStr[5], elapsedTime[5], infoPlayerName[25], infoTime[25], mineRemainingConcat[25];
 
 extern time_t startTime, currentTime;
+
+extern char historial_lineas[MAX_HISTORIAL_ENTRIES][MAX_LINE_LENGTH];
+extern int historial_count;
 
 extern field_t *f, *c;
 
