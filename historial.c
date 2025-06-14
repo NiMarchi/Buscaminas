@@ -1,11 +1,9 @@
-#include <stdio.h>
 #include <string.h>
 
 #include "historial.h"
-#include "constantes.h"
 #include "variables.h"
 
-void guardar_historial(const int tam, const int minas, const char *nombre, const char *tiempo, const char *resultado) {
+void guardarHistorial(const int tam, const int minas, const char *nombre, const char *tiempo, const char *resultado) {
     Registro registros[MAX_REGISTROS];
     int total = 0;
     FILE *archivo = fopen("historial.txt", "r");
@@ -61,20 +59,20 @@ void guardar_historial(const int tam, const int minas, const char *nombre, const
     }
 }
 
-void cargar_historial_desde_archivo(const char *ruta) {
+void cargarHistorialArchivo(const char *ruta) {
     FILE *file = fopen(ruta, "r");
     if (!file) {
         perror("No se pudo abrir historial.txt");
         return;
     }
 
-    historial_count = 0;
-    while (fgets(historial_lineas[historial_count], MAX_LINE_LENGTH, file) && historial_count < MAX_HISTORIAL_ENTRIES) {
-        const size_t len = strlen(historial_lineas[historial_count]);
-        if (len > 0 && historial_lineas[historial_count][len - 1] == '\n') {
-            historial_lineas[historial_count][len - 1] = '\0';
+    historialCont = 0;
+    while (fgets(historialLineas[historialCont], LOG_MAX_LINEA, file) && historialCont < MAX_HISTORIAL_ENTRADA) {
+        const size_t len = strlen(historialLineas[historialCont]);
+        if (len > 0 && historialLineas[historialCont][len - 1] == '\n') {
+            historialLineas[historialCont][len - 1] = '\0';
         }
-        historial_count++;
+        historialCont++;
     }
     fclose(file);
 }

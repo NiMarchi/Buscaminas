@@ -9,7 +9,7 @@ typedef struct {
     char resultado[10];
 } Registro;
 
-void guardar_historial(int tam, int minas, const char *nombre, const char *tiempo, const char *resultado);
-void cargar_historial_desde_archivo(const char *ruta);
+void guardarHistorial(const int tam, const int minas, const char *nombre, const char *tiempo, const char *resultado);
+void cargarHistorialArchivo(const char *ruta);
 
 #endif

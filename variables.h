@@ -56,8 +56,8 @@ extern char paramInput1[15], paramInput2[5], paramInput3[5], mineRemainingStr[5]
 
 extern time_t startTime, currentTime;
 
-extern char historial_lineas[MAX_HISTORIAL_ENTRIES][MAX_LINE_LENGTH];
-extern int historial_count;
+extern char historialLineas[MAX_HISTORIAL_ENTRADA][LOG_MAX_LINEA];
+extern int historialCont;
 
 extern campo_t *f, *c;
 

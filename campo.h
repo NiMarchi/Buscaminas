@@ -15,15 +15,15 @@ typedef struct azulejo {
     int h;
 } azulejo_t;
 
-campo_t* iniciarCampo(int x, int y, int minas);
-campo_t* iniciarCobertura(int x, int y);
+campo_t* iniciarCampo(const int x, const int y, const int minas);
+campo_t* iniciarCobertura(const int x, const int y);
 void contarMinas(const campo_t *f);
 void rellenarCampoCero(const campo_t *f);
 void rellenarBordeCampo(const campo_t *f);
 void rellenarCampoMinas(const campo_t *f);
 void rellenarCampoCobertura(const campo_t *f);
-void abrirCampoUtil(campo_t *f, campo_t *c, int x, int y, int viejo);
-void abrirCampo(campo_t *f, campo_t *c, int x, int y, int band, int *bandCant);
+void abrirCampoUtil(campo_t *f, campo_t *c, const int x, const int y, const int viejo);
+void abrirCampo(campo_t *f, campo_t *c, const int x, const int y, const int band, int *bandCant);
 
 extern azulejo_t azulejo;
 

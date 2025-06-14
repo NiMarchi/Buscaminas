@@ -20,7 +20,7 @@ bool checkWin(const campo_t *f, const campo_t *c) {
 
 			// Si la casilla está cubierta o marcada, debe haber una mina debajo.
 			// Si la casilla está descubierta, debe coincidir con el campo inferior.
-			if (!((cover == COVER && field == MINE) || (cover == FLAG && field == MINE) || (cover == field))) {
+			if (!((cover == CUBRIR && field == MINA) || (cover == BANDERA && field == MINA) || (cover == field))) {
 				return false; // Si alguna condición no se cumple, el jugador aún no ha ganado.
 			}
 		}
@@ -32,7 +32,7 @@ bool checkWin(const campo_t *f, const campo_t *c) {
 
 // Comprueba si el jugador perdió el juego.
 bool checkLose(const campo_t *f, const campo_t *c, const int *inpt) {
-	return f->mat[inpt[0]][inpt[1]] == MINE && c->mat[inpt[0]][inpt[1]] != FLAG && inpt[2] == OPEN_F;
+	return f->mat[inpt[0]][inpt[1]] == MINA && c->mat[inpt[0]][inpt[1]] != BANDERA && inpt[2] == OPEN_F;
 }
 
 // Función para implementar la función de subcadena en C.
@@ -216,7 +216,7 @@ void render() {
 			if (clickedL) {
 				main_menu_is_running = false;
 				history_menu_is_running = true;
-				cargar_historial_desde_archivo("historial.txt");
+				cargarHistorialArchivo("historial.txt");
 				clickedL = false;
 			}
 		} else {
@@ -447,7 +447,7 @@ void render() {
 				tileSquareRect.w = azulejo.w;
 				tileSquareRect.h = azulejo.h;
 
-				if (xm >= xi && xm <= xf && ym >= yi && ym <= yf && c->mat[i][j] != EDGE_L_R && c->mat[i][j] != EDGE_T_B) {
+				if (xm >= xi && xm <= xf && ym >= yi && ym <= yf && c->mat[i][j] != BORDE_L_R && c->mat[i][j] != BORDE_T_B) {
 					if (clickedL) {
 						saveEventMouseLog("Mouse Click Izquierdo", i, j);
 						// Si aún no se ha abierto la tapa, reproduce el sonido de clic izquierdo.
@@ -474,7 +474,7 @@ void render() {
 					clickedR = false;
 				}
 
-				if (c->mat[i][j] == MINE) {
+				if (c->mat[i][j] == MINA) {
 					SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 					SDL_RenderFillRect(renderer, &tileSquareRect);
 					f->mat[i][j] = MINE_TRIG;
@@ -487,19 +487,19 @@ void render() {
 						resetIJ = false;
 						break;
 					}
-				} else if (c->mat[i][j] == EDGE_L_R || c->mat[i][j] == EDGE_T_B) {
+				} else if (c->mat[i][j] == BORDE_L_R || c->mat[i][j] == BORDE_T_B) {
 					SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
 					SDL_RenderFillRect(renderer, &tileSquareRect);
 
 					// Muestra un icono personalizado para los bordes.
 					SDL_RenderCopy(renderer, edgeIconTexture, NULL, &tileSquareRect);
-				} else if (c->mat[i][j] == FLAG) {
+				} else if (c->mat[i][j] == BANDERA) {
 					SDL_SetRenderDrawColor(renderer, 127, 255, 0, 255);
 					SDL_RenderFillRect(renderer, &tileSquareRect);
 
 					// Muestra un icono personalizado para las banderas.
 					SDL_RenderCopy(renderer, flagIconTexture, NULL, &tileSquareRect);
-				} else if (c->mat[i][j] == COVER) {
+				} else if (c->mat[i][j] == CUBRIR) {
 					SDL_SetRenderDrawColor(renderer, 64, 64, 128, 255);
 					SDL_RenderFillRect(renderer, &tileSquareRect);
 
@@ -524,7 +524,7 @@ void render() {
 				}
 
 				// Si el jugador muere, muestra todas las minas ocultas.
-				if (f->mat[i][j] == MINE && showMines) {
+				if (f->mat[i][j] == MINA && showMines) {
 					// Muestra un icono personalizado para las minas.
 					SDL_RenderCopy(renderer, mineBoomIconTexture, NULL, &tileSquareRect);
 				}
@@ -540,7 +540,7 @@ void render() {
 			free(c); c = NULL;
 			stage_is_running = false;
 			saveEventGenericLog("Fin del Juego");
-			guardar_historial(h, m, paramInput1, elapsedTime, "Victoria");
+			guardarHistorial(h, m, paramInput1, elapsedTime, "Victoria");
 			eliminar_partida_guardada();
 			restored_game = false;
 		}
@@ -553,7 +553,7 @@ void render() {
 			free(c); c = NULL;
 			stage_is_running = false;
 			saveEventGenericLog("Fin del Juego");
-			guardar_historial(h, m, paramInput1, elapsedTime, "Derrota");
+			guardarHistorial(h, m, paramInput1, elapsedTime, "Derrota");
 			eliminar_partida_guardada();
 			restored_game = false;
 		}
@@ -572,7 +572,7 @@ void render() {
 		printTextLine(renderer, font_main, colorTitle, historyTitleRect, "Historial de Partidas", 0, 0, 0, 0);
 
 		// Mostrar las entradas del historial.
-		for (int i = 0; i < historial_count; i++) {
+		for (int i = 0; i < historialCont; i++) {
 			const int startY = 150;
 			SDL_Rect entryRect = {
 				(WINDOW_WIDTH - 800) / 2,
@@ -582,7 +582,7 @@ void render() {
 			};
 
 			// Color según victoria o derrota.
-			if (strstr(historial_lineas[i], "Victoria")) {
+			if (strstr(historialLineas[i], "Victoria")) {
 				SDL_SetRenderDrawColor(renderer, 0, 128, 0, 255); // Verde
 			} else {
 				SDL_SetRenderDrawColor(renderer, 128, 0, 0, 255); // Rojo
@@ -590,7 +590,7 @@ void render() {
 			SDL_RenderFillRect(renderer, &entryRect);
 
 			// Texto por encima del rectángulo.
-			printTextLine(renderer, font_secondary, colorInfo, entryRect, historial_lineas[i], 0, 0, 0, 0);
+			printTextLine(renderer, font_secondary, colorInfo, entryRect, historialLineas[i], 0, 0, 0, 0);
 		}
 
 		SDL_RenderPresent(renderer);
