@@ -11,16 +11,16 @@ int main(int argc, char* argv[]) {
 	game_is_running = initializeWindow();
 
 	while (game_is_running) {
-		setup_main_menu();
+		setupMainMenu();
 
 		while (main_menu_is_running) {
-			process_input(); // Procesar las entradas del usuario mediante el mouse/teclado en el menú.
+			processInput(); // Procesar las entradas del usuario mediante el mouse/teclado en el menú.
 			update(); // Procesar estados de objetos del juego en el menú.
 			render(); // Procesar la representación de objetos en el menú.
 		}
 
 		while (select_menu_is_running) {
-			process_input(); // Procesar las entradas del usuario mediante el mouse/teclado en el menú.
+			processInput(); // Procesar las entradas del usuario mediante el mouse/teclado en el menú.
 			update(); // Procesar estados de objetos del juego en el menú.
 			render(); // Procesar la representación de objetos en el menú.
 		}
@@ -30,14 +30,14 @@ int main(int argc, char* argv[]) {
 		}
 
 		while (stage_is_running) {
-			process_input(); // Procesar las entradas del usuario mediante el mouse y el teclado en el escenario.
+			processInput(); // Procesar las entradas del usuario mediante el mouse y el teclado en el escenario.
 			update(); // Procesar los estados de los objetos del juego en el escenario.
 			render(); // Procesar la representación de objetos en etapa.
 			wait_interval(); // Cuando finaliza un juego, espera 3 segundos y detiene la música antes de volver al menú principal.
 		}
 
 		while (history_menu_is_running) {
-			process_input();
+			processInput();
 			update();
 			render();
 		}

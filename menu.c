@@ -1,11 +1,8 @@
-#include <stdio.h>
-
-#include "constantes.h"
 #include "juego.h"
 #include "variables.h"
 #include "restaurar.h"
 
-void setup_main_menu() {
+void setupMainMenu() {
 	// Imagen de presentación izquierda.
 	menuPresentationRect1.w = ICON_SIZE;
 	menuPresentationRect1.h = ICON_SIZE;
@@ -44,7 +41,7 @@ void setup_main_menu() {
 }
 
 // Función auxiliar para cerrar el juego y salir de todos los estados.
-void handle_quit() {
+void handleQuit() {
 	game_is_running = false;
 	main_menu_is_running = false;
 	select_menu_is_running = false;
@@ -52,7 +49,7 @@ void handle_quit() {
 }
 
 // Función auxiliar para manejar el estado de los botones del mouse.
-void handle_mouse_button(const SDL_Event *event, const bool pressed) {
+void handleMouseButton(const SDL_Event *event, const bool pressed) {
 	if (event->button.button == SDL_BUTTON_LEFT) {
 		clickedL = pressed;
 	}
@@ -62,7 +59,7 @@ void handle_mouse_button(const SDL_Event *event, const bool pressed) {
 }
 
 // Función principal para procesar la entrada del usuario.
-void process_input() {
+void processInput() {
 	// Inicia la entrada de texto (Para SDL_TEXTINPUT).
 	SDL_StartTextInput();
 
@@ -101,7 +98,7 @@ void process_input() {
 					saveGame(f, c, paramInput1, elapsedTime, mineRemainingInt);
 				}
 				saveEventGenericLog("Cierre de Ventana");
-				handle_quit();
+				handleQuit();
 				break;
 
 			// Evento: Tecla presionada.
@@ -131,7 +128,7 @@ void process_input() {
 							main_menu_is_running = true;
 							history_menu_is_running = false;
 						} else {
-							handle_quit();
+							handleQuit();
 						}
 						break;
 
@@ -163,7 +160,7 @@ void process_input() {
 								main_menu_is_running = false;
 								select_menu_is_running = true;
 							} else if (option == 1) {
-								handle_quit();
+								handleQuit();
 							} else if (option == 5) {
 								main_menu_is_running = false;
 								history_menu_is_running = true;
@@ -224,12 +221,12 @@ void process_input() {
 
 			// Evento: Botón del mouse presionado.
 			case SDL_MOUSEBUTTONDOWN:
-				handle_mouse_button(&event, true);
+				handleMouseButton(&event, true);
 				break;
 
 			// Evento: Botón del mouse soltado.
 			case SDL_MOUSEBUTTONUP:
-				handle_mouse_button(&event, false);
+				handleMouseButton(&event, false);
 				break;
 
 			default:
