@@ -92,7 +92,6 @@ void update() {
     }
 
     // Calcula el tiempo transcurrido (delta) entre frames en segundos.
-    delta_time = (SDL_GetTicks() - last_frame_time) / 1000.0f;
     last_frame_time = SDL_GetTicks();
 
     // Si el juego está activo y los campos están cargados.
@@ -147,12 +146,6 @@ void render() {
 		SDL_RenderCopy(renderer, bgScrollTexture, NULL, &bgScrollRect1);
 		SDL_RenderCopy(renderer, bgScrollTexture, NULL, &bgScrollRect2);
 
-		// Imagen de presentación 1.
-		SDL_RenderCopyEx(renderer, menuPresentationTexture, NULL, &menuPresentationRect1, angle, NULL, SDL_FLIP_NONE);
-
-		// Imagen de presentación 2.
-		SDL_RenderCopyEx(renderer, menuPresentationTexture, NULL, &menuPresentationRect2, -angle, NULL, SDL_FLIP_NONE);
-
 		// Título de la presentación.
 		printTextLine(renderer, font_main, colorTitle, menuTitlePresentationRect, TITLE, 0, 0, 0, 0);
 
@@ -172,7 +165,7 @@ void render() {
 				Mix_PlayChannel(-1, soundEffectMenu, 0);
 				soundEffectPlayed = true;
 			}
-			option = RESET_OPTION;
+			option = 0;
 			if (clickedL) {
 				main_menu_is_running = false;
 				select_menu_is_running = true;
@@ -207,7 +200,7 @@ void render() {
 					select_menu_is_running = false;
 					stage_is_running = true;
 					restored_game = true;
-					option = RESET_OPTION;
+					option = 0;
 					Mix_HaltMusic();
 				}
 				clickedL = false;
@@ -320,7 +313,7 @@ void render() {
 			}
 			if (clickedL) {
 				formField = 0;
-				option = RESET_OPTION;
+				option = 0;
 				clickedL = false;
 			}
 		} else if (xm >= heightFieldTextboxRect.x && xm <= heightFieldTextboxRect.x + heightFieldTextboxRect.w && ym >= heightFieldTextboxRect.y && ym <= heightFieldTextboxRect.y + heightFieldTextboxRect.h) {
@@ -399,7 +392,7 @@ void render() {
 					mineRemainingInt = m;
 					select_menu_is_running = false;
 					stage_is_running = true;
-					option = RESET_OPTION;
+					option = 0;
 					Mix_HaltMusic(); // Detiene la música del menú de fondo.
 				} else {
 					printAlert(renderer, font_main, colorAlert); // Si los parámetros del campo están fuera de los límites, se muestra una alerta de banner.
@@ -602,22 +595,4 @@ void render() {
 
 		SDL_RenderPresent(renderer);
 	}
-}
-
-void saveEventGenericLog(const char *text) {
-	time(&t);
-	info = localtime(&t);
-	strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", info);
-	fprintf(logs, "%s: %s\n", buffer, text);
-}
-
-void saveEventMouseLog(const char *text, const int x, const int y) {
-	time(&t);
-	info = localtime(&t);
-	strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", info);
-	fprintf(logs, "%s: %s. Coordenadas: (x: %d, y: %d)\n", buffer, text, x, y);
-}
-
-void saveBlankLineLog() {
-	fprintf(logs, "\n");
 }

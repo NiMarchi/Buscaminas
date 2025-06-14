@@ -18,7 +18,6 @@ typedef struct field {
     int m;
 } field_t;
 
-// Solo declaración externa de la variable global
 typedef struct tile {
     int x;
     int y;

@@ -124,7 +124,7 @@ void process_input() {
 								Mix_PlayMusic(backgroundMusicMenu, -1);
 							}
 						} else if (in_select_menu) {
-							option = RESET_OPTION;
+							option = 0;
 							main_menu_is_running = true;
 							select_menu_is_running = false;
 						} else if (in_history_menu) {
@@ -159,7 +159,7 @@ void process_input() {
 					case SDLK_RETURN:
 						if (in_main_menu) {
 							if (option == 0) {
-								option = RESET_OPTION;
+								option = 0;
 								main_menu_is_running = false;
 								select_menu_is_running = true;
 							} else if (option == 1) {

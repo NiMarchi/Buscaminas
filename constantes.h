@@ -110,7 +110,6 @@
 #define FONT_PATH_SECONDARY "../resources/fonts/rexlia-rg.otf"
 #define ALPHA_UNSELECTED 64
 #define ALPHA_SELECTED 127
-#define RESET_OPTION 0
 
 #define WINDOW_ICON "../resources/icons/window_icon.png"
 #define MINE_BOOM_ICON "../resources/icons/mine_boom_icon.bmp"
@@ -121,7 +120,6 @@
 #define BACKGROUND_WALLPAPER "../resources/icons/background_menu.bmp"
 #define NEW_OK_BUTTON "../resources/icons/new_ok_button.bmp"
 #define QUIT_BUTTON "../resources/icons/quit_button.bmp"
-#define PRESENTATION "../resources/icons/menu_presentation.png"
 
 #define BACKGROUND_MUSIC_MENU "../resources/sounds/bg-menu_space-exploration.mp3"
 #define BACKGROUND_MUSIC_STAGE "../resources/sounds/bg-stage_hypnosphere.mp3"
@@ -138,14 +136,14 @@
 #define ERROR_SDL_AUDIO "Error al inicializar SDL Audio.\n"
 #define ERROR_SDL_INIT_PNG "Error al inicializar PNG support.\n"
 
-#define AUTHOR "NiMarchi - v1.0.0.2025"
+#define AUTHOR "NiMarchi - Beta"
 
 #define NEW_GAME_TEXT " Nuevo Juego "
 #define RESTORE_TEXT " Restaurar "
 #define RECORD_TEXT " Historial "
 #define QUIT_GAME_TEXT " Salir del Juego "
 
-#define WIN_TEXT "Winner"
-#define LOSE_TEXT "Game Over"
+#define WIN_TEXT " Victoria "
+#define LOSE_TEXT " Derrota "
 
 #endif

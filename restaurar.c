@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <string.h>
+
 #include "restaurar.h"
 #include "variables.h"
 
-int guardar_partida(const field_t *f, const field_t *c, const char *player, const char *elapsedTime, int mineRemainingInt) {
+int guardar_partida(const field_t *f, const field_t *c, const char *player, const char *elapsedTime, const int mineRemainingInt) {
     FILE *file = fopen("savegame.dat", "wb");
     if (!file) return 0;
 

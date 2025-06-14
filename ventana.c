@@ -94,41 +94,17 @@ bool initialize_window() {
 	}
 
 	// Carga superficies y texturas.
-	bgScrollSurface = load_surface(BACKGROUND_WALLPAPER);
-	bgScrollTexture = create_texture(bgScrollSurface);
-
-	menuPresentationSurface = load_surface(PRESENTATION);
-	menuPresentationTexture = create_texture(menuPresentationSurface);
-
-	menuButtonTextSurface1 = load_surface(NEW_OK_BUTTON);
-	menuButtonTextTexture1 = create_texture(menuButtonTextSurface1);
-
-	menuButtonTextSurface3 = load_surface(NEW_OK_BUTTON);
-	menuButtonTextTexture3 = create_texture(menuButtonTextSurface3);
-
-	menuButtonTextSurface4 = load_surface(NEW_OK_BUTTON);
-	menuButtonTextTexture4 = create_texture(menuButtonTextSurface4);
-
-	menuButtonTextSurface2 = load_surface(QUIT_BUTTON);
-	menuButtonTextTexture2 = create_texture(menuButtonTextSurface2);
-
-	okButtonSurface = load_surface(NEW_OK_BUTTON);
-	okButtonTexture = create_texture(okButtonSurface);
-
-	mineBoomIconSurface = load_surface(MINE_BOOM_ICON);
-	mineBoomIconTexture = create_texture(mineBoomIconSurface);
-
-	mineDeathIconSurface = load_surface(MINE_DEATH_ICON);
-	mineDeathIconTexture = create_texture(mineDeathIconSurface);
-
-	edgeIconSurface = load_surface(EDGE_ICON);
-	edgeIconTexture = create_texture(edgeIconSurface);
-
-	flagIconSurface = load_surface(FLAG_ICON);
-	flagIconTexture = create_texture(flagIconSurface);
-
-	coverIconSurface = load_surface(COVER_ICON);
-	coverIconTexture = create_texture(coverIconSurface);
+	bgScrollTexture = create_texture(load_surface(BACKGROUND_WALLPAPER));
+	menuButtonTextTexture1 = create_texture(load_surface(NEW_OK_BUTTON));
+	menuButtonTextTexture3 = create_texture(load_surface(NEW_OK_BUTTON));
+	menuButtonTextTexture4 = create_texture(load_surface(NEW_OK_BUTTON));
+	menuButtonTextTexture2 = create_texture(load_surface(QUIT_BUTTON));
+	okButtonTexture = create_texture(load_surface(NEW_OK_BUTTON));
+	mineBoomIconTexture = create_texture(load_surface(MINE_BOOM_ICON));
+	mineDeathIconTexture = create_texture(load_surface(MINE_DEATH_ICON));
+	edgeIconTexture = create_texture(load_surface(EDGE_ICON));
+	flagIconTexture = create_texture(load_surface(FLAG_ICON));
+	coverIconTexture = create_texture(load_surface(COVER_ICON));
 
 	// Carga música y efectos de sonido.
 	backgroundMusicMenu = Mix_LoadMUS(BACKGROUND_MUSIC_MENU);
@@ -157,43 +133,17 @@ void destroy_window() {
 	saveEventGenericLog("Liberación de Recursos");
 	saveBlankLineLog();
 	fclose(logs);
-
-	SDL_FreeSurface(aboutTextSurface);
-	SDL_FreeSurface(bgScrollSurface);
-	SDL_FreeSurface(menuPresentationSurface);
-	SDL_FreeSurface(menuButtonTextSurface1);
-	SDL_FreeSurface(menuButtonTextSurface2);
-	SDL_FreeSurface(labelSurface);
-	SDL_FreeSurface(textInputSurface);
-	SDL_FreeSurface(okButtonSurface);
-	SDL_FreeSurface(alertTextSurface);
-	SDL_FreeSurface(mineIconSurface);
-	SDL_FreeSurface(mineBoomIconSurface);
-	SDL_FreeSurface(mineDeathIconSurface);
-	SDL_FreeSurface(flagIconSurface);
-	SDL_FreeSurface(edgeIconSurface);
-	SDL_FreeSurface(coverIconSurface);
-	SDL_FreeSurface(finaleTextSurface);
-
-	SDL_DestroyTexture(aboutTextTexture);
+	
 	SDL_DestroyTexture(bgScrollTexture);
-	SDL_DestroyTexture(menuPresentationTexture);
-	SDL_DestroyTexture(menuTitlePresentationTexture);
 	SDL_DestroyTexture(menuButtonTextTexture1);
 	SDL_DestroyTexture(menuButtonTextTexture2);
-	SDL_DestroyTexture(labelTexture);
-	SDL_DestroyTexture(textInputTexture);
 	SDL_DestroyTexture(okButtonTexture);
-	SDL_DestroyTexture(alertTextTexture);
-	SDL_DestroyTexture(infoTextTexture);
 	SDL_DestroyTexture(tileTextTexture);
-	SDL_DestroyTexture(mineIconTexture);
 	SDL_DestroyTexture(mineBoomIconTexture);
 	SDL_DestroyTexture(mineDeathIconTexture);
 	SDL_DestroyTexture(flagIconTexture);
 	SDL_DestroyTexture(edgeIconTexture);
 	SDL_DestroyTexture(coverIconTexture);
-	SDL_DestroyTexture(finaleTextTexture);
 
 	TTF_CloseFont(font_main);
 	TTF_CloseFont(font_secondary);

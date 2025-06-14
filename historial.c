@@ -6,14 +6,6 @@
 char historial_lineas[MAX_HISTORIAL_ENTRIES][MAX_LINE_LENGTH];
 int historial_count = 0;
 
-typedef struct {
-    char tam[10];
-    int minas;
-    char nombre[50];
-    char tiempo[6];
-    char resultado[10];
-} Registro;
-
 void guardar_historial(const int tam, const int minas, const char *nombre, const char *tiempo, const char *resultado) {
     Registro registros[MAX_REGISTROS];
     int total = 0;
@@ -79,8 +71,7 @@ void cargar_historial_desde_archivo(const char *ruta) {
 
     historial_count = 0;
     while (fgets(historial_lineas[historial_count], MAX_LINE_LENGTH, file) && historial_count < MAX_HISTORIAL_ENTRIES) {
-        // Quita salto de línea
-        size_t len = strlen(historial_lineas[historial_count]);
+        const size_t len = strlen(historial_lineas[historial_count]);
         if (len > 0 && historial_lineas[historial_count][len - 1] == '\n') {
             historial_lineas[historial_count][len - 1] = '\0';
         }

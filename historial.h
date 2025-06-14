@@ -7,6 +7,14 @@
 #define MAX_HISTORIAL_ENTRIES 10
 #define MAX_LINE_LENGTH 256
 
+typedef struct {
+    char tam[10];
+    int minas;
+    char nombre[50];
+    char tiempo[6];
+    char resultado[10];
+} Registro;
+
 extern char historial_lineas[MAX_HISTORIAL_ENTRIES][MAX_LINE_LENGTH];
 extern int historial_count;
 
