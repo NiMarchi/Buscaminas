@@ -59,6 +59,6 @@ extern time_t startTime, currentTime;
 extern char historial_lineas[MAX_HISTORIAL_ENTRIES][MAX_LINE_LENGTH];
 extern int historial_count;
 
-extern field_t *f, *c;
+extern campo_t *f, *c;
 
 #endif

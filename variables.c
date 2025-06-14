@@ -51,4 +51,4 @@ int historial_count = 0;
 
 time_t startTime, currentTime;
 
-field_t *f = NULL, *c = NULL;
+campo_t *f = NULL, *c = NULL;

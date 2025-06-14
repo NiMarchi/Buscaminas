@@ -5,8 +5,8 @@
 
 #include "campo.h"
 
-bool checkWin(const field_t *f, const field_t *c);
-bool checkLose(const field_t *f, const field_t *c, const int *inpt);
+bool checkWin(const campo_t *f, const campo_t *c);
+bool checkLose(const campo_t *f, const campo_t *c, const int *inpt);
 char* substring(char *destination, const char *source, int beg, int n);
 void setup_stage(int h, int m);
 void wait_interval();

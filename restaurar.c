@@ -4,7 +4,7 @@
 #include "restaurar.h"
 #include "variables.h"
 
-int guardar_partida(const field_t *f, const field_t *c, const char *player, const char *elapsedTime, const int mineRemainingInt) {
+int guardar_partida(const campo_t *f, const campo_t *c, const char *player, const char *elapsedTime, const int mineRemainingInt) {
     FILE *file = fopen("savegame.dat", "wb");
     if (!file) return 0;
 
@@ -30,7 +30,7 @@ int guardar_partida(const field_t *f, const field_t *c, const char *player, cons
     return 1;
 }
 
-int cargar_partida(field_t **f, field_t **c, char *player, char *elapsedTime, int *mineRemainingInt, int *h, int *m) {
+int cargar_partida(campo_t **f, campo_t **c, char *player, char *elapsedTime, int *mineRemainingInt, int *h, int *m) {
     FILE *file = fopen("savegame.dat", "rb");
     if (!file) return 0;
 
@@ -45,8 +45,8 @@ int cargar_partida(field_t **f, field_t **c, char *player, char *elapsedTime, in
     strncpy(player, data.player, MAX_NAME_LENGTH);
     strncpy(elapsedTime, data.elapsedTime, 16);
 
-    *f = initField(data.width, data.width, data.mines);
-    *c = initCover(data.width, data.width);
+    *f = iniciarCampo(data.width, data.width, data.mines);
+    *c = iniciarCobertura(data.width, data.width);
 
     for (int i = 0; i < (*f)->x; i++) {
         for (int j = 0; j < (*f)->y; j++) {
