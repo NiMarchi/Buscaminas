@@ -8,7 +8,7 @@
 // Función principal.
 int main(int argc, char* argv[]) {
 	// Si initialize_window está inicializado, game_is_running es igual a verdadero.
-	game_is_running = initialize_window();
+	game_is_running = initializeWindow();
 
 	while (game_is_running) {
 		setup_main_menu();
@@ -43,6 +43,6 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	destroy_window(); // Cierra la ventana y finaliza el proceso.
+	destroyWindow(); // Cierra la ventana y finaliza el proceso.
 	return 0;
 }

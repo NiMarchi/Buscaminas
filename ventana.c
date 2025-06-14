@@ -1,14 +1,10 @@
-#include <stdio.h>
 #include <stdbool.h>
-
 #include <SDL_image.h>
-
 #include "juego.h"
-#include "constantes.h"
 #include "variables.h"
 
 // Carga imagen y devuelve superficie.
-SDL_Surface* load_surface(const char* path) {
+SDL_Surface* loadSurface(const char* path) {
 	SDL_Surface* surface = IMG_Load(path);
 	if (!surface) {
 		fprintf(stderr, "Error al cargar imagen %s: %s\n", path, IMG_GetError());
@@ -17,7 +13,7 @@ SDL_Surface* load_surface(const char* path) {
 }
 
 // Crea textura desde superficie.
-SDL_Texture* create_texture(SDL_Surface* surface) {
+SDL_Texture* createTexture(SDL_Surface* surface) {
 	if (!surface) {
 		return NULL;
 	}
@@ -29,7 +25,7 @@ SDL_Texture* create_texture(SDL_Surface* surface) {
 }
 
 // Inicializa todos los subsistemas SDL necesarios.
-bool initialize_sdl_systems() {
+bool initializeSDLSystems() {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		fprintf(stderr, "Error al inicializar SDL: %s\n", SDL_GetError());
 		return false;
@@ -50,14 +46,14 @@ bool initialize_sdl_systems() {
 }
 
 // Función principal de inicialización.
-bool initialize_window() {
+bool initializeWindow() {
 	logs = fopen("logs.txt", "a");
 	if (logs == NULL) {
 		perror("Error al intentar abrir el archivo de logs");
 		return false;
 	}
 
-	if (!initialize_sdl_systems()) {
+	if (!initializeSDLSystems()) {
 		return false;
 	}
 
@@ -68,7 +64,7 @@ bool initialize_window() {
 	}
 
 	// Establecer icono de la ventana.
-	SDL_Surface* iconSurface = load_surface(WINDOW_ICON);  // Asegúrate de definir WINDOW_ICON correctamente
+	SDL_Surface* iconSurface = loadSurface(WINDOW_ICON);  // Asegúrate de definir WINDOW_ICON correctamente
 	if (iconSurface) {
 		SDL_SetWindowIcon(window, iconSurface);
 		SDL_FreeSurface(iconSurface);
@@ -94,17 +90,17 @@ bool initialize_window() {
 	}
 
 	// Carga superficies y texturas.
-	bgScrollTexture = create_texture(load_surface(BACKGROUND_WALLPAPER));
-	menuButtonTextTexture1 = create_texture(load_surface(NEW_OK_BUTTON));
-	menuButtonTextTexture3 = create_texture(load_surface(NEW_OK_BUTTON));
-	menuButtonTextTexture4 = create_texture(load_surface(NEW_OK_BUTTON));
-	menuButtonTextTexture2 = create_texture(load_surface(QUIT_BUTTON));
-	okButtonTexture = create_texture(load_surface(NEW_OK_BUTTON));
-	mineBoomIconTexture = create_texture(load_surface(MINE_BOOM_ICON));
-	mineDeathIconTexture = create_texture(load_surface(MINE_DEATH_ICON));
-	edgeIconTexture = create_texture(load_surface(EDGE_ICON));
-	flagIconTexture = create_texture(load_surface(FLAG_ICON));
-	coverIconTexture = create_texture(load_surface(COVER_ICON));
+	bgScrollTexture = createTexture(loadSurface(BACKGROUND_WALLPAPER));
+	menuButtonTextTexture1 = createTexture(loadSurface(NEW_OK_BUTTON));
+	menuButtonTextTexture3 = createTexture(loadSurface(NEW_OK_BUTTON));
+	menuButtonTextTexture4 = createTexture(loadSurface(NEW_OK_BUTTON));
+	menuButtonTextTexture2 = createTexture(loadSurface(QUIT_BUTTON));
+	okButtonTexture = createTexture(loadSurface(NEW_OK_BUTTON));
+	mineBoomIconTexture = createTexture(loadSurface(MINE_BOOM_ICON));
+	mineDeathIconTexture = createTexture(loadSurface(MINE_DEATH_ICON));
+	edgeIconTexture = createTexture(loadSurface(EDGE_ICON));
+	flagIconTexture = createTexture(loadSurface(FLAG_ICON));
+	coverIconTexture = createTexture(loadSurface(COVER_ICON));
 
 	// Carga música y efectos de sonido.
 	backgroundMusicMenu = Mix_LoadMUS(BACKGROUND_MUSIC_MENU);
@@ -129,7 +125,7 @@ bool initialize_window() {
 }
 
 // Cierra la ventana, libera memoria y finaliza el proceso.
-void destroy_window() {
+void destroyWindow() {
 	saveEventGenericLog("Liberación de Recursos");
 	saveBlankLineLog();
 	fclose(logs);

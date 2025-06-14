@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-bool initialize_window();
-void destroy_window();
+bool initializeWindow();
+void destroyWindow();
 
 #endif
