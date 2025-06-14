@@ -195,7 +195,7 @@ void render() {
 			}
 			option = 4;
 			if (clickedL) {
-				if (cargar_partida(&f, &c, paramInput1, elapsedTime, &mineRemainingInt, &h, &m)) {
+				if (loadGame(&f, &c, paramInput1, elapsedTime, &mineRemainingInt, &h, &m)) {
 					main_menu_is_running = false;
 					select_menu_is_running = false;
 					stage_is_running = true;
@@ -541,7 +541,7 @@ void render() {
 			stage_is_running = false;
 			saveEventGenericLog("Fin del Juego");
 			guardarHistorial(h, m, paramInput1, elapsedTime, "Victoria");
-			eliminar_partida_guardada();
+			deleteSaveGame();
 			restored_game = false;
 		}
 		// Si el jugador gana, muestra un cartel de derrota y desvincula los campos superiores e inferiores.
@@ -554,7 +554,7 @@ void render() {
 			stage_is_running = false;
 			saveEventGenericLog("Fin del Juego");
 			guardarHistorial(h, m, paramInput1, elapsedTime, "Derrota");
-			eliminar_partida_guardada();
+			deleteSaveGame();
 			restored_game = false;
 		}
 

@@ -1,10 +1,8 @@
-#include <stdio.h>
 #include <string.h>
-
 #include "restaurar.h"
 #include "variables.h"
 
-int guardar_partida(const campo_t *f, const campo_t *c, const char *player, const char *elapsedTime, const int mineRemainingInt) {
+int saveGame(const campo_t *f, const campo_t *c, const char *player, const char *elapsedTime, const int mineRemainingInt) {
     FILE *file = fopen("savegame.dat", "wb");
     if (!file) return 0;
 
@@ -30,7 +28,7 @@ int guardar_partida(const campo_t *f, const campo_t *c, const char *player, cons
     return 1;
 }
 
-int cargar_partida(campo_t **f, campo_t **c, char *player, char *elapsedTime, int *mineRemainingInt, int *h, int *m) {
+int loadGame(campo_t **f, campo_t **c, char *player, char *elapsedTime, int *mineRemainingInt, int *h, int *m) {
     FILE *file = fopen("savegame.dat", "rb");
     if (!file) return 0;
 
@@ -58,6 +56,6 @@ int cargar_partida(campo_t **f, campo_t **c, char *player, char *elapsedTime, in
     return 1;
 }
 
-int eliminar_partida_guardada() {
+int deleteSaveGame() {
     return remove("savegame.dat") == 0;
 }
