@@ -49,22 +49,24 @@ void setup_stage(const int h, const int m) {
     tile.w = TILE_SIDE_SIZE; // Tamaño del lado del azulejo.
     tile.h = TILE_SIDE_SIZE; // Tamaño del lado del azulejo.
 
-    f = initField(h, h, m); // Asigna el campo inferior, donde se escribirán las minas y las puntas.
-    c = initCover(h, h); // Asigna el campo superior, donde el jugador se descubrirá.
-    fillFieldEdge(c); // Rellena el campo superior con caracteres de borde.
-    fillFieldCover(c); // Llena el campo superior con caracteres de portada.
-    fillFieldZero(f); // Rellena el campo inferior con ceros.
-    fillFieldEdge(f); // Rellena el campo superior con caracteres de borde.
-    fillFieldMine(f); // Llena el campo inferior con minas.
-    countMines(f); // Calcula la cantidad de minas y llena los vertederos en los alrededores de (minas).
+	if (!restored_game) {
+		f = initField(h, h, m); // Asigna el campo inferior, donde se escribirán las minas y las puntas.
+		c = initCover(h, h); // Asigna el campo superior, donde el jugador se descubrirá.
+		fillFieldEdge(c); // Rellena el campo superior con caracteres de borde.
+		fillFieldCover(c); // Llena el campo superior con caracteres de portada.
+		fillFieldZero(f); // Rellena el campo inferior con ceros.
+		fillFieldEdge(f); // Rellena el campo superior con caracteres de borde.
+		fillFieldMine(f); // Llena el campo inferior con minas.
+		countMines(f); // Calcula la cantidad de minas y llena los vertederos en los alrededores de (minas).
+
+		startTime = time(NULL); // Inicializa el tiempo para el conteo.
+	}
 
 	colorInfo = (SDL_Color){RED_INFO_POSITIVE, GREEN_INFO_POSITIVE, BLUE_INFO_POSITIVE}; // Asigna el color a las letras de los datos del juego (Como la cantidad de minas y nombre del jugador).
 
 	memset(infoPlayerName, 0, sizeof infoPlayerName); // Borra el array que muestra el nombre del jugador.
 	strcpy(infoPlayerName, PLAYER_NAME_INFO);
 	strcat(infoPlayerName, paramInput1); // Almacena el nombre del jugador para mostrarlo como información.
-
-	startTime = time(NULL); // Inicializa el tiempo para el conteo.
 
 	saveEventGenericLog("Inicio del Juego");
 }
@@ -204,6 +206,7 @@ void render() {
 					main_menu_is_running = false;
 					select_menu_is_running = false;
 					stage_is_running = true;
+					restored_game = true;
 					option = RESET_OPTION;
 					Mix_HaltMusic();
 				}
@@ -546,6 +549,7 @@ void render() {
 			saveEventGenericLog("Fin del Juego");
 			guardar_historial(h, m, paramInput1, elapsedTime, "Victoria");
 			eliminar_partida_guardada();
+			restored_game = false;
 		}
 		// Si el jugador gana, muestra un cartel de derrota y desvincula los campos superiores e inferiores.
 		if (lose) {
@@ -558,6 +562,7 @@ void render() {
 			saveEventGenericLog("Fin del Juego");
 			guardar_historial(h, m, paramInput1, elapsedTime, "Derrota");
 			eliminar_partida_guardada();
+			restored_game = false;
 		}
 
 		SDL_RenderPresent(renderer);

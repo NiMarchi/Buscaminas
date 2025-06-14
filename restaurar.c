@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "restaurar.h"
+#include "variables.h"
 
 int guardar_partida(const field_t *f, const field_t *c, const char *player, const char *elapsedTime, int mineRemainingInt) {
     FILE *file = fopen("savegame.dat", "wb");
@@ -11,6 +12,8 @@ int guardar_partida(const field_t *f, const field_t *c, const char *player, cons
     data.height = f->y - 2;
     data.mines = f->m;
     data.mineRemainingInt = mineRemainingInt;
+    currentTime = time(NULL);
+    data.elapsedSeconds = difftime(currentTime, startTime);
     strncpy(data.player, player, MAX_NAME_LENGTH);
     strncpy(data.elapsedTime, elapsedTime, sizeof(data.elapsedTime));
 
@@ -36,6 +39,7 @@ int cargar_partida(field_t **f, field_t **c, char *player, char *elapsedTime, in
 
     *h = data.width;
     *m = data.mines;
+    startTime = time(NULL) - data.elapsedSeconds;
     *mineRemainingInt = data.mineRemainingInt;
     strncpy(player, data.player, MAX_NAME_LENGTH);
     strncpy(elapsedTime, data.elapsedTime, 16);

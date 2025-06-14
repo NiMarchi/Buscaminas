@@ -11,6 +11,7 @@ typedef struct {
     int height;
     int mines;
     int mineRemainingInt;
+    int elapsedSeconds;
     int c_matrix[FIELD_SIZE_MAX + 2][FIELD_SIZE_MAX + 2];
     int f_matrix[FIELD_SIZE_MAX + 2][FIELD_SIZE_MAX + 2];
     char player[MAX_NAME_LENGTH];

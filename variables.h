@@ -55,7 +55,7 @@ heightFieldTextboxRect, mineAmountLabelRect, mineAmountTextboxRect, okButtonRect
 
 // Variables del juego
 extern bool game_is_running, stage_is_running, main_menu_is_running, select_menu_is_running, history_menu_is_running;
-extern bool clickedL, clickedR, win, lose, canInteract, showMines, resetIJ, soundEffectPlayed;
+extern bool clickedL, clickedR, win, lose, canInteract, showMines, resetIJ, soundEffectPlayed, restored_game;
 
 extern int last_frame_time, angle, mineRemainingInt;
 extern int centerFieldX, centerFieldY, centerFormTextX, centerFormInputX;
