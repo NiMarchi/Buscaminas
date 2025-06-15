@@ -2,14 +2,14 @@
 #define HISTORIAL_H
 
 typedef struct {
-    char tam[10];
-    int minas;
-    char nombre[50];
-    char tiempo[6];
-    char resultado[10];
-} Registro;
+    char size[10];
+    int mines;
+    char name[50];
+    char time[6];
+    char result[10];
+} Register;
 
-void guardarHistorial(const int tam, const int minas, const char *nombre, const char *tiempo, const char *resultado);
-void cargarHistorialArchivo(const char *ruta);
+void saveHistory(const int size, const int mines, const char *name, const char *time, const char *result);
+void loadHistoryFile(const char *route);
 
 #endif

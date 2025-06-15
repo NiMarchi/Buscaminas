@@ -212,7 +212,7 @@ void render() {
 			if (clickedL) {
 				main_menu_is_running = false;
 				history_menu_is_running = true;
-				cargarHistorialArchivo("historial.txt");
+				loadHistoryFile("historial.txt");
 				clickedL = false;
 			}
 		} else {
@@ -536,7 +536,7 @@ void render() {
 			free(c); c = NULL;
 			stage_is_running = false;
 			saveEventGenericLog("Fin del Juego");
-			guardarHistorial(h, m, paramInput1, elapsedTime, "Victoria");
+			saveHistory(h, m, paramInput1, elapsedTime, "Victoria");
 			deleteSaveGame();
 			restored_game = false;
 		}
@@ -549,7 +549,7 @@ void render() {
 			free(c); c = NULL;
 			stage_is_running = false;
 			saveEventGenericLog("Fin del Juego");
-			guardarHistorial(h, m, paramInput1, elapsedTime, "Derrota");
+			saveHistory(h, m, paramInput1, elapsedTime, "Derrota");
 			deleteSaveGame();
 			restored_game = false;
 		}
@@ -568,7 +568,7 @@ void render() {
 		printTextLine(renderer, font_main, colorTitle, historyTitleRect, "Historial de Partidas", 0, 0, 0, 0);
 
 		// Mostrar las entradas del historial.
-		for (int i = 0; i < historialCont; i++) {
+		for (int i = 0; i < historyCount; i++) {
 			const int startY = 150;
 			SDL_Rect entryRect = {
 				(WINDOW_WIDTH - 800) / 2,
@@ -578,7 +578,7 @@ void render() {
 			};
 
 			// Color según victoria o derrota.
-			if (strstr(historialLineas[i], "Victoria")) {
+			if (strstr(historyLines[i], "Victoria")) {
 				SDL_SetRenderDrawColor(renderer, 0, 128, 0, 255); // Verde
 			} else {
 				SDL_SetRenderDrawColor(renderer, 128, 0, 0, 255); // Rojo
@@ -586,7 +586,7 @@ void render() {
 			SDL_RenderFillRect(renderer, &entryRect);
 
 			// Texto por encima del rectángulo.
-			printTextLine(renderer, font_secondary, colorInfo, entryRect, historialLineas[i], 0, 0, 0, 0);
+			printTextLine(renderer, font_secondary, colorInfo, entryRect, historyLines[i], 0, 0, 0, 0);
 		}
 
 		SDL_RenderPresent(renderer);

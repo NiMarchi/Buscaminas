@@ -1,78 +1,79 @@
 #include <string.h>
-
 #include "historial.h"
 #include "variables.h"
 
-void guardarHistorial(const int tam, const int minas, const char *nombre, const char *tiempo, const char *resultado) {
-    Registro registros[MAX_REGISTROS];
+void saveHistory(const int size, const int mines, const char *name, const char *time, const char *result) {
+    Register registers[MAX_REGISTERS];
     int total = 0;
-    FILE *archivo = fopen("historial.txt", "r");
+    FILE *file = fopen("historial.txt", "r");
 
     // Leer registros existentes del archivo.
-    if (archivo) {
-        char linea[MAX_LINEA];
-        while (fgets(linea, sizeof(linea), archivo) && total < MAX_REGISTROS) {
-            sscanf(linea, "Tamaño: %9[^,], Minas: %d, Jugador: %49[^,], Tiempo: %5s, Resultado: %9[^\n]",
-                   registros[total].tam,
-                   &registros[total].minas,
-                   registros[total].nombre,
-                   registros[total].tiempo,
-                   registros[total].resultado);
+    if (file) {
+        char line[MAX_LINE];
+        while (fgets(line, sizeof(line), file) && total < MAX_REGISTERS) {
+            sscanf(line, "Tamaño: %9[^,], Minas: %d, Jugador: %49[^,], Tiempo: %5s, Resultado: %9[^\n]",
+               registers[total].size,
+               &registers[total].mines,
+               registers[total].name,
+               registers[total].time,
+               registers[total].result
+            );
             total++;
         }
-        fclose(archivo);
+        fclose(file);
     }
 
     // Eliminar el registro más antiguo si hay 10.
-    if (total == MAX_REGISTROS) {
-        for (int i = 1; i < MAX_REGISTROS; i++) {
-            registros[i - 1] = registros[i];
+    if (total == MAX_REGISTERS) {
+        for (int i = 1; i < MAX_REGISTERS; i++) {
+            registers[i - 1] = registers[i];
         }
         total--;
     }
 
     // Agregar nuevo registro.
-    snprintf(registros[total].tam, sizeof(registros[total].tam), "%dx%d", tam, tam); // Tamaño como "10x10"
-    registros[total].minas = minas;
-    strncpy(registros[total].nombre, nombre, sizeof(registros[total].nombre) - 1);
-    registros[total].nombre[sizeof(registros[total].nombre) - 1] = '\0';
-    strncpy(registros[total].tiempo, tiempo, sizeof(registros[total].tiempo) - 1);
-    registros[total].tiempo[sizeof(registros[total].tiempo) - 1] = '\0';
-    strncpy(registros[total].resultado, resultado, sizeof(registros[total].resultado) - 1);
-    registros[total].resultado[sizeof(registros[total].resultado) - 1] = '\0';
+    snprintf(registers[total].size, sizeof(registers[total].size), "%dx%d", size, size);
+    registers[total].mines = mines;
+    strncpy(registers[total].name, name, sizeof(registers[total].name) - 1);
+    registers[total].name[sizeof(registers[total].name) - 1] = '\0';
+    strncpy(registers[total].time, time, sizeof(registers[total].time) - 1);
+    registers[total].time[sizeof(registers[total].time) - 1] = '\0';
+    strncpy(registers[total].result, result, sizeof(registers[total].result) - 1);
+    registers[total].result[sizeof(registers[total].result) - 1] = '\0';
     total++;
 
     // Escribir todos los registros actualizados.
-    archivo = fopen("historial.txt", "w");
-    if (archivo) {
+    file = fopen("historial.txt", "w");
+    if (file) {
         for (int i = 0; i < total; i++) {
-            fprintf(archivo, "Tamaño: %s, Minas: %d, Jugador: %s, Tiempo: %s, Resultado: %s\n",
-                    registros[i].tam,
-                    registros[i].minas,
-                    registros[i].nombre,
-                    registros[i].tiempo,
-                    registros[i].resultado);
+            fprintf(file, "Tamaño: %s, Minas: %d, Jugador: %s, Tiempo: %s, Resultado: %s\n",
+                registers[i].size,
+                registers[i].mines,
+                registers[i].name,
+                registers[i].time,
+                registers[i].result
+            );
         }
-        fclose(archivo);
+        fclose(file);
     } else {
         perror("No se pudo abrir el archivo para escribir");
     }
 }
 
-void cargarHistorialArchivo(const char *ruta) {
-    FILE *file = fopen(ruta, "r");
+void loadHistoryFile(const char *route) {
+    FILE *file = fopen(route, "r");
     if (!file) {
         perror("No se pudo abrir historial.txt");
         return;
     }
 
-    historialCont = 0;
-    while (fgets(historialLineas[historialCont], LOG_MAX_LINEA, file) && historialCont < MAX_HISTORIAL_ENTRADA) {
-        const size_t len = strlen(historialLineas[historialCont]);
-        if (len > 0 && historialLineas[historialCont][len - 1] == '\n') {
-            historialLineas[historialCont][len - 1] = '\0';
+    historyCount = 0;
+    while (fgets(historyLines[historyCount], MAX_LINE_LENGTH, file) && historyCount < MAX_HISTORIAL_ENTRIES) {
+        const size_t len = strlen(historyLines[historyCount]);
+        if (len > 0 && historyLines[historyCount][len - 1] == '\n') {
+            historyLines[historyCount][len - 1] = '\0';
         }
-        historialCont++;
+        historyCount++;
     }
     fclose(file);
 }

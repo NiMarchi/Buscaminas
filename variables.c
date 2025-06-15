@@ -46,8 +46,8 @@ int ij_selected[3] = {0};
 char *aux = NULL;
 char paramInput1[15] = {0}, paramInput2[5] = {0}, paramInput3[5] = {0}, mineRemainingStr[5] = {0}, elapsedTime[5] = {0}, infoPlayerName[25] = {0}, infoTime[25] = TIME_INFO, mineRemainingConcat[25] = MINE_INGAME_INFO;
 
-char historialLineas[MAX_HISTORIAL_ENTRADA][LOG_MAX_LINEA];
-int historialCont = 0;
+char historyLines[MAX_HISTORIAL_ENTRIES][MAX_LINE_LENGTH];
+int historyCount = 0;
 
 time_t startTime, currentTime;
 
