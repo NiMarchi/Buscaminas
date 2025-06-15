@@ -57,14 +57,14 @@ void saveHistory(const int size, const int mines, const char *name, const char *
         }
         fclose(file);
     } else {
-        perror("No se pudo abrir el archivo para escribir");
+        printf("Error al intentar escribir en el archivo historial.txt\n");
     }
 }
 
 void loadHistoryFile(const char *route) {
     FILE *file = fopen(route, "r");
     if (!file) {
-        perror("No se pudo abrir historial.txt");
+        historyCount = 0;
         return;
     }
 

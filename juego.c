@@ -569,6 +569,16 @@ void render() {
 		const SDL_Rect historyTitleRect = { (WINDOW_WIDTH - 600) / 2, 50, 600, 80 };
 		printTextLine(renderer, font_main, colorTitle, historyTitleRect, "Historial de Partidas", 0, 0, 0, 0);
 
+		if (historyCount == 0) {
+			const SDL_Rect noRecordRect = {
+				(WINDOW_WIDTH - 400) / 2,
+				WINDOW_HEIGHT / 2 - 25,
+				400,
+				50
+			};
+			printTextLine(renderer, font_main, colorAlert, noRecordRect, "Sin Registros", 0, 0, 0, 0);
+		}
+
 		// Mostrar las entradas del historial.
 		for (int i = 0; i < historyCount; i++) {
 			const int startY = 150;
