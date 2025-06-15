@@ -12,7 +12,7 @@ void saveHistory(const int size, const int mines, const char *name, const char *
     if (file) {
         char line[MAX_LINE];
         while (fgets(line, sizeof(line), file) && total < MAX_REGISTERS) {
-            sscanf(line, "Tamaño: %9[^,], Minas: %d, Jugador: %49[^,], Tiempo: %5s, Resultado: %9[^\n]",
+            sscanf(line, "Dimensiones: %9[^,], Minas: %d, Jugador: %49[^,], Tiempo: %5s, Resultado: %9[^\n]",
                registers[total].size,
                &registers[total].mines,
                registers[total].name,
@@ -47,7 +47,7 @@ void saveHistory(const int size, const int mines, const char *name, const char *
     file = fopen("historial.txt", "w");
     if (file) {
         for (int i = 0; i < total; i++) {
-            fprintf(file, "Tamaño: %s, Minas: %d, Jugador: %s, Tiempo: %s, Resultado: %s\n",
+            fprintf(file, "Dimensiones: %s, Minas: %d, Jugador: %s, Tiempo: %s, Resultado: %s\n",
                 registers[i].size,
                 registers[i].mines,
                 registers[i].name,
@@ -69,6 +69,7 @@ void loadHistoryFile(const char *route) {
     }
 
     historyCount = 0;
+
     while (fgets(historyLines[historyCount], MAX_LINE_LENGTH, file) && historyCount < MAX_HISTORIAL_ENTRIES) {
         const size_t len = strlen(historyLines[historyCount]);
         if (len > 0 && historyLines[historyCount][len - 1] == '\n') {
@@ -76,5 +77,6 @@ void loadHistoryFile(const char *route) {
         }
         historyCount++;
     }
+
     fclose(file);
 }

@@ -597,8 +597,18 @@ void render() {
 			}
 			SDL_RenderFillRect(renderer, &entryRect);
 
+			char visibleText[MAX_LINE_LENGTH];
+			strncpy(visibleText, historyLines[i], sizeof(visibleText));
+			visibleText[sizeof(visibleText) - 1] = '\0';
+
+			// Buscar la posición donde empieza "Resultado:" y lo elimina para no mostrar.
+			char *resultadoPtr = strstr(visibleText, ", Resultado:");
+			if (resultadoPtr) {
+				*resultadoPtr = '\0';
+			}
+
 			// Texto por encima del rectángulo.
-			printTextLine(renderer, font_secondary, colorInfo, entryRect, historyLines[i], 0, 0, 0, 0);
+			printTextLine(renderer, font_secondary, colorInfo, entryRect, visibleText, 0, 0, 0, 0);
 		}
 
 		SDL_RenderPresent(renderer);
