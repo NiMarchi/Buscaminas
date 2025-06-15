@@ -2,7 +2,7 @@
 #include "restaurar.h"
 #include "variables.h"
 
-int saveGame(const campo_t *f, const campo_t *c, const char *player, const char *elapsedTime, const int mineRemainingInt) {
+int saveGame(const field_t *f, const field_t *c, const char *player, const char *elapsedTime, const int mineRemainingInt) {
     FILE *file = fopen("savegame.dat", "wb");
     if (!file) return 0;
 
@@ -28,7 +28,7 @@ int saveGame(const campo_t *f, const campo_t *c, const char *player, const char 
     return 1;
 }
 
-int loadGame(campo_t **f, campo_t **c, char *player, char *elapsedTime, int *mineRemainingInt, int *h, int *m) {
+int loadGame(field_t **f, field_t **c, char *player, char *elapsedTime, int *mineRemainingInt, int *h, int *m) {
     FILE *file = fopen("savegame.dat", "rb");
     if (!file) return 0;
 
@@ -43,8 +43,8 @@ int loadGame(campo_t **f, campo_t **c, char *player, char *elapsedTime, int *min
     strncpy(player, data.player, MAX_NAME_LENGTH);
     strncpy(elapsedTime, data.elapsedTime, 16);
 
-    *f = iniciarCampo(data.width, data.width, data.mines);
-    *c = iniciarCobertura(data.width, data.width);
+    *f = initField(data.width, data.width, data.mines);
+    *c = initCover(data.width, data.width);
 
     for (int i = 0; i < (*f)->x; i++) {
         for (int j = 0; j < (*f)->y; j++) {

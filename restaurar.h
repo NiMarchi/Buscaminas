@@ -16,8 +16,8 @@ typedef struct {
     char elapsedTime[16];
 } SaveGameData;
 
-int saveGame(const campo_t *f, const campo_t *c, const char *player, const char *elapsedTime, const int mineRemainingInt);
-int loadGame(campo_t **f, campo_t **c, char *player, char *elapsedTime, int *mineRemainingInt, int *h, int *m);
+int saveGame(const field_t *f, const field_t *c, const char *player, const char *elapsedTime, const int mineRemainingInt);
+int loadGame(field_t **f, field_t **c, char *player, char *elapsedTime, int *mineRemainingInt, int *h, int *m);
 int deleteSaveGame();
 
 #endif

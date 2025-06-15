@@ -8,7 +8,7 @@
 #include "restaurar.h"
 
 // Comprueba si el jugador venció el juego.
-bool checkWin(const campo_t *f, const campo_t *c) {
+bool checkWin(const field_t *f, const field_t *c) {
 	for (int i = 1; i < c->x - 1; i++) {
 		for (int j = 1; j < c->y - 1; j++) {
 			const int cover = c->mat[i][j]; // Valor de la casilla cubierta.
@@ -16,7 +16,7 @@ bool checkWin(const campo_t *f, const campo_t *c) {
 
 			// Si la casilla está cubierta o marcada, debe haber una mina debajo.
 			// Si la casilla está descubierta, debe coincidir con el campo inferior.
-			if (!((cover == CUBRIR && field == MINA) || (cover == BANDERA && field == MINA) || (cover == field))) {
+			if (!((cover == COVER && field == MINE) || (cover == FLAG && field == MINE) || (cover == field))) {
 				return false; // Si alguna condición no se cumple, el jugador aún no ha ganado.
 			}
 		}
@@ -27,8 +27,8 @@ bool checkWin(const campo_t *f, const campo_t *c) {
 }
 
 // Comprueba si el jugador perdió el juego.
-bool checkLose(const campo_t *f, const campo_t *c, const int *inpt) {
-	return f->mat[inpt[0]][inpt[1]] == MINA && c->mat[inpt[0]][inpt[1]] != BANDERA && inpt[2] == OPEN_F;
+bool checkLose(const field_t *f, const field_t *c, const int *inpt) {
+	return f->mat[inpt[0]][inpt[1]] == MINE && c->mat[inpt[0]][inpt[1]] != FLAG && inpt[2] == OPEN_F;
 }
 
 // Función para implementar la función de subcadena en C.
@@ -40,20 +40,20 @@ char *substring(char *destination, const char *source, const int beg, const int 
 
 // Inicializa los parámetros del juego.
 void setupStage(const int h, const int m) {
-    azulejo.x = TILE_SPACING; // Espaciado de mosaicos entre sí.
-    azulejo.y = TILE_SPACING; // Espaciado de mosaicos entre sí.
-    azulejo.w = TILE_SIDE_SIZE; // Tamaño del lado del azulejo.
-    azulejo.h = TILE_SIDE_SIZE; // Tamaño del lado del azulejo.
+    tile.x = TILE_SPACING; // Espaciado de mosaicos entre sí.
+    tile.y = TILE_SPACING; // Espaciado de mosaicos entre sí.
+    tile.w = TILE_SIDE_SIZE; // Tamaño del lado del azulejo.
+    tile.h = TILE_SIDE_SIZE; // Tamaño del lado del azulejo.
 
 	if (!restored_game) {
-		f = iniciarCampo(h, h, m); // Asigna el campo inferior, donde se escribirán las minas y las puntas.
-		c = iniciarCobertura(h, h); // Asigna el campo superior, donde el jugador se descubrirá.
-		rellenarBordeCampo(c); // Rellena el campo superior con caracteres de borde.
-		rellenarCampoCobertura(c); // Llena el campo superior con caracteres de portada.
-		rellenarCampoCero(f); // Rellena el campo inferior con ceros.
-		rellenarBordeCampo(f); // Rellena el campo superior con caracteres de borde.
-		rellenarCampoMinas(f); // Llena el campo inferior con minas.
-		contarMinas(f); // Calcula la cantidad de minas y llena los vertederos en los alrededores de (minas).
+		f = initField(h, h, m); // Asigna el campo inferior, donde se escribirán las minas y las puntas.
+		c = initCover(h, h); // Asigna el campo superior, donde el jugador se descubrirá.
+		fillFieldEdge(c); // Rellena el campo superior con caracteres de borde.
+		fillFieldCover(c); // Llena el campo superior con caracteres de portada.
+		fillFieldZero(f); // Rellena el campo inferior con ceros.
+		fillFieldEdge(f); // Rellena el campo superior con caracteres de borde.
+		fillFieldMine(f); // Llena el campo inferior con minas.
+		countMines(f); // Calcula la cantidad de minas y llena los vertederos en los alrededores de (minas).
 
 		startTime = time(NULL); // Inicializa el tiempo para el conteo.
 	}
@@ -93,7 +93,7 @@ void update() {
     // Si el juego está activo y los campos están cargados.
     if (f && c) {
         if (canInteract) {
-            abrirCampo(f, c, ij_selected[0], ij_selected[1], ij_selected[2], &mineRemainingInt);
+            openField(f, c, ij_selected[0], ij_selected[1], ij_selected[2], &mineRemainingInt);
         }
 
         // Actualiza el contador de minas restantes como cadena.
@@ -433,17 +433,17 @@ void render() {
 		// Dibuja los objetos de juego.
 		for (i = 0; i < c->x; i++) {
 			for (j = 0; j < c->y; j++) {
-				xi = (azulejo.x + azulejo.w) * i + centerFieldX + X_FINE_ADJUSTEMENT;
-				yi = (azulejo.y + azulejo.h) * j + centerFieldY + Y_FINE_ADJUSTEMENT;
-				xf = (xi + azulejo.w);
-				yf = (yi + azulejo.h);
+				xi = (tile.x + tile.w) * i + centerFieldX + X_FINE_ADJUSTEMENT;
+				yi = (tile.y + tile.h) * j + centerFieldY + Y_FINE_ADJUSTEMENT;
+				xf = (xi + tile.w);
+				yf = (yi + tile.h);
 
 				tileSquareRect.x = xi;
 				tileSquareRect.y = yi;
-				tileSquareRect.w = azulejo.w;
-				tileSquareRect.h = azulejo.h;
+				tileSquareRect.w = tile.w;
+				tileSquareRect.h = tile.h;
 
-				if (xm >= xi && xm <= xf && ym >= yi && ym <= yf && c->mat[i][j] != BORDE_L_R && c->mat[i][j] != BORDE_T_B) {
+				if (xm >= xi && xm <= xf && ym >= yi && ym <= yf && c->mat[i][j] != EDGE_L_R && c->mat[i][j] != EDGE_T_B) {
 					if (clickedL) {
 						saveEventMouseLog("Mouse Click Izquierdo", i, j);
 						// Si aún no se ha abierto la tapa, reproduce el sonido de clic izquierdo.
@@ -470,7 +470,7 @@ void render() {
 					clickedR = false;
 				}
 
-				if (c->mat[i][j] == MINA) {
+				if (c->mat[i][j] == MINE) {
 					SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 					SDL_RenderFillRect(renderer, &tileSquareRect);
 					f->mat[i][j] = MINE_TRIG;
@@ -483,19 +483,19 @@ void render() {
 						resetIJ = false;
 						break;
 					}
-				} else if (c->mat[i][j] == BORDE_L_R || c->mat[i][j] == BORDE_T_B) {
+				} else if (c->mat[i][j] == EDGE_L_R || c->mat[i][j] == EDGE_T_B) {
 					SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
 					SDL_RenderFillRect(renderer, &tileSquareRect);
 
 					// Muestra un icono personalizado para los bordes.
 					SDL_RenderCopy(renderer, edgeIconTexture, NULL, &tileSquareRect);
-				} else if (c->mat[i][j] == BANDERA) {
+				} else if (c->mat[i][j] == FLAG) {
 					SDL_SetRenderDrawColor(renderer, 127, 255, 0, 255);
 					SDL_RenderFillRect(renderer, &tileSquareRect);
 
 					// Muestra un icono personalizado para las banderas.
 					SDL_RenderCopy(renderer, flagIconTexture, NULL, &tileSquareRect);
-				} else if (c->mat[i][j] == CUBRIR) {
+				} else if (c->mat[i][j] == COVER) {
 					SDL_SetRenderDrawColor(renderer, 64, 64, 128, 255);
 					SDL_RenderFillRect(renderer, &tileSquareRect);
 
@@ -520,7 +520,7 @@ void render() {
 				}
 
 				// Si el jugador muere, muestra todas las minas ocultas.
-				if (f->mat[i][j] == MINA && showMines) {
+				if (f->mat[i][j] == MINE && showMines) {
 					// Muestra un icono personalizado para las minas.
 					SDL_RenderCopy(renderer, mineBoomIconTexture, NULL, &tileSquareRect);
 				}

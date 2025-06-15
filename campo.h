@@ -1,30 +1,30 @@
 #ifndef CAMPO_H
 #define CAMPO_H
 
-typedef struct campo {
+typedef struct field {
     int **mat;
     int x;
     int y;
     int m;
-} campo_t;
+} field_t;
 
-typedef struct azulejo {
+typedef struct tile {
     int x;
     int y;
     int w;
     int h;
-} azulejo_t;
+} tile_t;
 
-campo_t* iniciarCampo(const int x, const int y, const int minas);
-campo_t* iniciarCobertura(const int x, const int y);
-void contarMinas(const campo_t *f);
-void rellenarCampoCero(const campo_t *f);
-void rellenarBordeCampo(const campo_t *f);
-void rellenarCampoMinas(const campo_t *f);
-void rellenarCampoCobertura(const campo_t *f);
-void abrirCampoUtil(campo_t *f, campo_t *c, const int x, const int y, const int viejo);
-void abrirCampo(campo_t *f, campo_t *c, const int x, const int y, const int band, int *bandCant);
+field_t* initField(const int x, const int y, const int mines);
+field_t* initCover(const int x, const int y);
+void countMines(const field_t *f);
+void fillFieldZero(const field_t *f);
+void fillFieldEdge(const field_t *f);
+void fillFieldMine(const field_t *f);
+void fillFieldCover(const field_t *f);
+void openFieldUtil(field_t *f, field_t *c, const int x, const int y, const int old);
+void openField(field_t *f, field_t *c, const int x, const int y, const int band, int *flagQty);
 
-extern azulejo_t azulejo;
+extern tile_t tile;
 
 #endif

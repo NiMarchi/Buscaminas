@@ -24,13 +24,13 @@
 
 #define OPEN_F 1
 #define FLAG_F 2
-#define MINA 20
+#define MINE 20
 #define MINE_TRIG 21
-#define BLANCO 0
-#define CUBRIR 10
-#define BANDERA 50
-#define BORDE_T_B 100
-#define BORDE_L_R 101
+#define BLANK 0
+#define COVER 10
+#define FLAG 50
+#define EDGE_T_B 100
+#define EDGE_L_R 101
 
 #define MAX_REGISTERS 10
 #define MAX_LINE 150

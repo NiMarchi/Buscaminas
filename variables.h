@@ -59,6 +59,6 @@ extern time_t startTime, currentTime;
 extern char historyLines[MAX_HISTORIAL_ENTRIES][MAX_LINE_LENGTH];
 extern int historyCount;
 
-extern campo_t *f, *c;
+extern field_t *f, *c;
 
 #endif

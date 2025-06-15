@@ -1,13 +1,12 @@
 #include <stdlib.h>
 #include <time.h>
-
 #include "campo.h"
 #include "constantes.h"
 
-struct azulejo azulejo;
+struct tile tile;
 
 // Reserva memoria para una matriz (x filas, y columnas) y la inicializa a cero.
-static int **matrizAsignacion(const int f, const int c) {
+static int **allocMatrix(const int f, const int c) {
     int **mat = malloc(f * sizeof(int *));
     for (int i = 0; i < f; i++) {
         mat[i] = calloc(c, sizeof(int));
@@ -16,63 +15,63 @@ static int **matrizAsignacion(const int f, const int c) {
 }
 
 // Inicializa el campo (Con bordes +2).
-campo_t *iniciarCampo(const int x, const int y, const int minas) {
-    campo_t *campo = malloc(sizeof(campo_t));
-    campo->x = x + 2;
-    campo->y = y + 2;
-    campo->m = minas;
-    campo->mat = matrizAsignacion(campo->x, campo->y);
-    return campo;
+field_t *initField(const int x, const int y, const int mines) {
+    field_t *field = malloc(sizeof(field_t));
+    field->x = x + 2;
+    field->y = y + 2;
+    field->m = mines;
+    field->mat = allocMatrix(field->x, field->y);
+    return field;
 }
 
 // Inicializa el campo de cobertura (Sin minas).
-campo_t *iniciarCobertura(const int x, const int y) {
-    return iniciarCampo(x, y, 0);
+field_t *initCover(const int x, const int y) {
+    return initField(x, y, 0);
 }
 
 // Llena bordes con constantes específicas.
-void rellenarBordeCampo(const campo_t *f) {
+void fillFieldEdge(const field_t *f) {
     for (int i = 0; i < f->x; i++) {
-        f->mat[i][0] = BORDE_T_B;
-        f->mat[i][f->y - 1] = BORDE_T_B;
+        f->mat[i][0] = EDGE_T_B;
+        f->mat[i][f->y - 1] = EDGE_T_B;
     }
     for (int j = 0; j < f->y; j++) {
-        f->mat[0][j] = BORDE_L_R;
-        f->mat[f->x - 1][j] = BORDE_L_R;
+        f->mat[0][j] = EDGE_L_R;
+        f->mat[f->x - 1][j] = EDGE_L_R;
     }
 }
 
-// Llena el campo con ceros (Blanco).
-void rellenarCampoCero(const campo_t *f) {
+// Llena el campo con ceros (BLANK).
+void fillFieldZero(const field_t *f) {
     for (int i = 0; i < f->x; i++) {
         for (int j = 0; j < f->y; j++) {
-            f->mat[i][j] = BLANCO;
+            f->mat[i][j] = BLANK;
         }
     }
 }
 
 // Llena el campo con minas, evitando bordes y duplicados.
-void rellenarCampoMinas(const campo_t *f) {
+void fillFieldMine(const field_t *f) {
     srand(time(NULL));
-    int cant = 0;
-    while (cant < f->m) {
+    int count = 0;
+    while (count < f->m) {
         const int x = 1 + rand() % (f->x - 2);
         const int y = 1 + rand() % (f->y - 2);
-        if (f->mat[x][y] != MINA) {
-            f->mat[x][y] = MINA;
-            cant++;
+        if (f->mat[x][y] != MINE) {
+            f->mat[x][y] = MINE;
+            count++;
         }
     }
 }
 
 // Cuenta minas adyacentes y coloca pistas en casillas.
-void contarMinas(const campo_t *f) {
+void countMines(const field_t *f) {
     for (int i = 1; i < f->x - 1; i++) {
         for (int j = 1; j < f->y - 1; j++) {
-            if (f->mat[i][j] == MINA || f->mat[i][j] == BORDE_T_B || f->mat[i][j] == BORDE_L_R) {
+            if (f->mat[i][j] == MINE || f->mat[i][j] == EDGE_T_B || f->mat[i][j] == EDGE_L_R) {
                 continue;
             }
-            int cant = 0;
+            int count = 0;
             for (int k = 0; k < 8; k++) {
                 // Desplazamientos para los 8 vecinos.
                 const int dy[] = { -1, 0, 1, -1, 1, -1, 0, 1 };
@@ -80,39 +79,39 @@ void contarMinas(const campo_t *f) {
 
                 const int nx = i + dx[k];
                 const int ny = j + dy[k];
-                if (f->mat[nx][ny] == MINA) {
-                    cant++;
+                if (f->mat[nx][ny] == MINE) {
+                    count++;
                 }
             }
-            f->mat[i][j] = cant;
+            f->mat[i][j] = count;
         }
     }
 }
 
 // Cubre el campo con COVER (Solo zona interior).
-void rellenarCampoCobertura(const campo_t *f) {
+void fillFieldCover(const field_t *f) {
     for (int i = 1; i < f->x - 1; i++) {
         for (int j = 1; j < f->y - 1; j++) {
-            f->mat[i][j] = CUBRIR;
+            f->mat[i][j] = COVER;
         }
     }
 }
 
 // Función auxiliar para abrir casillas vacías recursivamente (Relleno por inundación).
-void abrirCampoUtil(campo_t *f, campo_t *c, const int x, const int y, const int viejo) {
+void openFieldUtil(field_t *f, field_t *c, const int x, const int y, const int old) {
     if (x < 1 || x >= c->x - 1 || y < 1 || y >= c->y - 1) {
         return;
     }
-    if (c->mat[x][y] == BANDERA) {
+    if (c->mat[x][y] == FLAG) {
         return;
     }
-    if (c->mat[x][y] != viejo) {
+    if (c->mat[x][y] != old) {
         return;
     }
     if (c->mat[x][y] == f->mat[x][y]) {
         return;
     }
-    if (f->mat[x][y] == MINA) {
+    if (f->mat[x][y] == MINE) {
         c->mat[x][y] = f->mat[x][y];
         return;
     }
@@ -123,27 +122,27 @@ void abrirCampoUtil(campo_t *f, campo_t *c, const int x, const int y, const int 
 
     c->mat[x][y] = f->mat[x][y];
 
-    abrirCampoUtil(f, c, x + 1, y, viejo);
-    abrirCampoUtil(f, c, x - 1, y, viejo);
-    abrirCampoUtil(f, c, x, y + 1, viejo);
-    abrirCampoUtil(f, c, x, y - 1, viejo);
+    openFieldUtil(f, c, x + 1, y, old);
+    openFieldUtil(f, c, x - 1, y, old);
+    openFieldUtil(f, c, x, y + 1, old);
+    openFieldUtil(f, c, x, y - 1, old);
 }
 
 // Abre una casilla y expande si es necesario; marca/desmarca banderas.
-void abrirCampo(campo_t *f, campo_t *c, const int x, const int y, const int band, int *bandCant) {
-    if (band == 1 && c->mat[x][y] == CUBRIR) {
-        const int viejo = c->mat[x][y];
-        if (viejo == f->mat[x][y]) {
+void openField(field_t *f, field_t *c, const int x, const int y, const int band, int *flagQty) {
+    if (band == 1 && c->mat[x][y] == COVER) {
+        const int old = c->mat[x][y];
+        if (old == f->mat[x][y]) {
             return;
         }
-        abrirCampoUtil(f, c, x, y, viejo);
+        openFieldUtil(f, c, x, y, old);
     } else if (band == 2) {
-        if (*bandCant > 0 && c->mat[x][y] != BANDERA && c->mat[x][y] != f->mat[x][y]) {
-            c->mat[x][y] = BANDERA;
-            (*bandCant)--;
-        } else if (c->mat[x][y] == BANDERA) {
-            c->mat[x][y] = CUBRIR;
-            (*bandCant)++;
+        if (*flagQty > 0 && c->mat[x][y] != FLAG && c->mat[x][y] != f->mat[x][y]) {
+            c->mat[x][y] = FLAG;
+            (*flagQty)--;
+        } else if (c->mat[x][y] == FLAG) {
+            c->mat[x][y] = COVER;
+            (*flagQty)++;
         }
     }
 }
