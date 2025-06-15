@@ -115,10 +115,10 @@ bool initializeWindow() {
 	// Inicializa rectángulos.
 	bgScrollRect1 = (SDL_Rect){0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
 	bgScrollRect2 = (SDL_Rect){0, -WINDOW_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT};
-	infoRect = (SDL_Rect){0, 0, 250, 20};
-	infoPlayer = (SDL_Rect){0, 20, 250, 20};
-	infoTimeRect = (SDL_Rect){0, 40, 250, 20};
-	infoTrampRect = (SDL_Rect){0, 60, 250, 20};
+	infoRect = (SDL_Rect){20, 20, 250, 20};
+	infoPlayer = (SDL_Rect){20, 40, 250, 20};
+	infoTimeRect = (SDL_Rect){20, 60, 250, 20};
+	infoTrampRect = (SDL_Rect){20, 80, 250, 20};
 
 	saveEventGenericLog("Inicialización de Recursos");
 

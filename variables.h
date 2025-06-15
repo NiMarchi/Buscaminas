@@ -32,7 +32,7 @@ extern bool gameRunning, stageRunning, mainMenuRunning, selectMenuRunning, histo
 extern bool clickedL, clickedR, win, lose, showMines, resetIJ;
 
 extern int mineRemainingInt, formField, option, historyCount;
-extern int xm, ym, h, m, ijSelected[3];
+extern int xm, ym, h, m, ijSelected[3], tileSideSize;
 extern int counter1, counter2, counter3;
 
 extern char paramInput1[15], paramInput2[5], paramInput3[5], elapsedTime[5], historyLines[MAX_HISTORIAL_ENTRIES][MAX_LINE_LENGTH];

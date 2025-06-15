@@ -53,10 +53,15 @@ char *substring(char *destination, const char *source, const int beg, const int 
 
 // Inicializa los parámetros del juego.
 void setupStage(const int h, const int m) {
+	// Calcula tamaño del campo automáticamente para evitar que sobresalga de la ventana.
+	const int maxTileW = (WINDOW_WIDTH - 100) / h;
+	const int maxTileH = (WINDOW_HEIGHT - 200) / h;
+	tileSideSize = (maxTileW < maxTileH ? maxTileW : maxTileH) - TILE_SPACING;
+
     tile.x = TILE_SPACING; // Espaciado de mosaicos entre sí.
     tile.y = TILE_SPACING; // Espaciado de mosaicos entre sí.
-    tile.w = TILE_SIDE_SIZE; // Tamaño del lado del azulejo.
-    tile.h = TILE_SIDE_SIZE; // Tamaño del lado del azulejo.
+    tile.w = tileSideSize; // Tamaño del lado del azulejo.
+    tile.h = tileSideSize; // Tamaño del lado del azulejo.
 
 	if (!restoredGame) {
 		f = initField(h, h, m); // Asigna el campo inferior, donde se escribirán las minas y las puntas.
@@ -449,8 +454,8 @@ void render() {
 		j = 0;
 
 		// Centraliza el campo en el centro de la ventana.
-		centerFieldX = ((WINDOW_WIDTH / 2) - (c->x * (TILE_SIDE_SIZE + TILE_SPACING)) / 2);
-		centerFieldY = ((WINDOW_HEIGHT / 2) - (c->y * (TILE_SIDE_SIZE + TILE_SPACING)) / 2);
+		centerFieldX = ((WINDOW_WIDTH / 2) - (c->x * (tileSideSize + TILE_SPACING)) / 2);
+		centerFieldY = ((WINDOW_HEIGHT / 2) - (c->y * (tileSideSize + TILE_SPACING)) / 2);
 
 		// Dibuja los objetos de juego.
 		for (i = 0; i < c->x; i++) {

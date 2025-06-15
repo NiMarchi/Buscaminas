@@ -78,7 +78,6 @@
 #define OK_BUTTON_W WINDOW_WIDTH / 4
 #define OK_BUTTON_H 100
 
-#define TILE_SIDE_SIZE 35
 #define TILE_SPACING 5
 
 #define COLOR_TIP {192, 192, 192}

@@ -27,7 +27,7 @@ bool gameRunning = false, stageRunning = false, mainMenuRunning = true, selectMe
 bool clickedL = false, clickedR = false, win = false, lose = false, showMines = false, resetIJ = true;
 
 int mineRemainingInt = 0, formField = 0, option = 0, historyCount = 0;
-int xm = 0, ym = 0, h = 0, m = 0, ijSelected[3] = {0};
+int xm = 0, ym = 0, h = 0, m = 0, ijSelected[3] = {0}, tileSideSize = 35;
 int counter1 = 1, counter2 = 1, counter3 = 1;
 
 char paramInput1[15] = {0}, paramInput2[5] = {0}, paramInput3[5] = {0}, elapsedTime[5] = {0}, historyLines[MAX_HISTORIAL_ENTRIES][MAX_LINE_LENGTH];
