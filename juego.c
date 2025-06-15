@@ -143,7 +143,7 @@ void render() {
 		SDL_RenderCopy(renderer, bgScrollTexture, NULL, &bgScrollRect2);
 
 		// Título de la presentación.
-		imprimirLineaTexto(renderer, font_main, colorTitle, menuTitlePresentationRect, TITLE, 0, 0, 0, 0);
+		printTextLine(renderer, font_main, colorTitle, menuTitlePresentationRect, TITLE, 0, 0, 0, 0);
 
 		// Botones de menú.
 		SDL_RenderCopy(renderer, menuButtonTextTexture1, NULL, &menuButtonRect1); // Nuevo juego
@@ -152,7 +152,7 @@ void render() {
 		SDL_RenderCopy(renderer, menuButtonTextTexture4, NULL, &menuButtonRect4); // Historial
 
 		// Imprime el título.
-		imprimirTitulo(renderer, font_main, colorTitle);
+		printTitle(renderer, font_main, colorTitle);
 
 		// Si el mouse está sobre el botón de nuevo juego, se resalta y, si se hace clic, pasa a la pantalla de selección de tamaño/minas.
 		if (xm >= menuButtonRect1.x && xm <= menuButtonRect1.x + menuButtonRect1.w && ym >= menuButtonRect1.y && ym <= menuButtonRect1.y + menuButtonRect1.h) {
@@ -220,10 +220,10 @@ void render() {
 		}
 
 		// Dibuja texto resaltado según opción.
-		imprimirLineaTexto(renderer, font_main, colorMenuText, menuButtonRect1, NEW_GAME_TEXT, 0, 0, 0, (option == 0) ? 0 : 127);
-		imprimirLineaTexto(renderer, font_main, colorMenuText, menuButtonRect2, QUIT_GAME_TEXT, 0, 0, 0, (option == 1) ? 0 : 127);
-		imprimirLineaTexto(renderer, font_main, colorMenuText, menuButtonRect3, RESTORE_TEXT, 0, 0, 0, (option == 4) ? 0 : 127);
-		imprimirLineaTexto(renderer, font_main, colorMenuText, menuButtonRect4, RECORD_TEXT, 0, 0, 0, (option == 5) ? 0 : 127);
+		printTextLine(renderer, font_main, colorMenuText, menuButtonRect1, NEW_GAME_TEXT, 0, 0, 0, (option == 0) ? 0 : 127);
+		printTextLine(renderer, font_main, colorMenuText, menuButtonRect2, QUIT_GAME_TEXT, 0, 0, 0, (option == 1) ? 0 : 127);
+		printTextLine(renderer, font_main, colorMenuText, menuButtonRect3, RESTORE_TEXT, 0, 0, 0, (option == 4) ? 0 : 127);
+		printTextLine(renderer, font_main, colorMenuText, menuButtonRect4, RECORD_TEXT, 0, 0, 0, (option == 5) ? 0 : 127);
 
 		SDL_RenderPresent(renderer);
 	} else if (!main_menu_is_running && select_menu_is_running && !stage_is_running && !history_menu_is_running) {
@@ -236,7 +236,7 @@ void render() {
 		SDL_RenderCopy(renderer, bgScrollTexture, NULL, &bgScrollRect2);
 
 		// Imprime el título.
-		imprimirTitulo(renderer, font_main, colorTitle);
+		printTitle(renderer, font_main, colorTitle);
 
 		widthFieldLabelRect.y = WIDTH_TEXT_Y;
 		widthFieldLabelRect.w = WIDTH_TEXT_W;
@@ -249,7 +249,7 @@ void render() {
 		centerFormInputX = ((WINDOW_WIDTH / 2) - (widthFieldTextboxRect.w) / 2); // Centraliza el texto/formulario/botón en el centro del ancho de la ventana.
 		widthFieldTextboxRect.h = WIDTH_INPUT_H;
 		widthFieldTextboxRect.x = centerFormInputX;
-		imprimirLineaTexto(renderer, font_main, colorForm, widthFieldTextboxRect, paramInput1, 0, 0, 0, 255);
+		printTextLine(renderer, font_main, colorForm, widthFieldTextboxRect, paramInput1, 0, 0, 0, 255);
 
 		heightFieldLabelRect.y = HEIGHT_TEXT_Y;
 		heightFieldLabelRect.w = HEIGHT_TEXT_W;
@@ -262,7 +262,7 @@ void render() {
 		centerFormInputX = ((WINDOW_WIDTH / 2) - (heightFieldTextboxRect.w) / 2); // Centraliza el texto/formulario/botón en el centro del ancho de la ventana.
 		heightFieldTextboxRect.h = HEIGHT_INPUT_H;
 		heightFieldTextboxRect.x = centerFormInputX;
-		imprimirLineaTexto(renderer, font_main, colorForm, heightFieldTextboxRect, paramInput2, 0, 0, 0, 255);
+		printTextLine(renderer, font_main, colorForm, heightFieldTextboxRect, paramInput2, 0, 0, 0, 255);
 
 		mineAmountLabelRect.y = MINE_TEXT_Y;
 		mineAmountLabelRect.w = MINE_TEXT_W;
@@ -275,7 +275,7 @@ void render() {
 		centerFormInputX = ((WINDOW_WIDTH / 2) - (mineAmountTextboxRect.w) / 2); // Centraliza el texto/formulario/botón en el centro del ancho de la ventana.
 		mineAmountTextboxRect.h = MINE_INPUT_H;
 		mineAmountTextboxRect.x = centerFormInputX;
-		imprimirLineaTexto(renderer, font_main, colorForm, mineAmountTextboxRect, paramInput3, 0, 0, 0, 255);
+		printTextLine(renderer, font_main, colorForm, mineAmountTextboxRect, paramInput3, 0, 0, 0, 255);
 
 		okButtonRect.y = OK_BUTTON_Y;
 		okButtonRect.w = OK_BUTTON_W;
@@ -284,13 +284,13 @@ void render() {
 		okButtonRect.x = centerFormTextX;
 
 		// Dibuja cada etiqueta de texto.
-		imprimirLineaTexto(renderer, font_main, colorForm, widthFieldLabelRect, PLAYER_NAME, 0, 0, 0, 0);
-		imprimirLineaTexto(renderer, font_main, colorForm, heightFieldLabelRect, FIELD_SIZE, 0, 0, 0, 0);
-		imprimirLineaTexto(renderer, font_main, colorForm, mineAmountLabelRect, MINE_AMOUNT_TEXT, 0, 0, 0, 0);
+		printTextLine(renderer, font_main, colorForm, widthFieldLabelRect, PLAYER_NAME, 0, 0, 0, 0);
+		printTextLine(renderer, font_main, colorForm, heightFieldLabelRect, FIELD_SIZE, 0, 0, 0, 0);
+		printTextLine(renderer, font_main, colorForm, mineAmountLabelRect, MINE_AMOUNT_TEXT, 0, 0, 0, 0);
 
 		// Dibuja el botón Aceptar.
 		SDL_RenderCopy(renderer, okButtonTexture, NULL, &okButtonRect);
-		imprimirLineaTexto(renderer, font_main, colorButton, okButtonRect, OK_BUTTON_TEXT, 0, 0, 0, alpha4);
+		printTextLine(renderer, font_main, colorButton, okButtonRect, OK_BUTTON_TEXT, 0, 0, 0, alpha4);
 
 		// Dibuja cada cuadro de texto para la entrada.
 		SDL_SetRenderDrawColor(renderer, 127, 127, 127, alpha1);
@@ -391,7 +391,7 @@ void render() {
 					option = 0;
 					Mix_HaltMusic(); // Detiene la música del menú de fondo.
 				} else {
-					imprimirAlerta(renderer, font_main, colorAlert); // Si los parámetros del campo están fuera de los límites, se muestra una alerta de banner.
+					printAlert(renderer, font_main, colorAlert); // Si los parámetros del campo están fuera de los límites, se muestra una alerta de banner.
 				}
 			}
 		}
@@ -409,19 +409,19 @@ void render() {
 		SDL_RenderCopy(renderer, bgScrollTexture, NULL, &bgScrollRect2);
 
 		// Imprime el título.
-		imprimirTitulo(renderer, font_main, colorTitle);
+		printTitle(renderer, font_main, colorTitle);
 
 		// Imprime la cantidad de mina restante.
-		imprimirLineaTexto(renderer, font_secondary, colorInfo, infoRect, mineRemainingConcat, 0, 0, 0, 0);
+		printTextLine(renderer, font_secondary, colorInfo, infoRect, mineRemainingConcat, 0, 0, 0, 0);
 
 		// Imprime el nombre del jugador.
-		imprimirLineaTexto(renderer, font_secondary, colorInfo, infoPlayer, infoPlayerName, 0, 0, 0, 0);
+		printTextLine(renderer, font_secondary, colorInfo, infoPlayer, infoPlayerName, 0, 0, 0, 0);
 
 		// Imprime el tiempo de juego.
-		imprimirLineaTexto(renderer, font_secondary, colorInfo, infoTimeRect, infoTime, 0, 0, 0, 0);
+		printTextLine(renderer, font_secondary, colorInfo, infoTimeRect, infoTime, 0, 0, 0, 0);
 
 		// Imprime el tiempo de juego.
-		imprimirLineaTexto(renderer, font_secondary, colorInfo, infoTrampRect, TRAMP_INFO, 0, 0, 0, 0);
+		printTextLine(renderer, font_secondary, colorInfo, infoTrampRect, TRAMP_INFO, 0, 0, 0, 0);
 
 		i = 0;
 		j = 0;
@@ -531,7 +531,7 @@ void render() {
 		if (win) {
 			saveEventGenericLog("Victoria");
 			Mix_PlayChannel(-1, soundEffectVictory, 0); // Reproduce un sonido de victoria.
-			imprimirFinalizar(renderer, font_main, colorTip, true);
+			printFinish(renderer, font_main, colorTip, true);
 			free(f); f = NULL;
 			free(c); c = NULL;
 			stage_is_running = false;
@@ -544,7 +544,7 @@ void render() {
 		if (lose) {
 			saveEventGenericLog("Derrota");
 			Mix_PlayChannel(-1, soundEffectMine, 0); // Reproduce un sonido de derrota.
-			imprimirFinalizar(renderer, font_main, colorTip, false);
+			printFinish(renderer, font_main, colorTip, false);
 			free(f); f = NULL;
 			free(c); c = NULL;
 			stage_is_running = false;
@@ -565,7 +565,7 @@ void render() {
 
 		// Título centrado arriba.
 		const SDL_Rect historyTitleRect = { (WINDOW_WIDTH - 600) / 2, 50, 600, 80 };
-		imprimirLineaTexto(renderer, font_main, colorTitle, historyTitleRect, "Historial de Partidas", 0, 0, 0, 0);
+		printTextLine(renderer, font_main, colorTitle, historyTitleRect, "Historial de Partidas", 0, 0, 0, 0);
 
 		// Mostrar las entradas del historial.
 		for (int i = 0; i < historialCont; i++) {
@@ -586,7 +586,7 @@ void render() {
 			SDL_RenderFillRect(renderer, &entryRect);
 
 			// Texto por encima del rectángulo.
-			imprimirLineaTexto(renderer, font_secondary, colorInfo, entryRect, historialLineas[i], 0, 0, 0, 0);
+			printTextLine(renderer, font_secondary, colorInfo, entryRect, historialLineas[i], 0, 0, 0, 0);
 		}
 
 		SDL_RenderPresent(renderer);

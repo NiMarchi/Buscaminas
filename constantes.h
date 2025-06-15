@@ -99,15 +99,15 @@
 #define GREEN_INFO_NEUTRAL 255
 #define BLUE_INFO_NEUTRAL 255
 
-#define FINALIZAR_BANNER_X 0
-#define FINALIZAR_BANNER_Y WINDOW_HEIGHT / 3
-#define FINALIZAR_BANNER_W WINDOW_WIDTH
-#define FINALIZAR_BANNER_H WINDOW_HEIGHT / 3
+#define FINISH_BANNER_X 0
+#define FINISH_BANNER_Y WINDOW_HEIGHT / 3
+#define FINISH_BANNER_W WINDOW_WIDTH
+#define FINISH_BANNER_H WINDOW_HEIGHT / 3
 
-#define ALERTA_BANNER_X 0
-#define ALERTA_BANNER_Y WINDOW_HEIGHT / 2.5
-#define ALERTA_BANNER_W WINDOW_WIDTH
-#define ALERTA_BANNER_H WINDOW_HEIGHT / 5
+#define ALERT_BANNER_X 0
+#define ALERT_BANNER_Y WINDOW_HEIGHT / 2.5
+#define ALERT_BANNER_W WINDOW_WIDTH
+#define ALERT_BANNER_H WINDOW_HEIGHT / 5
 
 #define X_FINE_ADJUSTEMENT 2
 #define Y_FINE_ADJUSTEMENT 0
@@ -116,9 +116,9 @@
 #define WINDOW_TITLE "Buscaminas"
 #define TITLE "Buscaminas"
 #define TITLE_H 30
-#define TITULO_X WINDOW_WIDTH / 2
-#define TITULO_Y WINDOW_HEIGHT - TITLE_H
-#define TITULO_W WINDOW_WIDTH - WINDOW_WIDTH / 2
+#define TITLE_X WINDOW_WIDTH / 2
+#define TITLE_Y WINDOW_HEIGHT - TITLE_H
+#define TITLE_W WINDOW_WIDTH - WINDOW_WIDTH / 2
 
 #define FPS 30
 #define FRAME_TARGET_TIME (1000 / FPS)
@@ -154,14 +154,14 @@
 #define ERROR_SDL_AUDIO "Error al inicializar SDL Audio.\n"
 #define ERROR_SDL_INIT_PNG "Error al inicializar PNG support.\n"
 
-#define AUTOR "NiMarchi - Beta"
+#define AUTHOR "NiMarchi - Beta"
 
 #define NEW_GAME_TEXT " Nuevo Juego "
 #define RESTORE_TEXT " Restaurar "
 #define RECORD_TEXT " Historial "
 #define QUIT_GAME_TEXT " Salir del Juego "
 
-#define VICTORIA_TEXTO " Victoria "
-#define DERROTA_TEXTO " Derrota "
+#define WIN_TEXT " Victoria "
+#define LOSE_TEXT " Derrota "
 
 #endif
