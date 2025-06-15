@@ -135,20 +135,26 @@ void processInput() {
 
 					// Flecha hacia abajo.
 					case SDLK_DOWN:
-						if (option < (in_main_menu ? 5 : 3)) {
-							option++;
-							if (in_select_menu) {
-								formField++;
+						if (in_main_menu) {
+							if (option == 0) {
+								option = 4;
+							} else if (option == 4) {
+								option = 5;
+							} else if (option == 5) {
+								option = 1;
 							}
 						}
 						break;
 
 					// Flecha hacia arriba.
 					case SDLK_UP:
-						if (option > 0) {
-							option--;
-							if (in_select_menu) {
-								formField--;
+						if (in_main_menu) {
+							if (option == 1) {
+								option = 5;
+							} else if (option == 5) {
+								option = 4;
+							} else if (option == 4) {
+								option = 0;
 							}
 						}
 						break;

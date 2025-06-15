@@ -199,7 +199,10 @@ void render() {
 					stage_is_running = true;
 					restored_game = true;
 					option = 0;
+					showNoSaveMessage = false;
 					Mix_HaltMusic();
+				} else {
+					showNoSaveMessage = true;
 				}
 				clickedL = false;
 			}
@@ -226,6 +229,17 @@ void render() {
 		printTextLine(renderer, font_main, colorMenuText, menuButtonRect2, QUIT_GAME_TEXT, 0, 0, 0, (option == 1) ? 0 : 127);
 		printTextLine(renderer, font_main, colorMenuText, menuButtonRect3, RESTORE_TEXT, 0, 0, 0, (option == 4) ? 0 : 127);
 		printTextLine(renderer, font_main, colorMenuText, menuButtonRect4, RECORD_TEXT, 0, 0, 0, (option == 5) ? 0 : 127);
+
+		if (showNoSaveMessage) {
+			const SDL_Rect noSaveRect = {
+				(WINDOW_WIDTH - 600) / 2,
+				WINDOW_HEIGHT / 2 - 50,
+				600,
+				100
+			};
+
+			renderTextBox(renderer, font_main, colorAlert, &noSaveRect, "No hay partida guardada", 255, 0, 0, 192);
+		}
 
 		SDL_RenderPresent(renderer);
 	} else if (!main_menu_is_running && select_menu_is_running && !stage_is_running && !history_menu_is_running) {
@@ -612,5 +626,14 @@ void render() {
 		}
 
 		SDL_RenderPresent(renderer);
+	}
+
+	static int noSaveCounter = 0;
+	if (showNoSaveMessage) {
+		noSaveCounter++;
+		if (noSaveCounter > FPS * 2) { // 2 Segundos.
+			showNoSaveMessage = false;
+			noSaveCounter = 0;
+		}
 	}
 }

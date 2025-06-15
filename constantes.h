@@ -126,7 +126,7 @@
 #define FLAG_ICON "../resources/icons/flag_icon.bmp"
 #define EDGE_ICON "../resources/icons/edge_icon.bmp"
 #define COVER_ICON "../resources/icons/cover_icon.bmp"
-#define BACKGROUND_WALLPAPER "../resources/icons/background_menu.bmp"
+#define BACKGROUND_WALLPAPER "../resources/icons/background_menu.jpg"
 #define NEW_OK_BUTTON "../resources/icons/new_ok_button.bmp"
 #define QUIT_BUTTON "../resources/icons/quit_button.bmp"
 

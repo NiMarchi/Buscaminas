@@ -32,7 +32,7 @@ menuButtonRect1, menuButtonRect2, menuButtonRect3, menuButtonRect4, widthFieldLa
 heightFieldTextboxRect, mineAmountLabelRect, mineAmountTextboxRect, okButtonRect, infoRect, infoPlayer, infoTimeRect, infoTrampRect, tileSquareRect;
 
 bool game_is_running = false, stage_is_running = false, main_menu_is_running = true, select_menu_is_running = false, history_menu_is_running = false;
-bool clickedL = false, clickedR = false, win = false, lose = false, canInteract = false, showMines = false, resetIJ = true, soundEffectPlayed = false, restored_game = false;
+bool clickedL = false, clickedR = false, win = false, lose = false, canInteract = false, showMines = false, resetIJ = true, soundEffectPlayed = false, restored_game = false, showNoSaveMessage = false;;
 
 int last_frame_time = 0, angle = 0, mineRemainingInt = 0;
 int centerFieldX = 0, centerFieldY = 0, centerFormTextX = 0, centerFormInputX = 0;
