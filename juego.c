@@ -53,10 +53,22 @@ char *substring(char *destination, const char *source, const int beg, const int 
 
 // Inicializa los parámetros del juego.
 void setupStage(const int h, const int m) {
-	// Calcula tamaño del campo automáticamente para evitar que sobresalga de la ventana.
-	const int maxTileW = (WINDOW_WIDTH - 100) / h;
-	const int maxTileH = (WINDOW_HEIGHT - 200) / h;
-	tileSideSize = (maxTileW < maxTileH ? maxTileW : maxTileH) - TILE_SPACING;
+	// Calcula tamaño de los azulejos dinámicamente según el tamaño del campo.
+	const int paddingX = 100;
+	const int paddingY = 200;
+
+	const int spaceWidth = WINDOW_WIDTH - paddingX;
+	const int spaceHigh = WINDOW_HEIGHT - paddingY;
+
+	const int tileMaxW = (spaceWidth / h) - TILE_SPACING;
+	const int tileMaxH = (spaceHigh / h) - TILE_SPACING;
+
+	tileSideSize = (tileMaxW < tileMaxH ? tileMaxW : tileMaxH);
+
+	// Limita a un tamaño mínimo para que no se vea demasiado chico los azulejos.
+	if (tileSideSize <= 20) {
+		tileSideSize = 16 + ((FIELD_SIZE_MAX - h) / 2);
+	}
 
     tile.x = TILE_SPACING; // Espaciado de mosaicos entre sí.
     tile.y = TILE_SPACING; // Espaciado de mosaicos entre sí.
