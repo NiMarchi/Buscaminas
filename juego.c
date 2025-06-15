@@ -60,7 +60,7 @@ void setupStage(const int h, const int m) {
 		startTime = time(NULL); // Inicializa el tiempo para el conteo.
 	}
 
-	colorInfo = (SDL_Color){RED_INFO_POSITIVE, GREEN_INFO_POSITIVE, BLUE_INFO_POSITIVE}; // Asigna el color a las letras de los datos del juego (Como la cantidad de minas y nombre del jugador).
+	colorInfo = (SDL_Color)COLOR_INFO; // Asigna el color a las letras de los datos del juego (Como la cantidad de minas y nombre del jugador).
 
 	memset(infoPlayerName, 0, sizeof infoPlayerName); // Borra el array que muestra el nombre del jugador.
 	strcpy(infoPlayerName, PLAYER_NAME_INFO);

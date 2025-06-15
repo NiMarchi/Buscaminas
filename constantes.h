@@ -88,16 +88,7 @@
 #define COLOR_SEL_INPT {255, 255, 255}
 #define COLOR_ALERT {0, 255, 255, 192}
 #define COLOR_MENU_TEXT {0, 0, 0, 255}
-
-#define RED_INFO_POSITIVE 122
-#define GREEN_INFO_POSITIVE 255
-#define BLUE_INFO_POSITIVE 133
-#define RED_INFO_NEGATIVE 255
-#define GREEN_INFO_NEGATIVE 38
-#define BLUE_INFO_NEGATIVE 38
-#define RED_INFO_NEUTRAL 255
-#define GREEN_INFO_NEUTRAL 255
-#define BLUE_INFO_NEUTRAL 255
+#define COLOR_INFO {122, 255, 133}
 
 #define FINISH_BANNER_X 0
 #define FINISH_BANNER_Y WINDOW_HEIGHT / 3
@@ -146,13 +137,6 @@
 #define SOUND_EFFECT_MENU "../resources/sounds/effect-menu_mixkit-cool-interface-click-tone-2568.wav"
 #define SOUND_EFFECT_MINE "../resources/sounds/effect-defeat_mixkit-arcade-game-explosion-echo-1698.wav"
 #define SOUND_EFFECT_VICTORY "../resources/sounds/effect-victory_mixkit-warfare-horn-2289.wav"
-
-#define ERROR_SDL_INIT "Error al inicializar SDL.\n"
-#define ERROR_SDL_WINDOW "Error al crear SDL Window.\n"
-#define ERROR_SDL_RENDERER "Error al crear SDL Renderer.\n"
-#define ERROR_SDL_TTF "Error al inicializar SDL_TTF.\n"
-#define ERROR_SDL_AUDIO "Error al inicializar SDL Audio.\n"
-#define ERROR_SDL_INIT_PNG "Error al inicializar PNG support.\n"
 
 #define AUTHOR "NiMarchi - Beta"
 

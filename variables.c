@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <time.h>
-
 #include "variables.h"
 #include "constantes.h"
 
