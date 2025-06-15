@@ -26,14 +26,14 @@ int main(int argc, char* argv[]) {
 		}
 
 		if(stage_is_running) {
-			setup_stage(h, m); // Inicializa los parámetros del campo minado.
+			setupStage(h, m); // Inicializa los parámetros del campo minado.
 		}
 
 		while (stage_is_running) {
 			processInput(); // Procesar las entradas del usuario mediante el mouse y el teclado en el escenario.
 			update(); // Procesar los estados de los objetos del juego en el escenario.
 			render(); // Procesar la representación de objetos en etapa.
-			wait_interval(); // Cuando finaliza un juego, espera 3 segundos y detiene la música antes de volver al menú principal.
+			waitInterval(); // Cuando finaliza un juego, espera 3 segundos y detiene la música antes de volver al menú principal.
 		}
 
 		while (history_menu_is_running) {

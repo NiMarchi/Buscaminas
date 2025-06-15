@@ -1,12 +1,8 @@
 #include <stdbool.h>
-#include <stdio.h>
 #include <string.h>
 #include <math.h>
-
-#include "constantes.h"
-#include "campo.h"
 #include "impresion.h"
-#include "juego.h"
+#include "logs.h"
 #include "variables.h"
 #include "historial.h"
 #include "restaurar.h"
@@ -43,7 +39,7 @@ char *substring(char *destination, const char *source, const int beg, const int 
 }
 
 // Inicializa los parámetros del juego.
-void setup_stage(const int h, const int m) {
+void setupStage(const int h, const int m) {
     azulejo.x = TILE_SPACING; // Espaciado de mosaicos entre sí.
     azulejo.y = TILE_SPACING; // Espaciado de mosaicos entre sí.
     azulejo.w = TILE_SIDE_SIZE; // Tamaño del lado del azulejo.
@@ -72,7 +68,7 @@ void setup_stage(const int h, const int m) {
 }
 
 // Espera un intervalo si el jugador ha ganado o perdido antes de volver al menú principal.
-void wait_interval() {
+void waitInterval() {
 	if (win || lose) {
 		SDL_Delay(5000); // Espera 5 segundos.
 		Mix_HaltMusic(); // Detiene la música.
