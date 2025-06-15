@@ -1,6 +1,7 @@
 #include "juego.h"
 #include "variables.h"
 #include "restaurar.h"
+#include "logs.h"
 
 void setupMainMenu() {
 	// Imagen de presentación izquierda.

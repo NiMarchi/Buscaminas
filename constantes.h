@@ -12,7 +12,7 @@
 #define FIELD_SIZE_MAX 32
 #define MINE_MIN 5
 
-#define ALERT "Parametros Invalidos"
+#define ALERT " Parametros Invalidos "
 
 #define SLIDING_SPEED 1
 

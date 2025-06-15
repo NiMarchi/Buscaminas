@@ -1,14 +1,10 @@
 #ifndef VARIABLES_H
 #define VARIABLES_H
 
-#include <stdbool.h>
 #include <stdio.h>
-#include <time.h>
-
-#include <SDL.h>
+#include <stdbool.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
-
 #include "campo.h"
 #include "constantes.h"
 

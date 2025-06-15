@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <time.h>
 #include "variables.h"
 
 void saveEventGenericLog(const char *text) {

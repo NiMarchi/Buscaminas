@@ -1,6 +1,8 @@
+#include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 #include "impresion.h"
 #include "logs.h"
 #include "variables.h"

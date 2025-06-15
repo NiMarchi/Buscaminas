@@ -1,6 +1,7 @@
+#include <stdio.h>
 #include <stdbool.h>
 #include <SDL_image.h>
-#include "juego.h"
+#include "logs.h"
 #include "variables.h"
 
 // Carga imagen y devuelve superficie.

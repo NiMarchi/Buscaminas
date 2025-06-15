@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <time.h>
 #include <string.h>
 #include "restaurar.h"
 #include "variables.h"
