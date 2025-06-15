@@ -9,6 +9,17 @@
 #include "historial.h"
 #include "restaurar.h"
 
+SDL_Color colorTip = COLOR_TIP, colorTitle = COLOR_TITLE, colorForm = COLOR_FORM, colorButton = COLOR_BUTTON,
+colorSelectInput = COLOR_SEL_INPT, colorAlert = COLOR_ALERT, colorMenuText = COLOR_MENU_TEXT, colorInfo = COLOR_INFO;
+
+int alpha1 = ALPHA_UNSELECTED, alpha2 = ALPHA_UNSELECTED, alpha3 = ALPHA_UNSELECTED, alpha4 = ALPHA_UNSELECTED;
+int centerFieldX = 0, centerFieldY = 0, centerFormTextX = 0, centerFormInputX = 0;
+int lastFrameTime = 0, length = 0, i = 0, j = 0, xi = 0, xf = 0, yi = 0, yf = 0;
+
+char mineRemainingStr[5] = {0}, infoPlayerName[25] = {0}, *aux = NULL, infoTime[25] = TIME_INFO, mineRemainingConcat[25] = MINE_INGAME_INFO;
+
+bool canInteract = false, soundEffectPlayed = false, restoredGame = false, showNoSaveMessage = false;
+
 // Comprueba si el jugador venció el juego.
 bool checkWin(const field_t *f, const field_t *c) {
 	for (int i = 1; i < c->x - 1; i++) {
@@ -47,7 +58,7 @@ void setupStage(const int h, const int m) {
     tile.w = TILE_SIDE_SIZE; // Tamaño del lado del azulejo.
     tile.h = TILE_SIDE_SIZE; // Tamaño del lado del azulejo.
 
-	if (!restored_game) {
+	if (!restoredGame) {
 		f = initField(h, h, m); // Asigna el campo inferior, donde se escribirán las minas y las puntas.
 		c = initCover(h, h); // Asigna el campo superior, donde el jugador se descubrirá.
 		fillFieldEdge(c); // Rellena el campo superior con caracteres de borde.
@@ -59,8 +70,6 @@ void setupStage(const int h, const int m) {
 
 		startTime = time(NULL); // Inicializa el tiempo para el conteo.
 	}
-
-	colorInfo = (SDL_Color)COLOR_INFO; // Asigna el color a las letras de los datos del juego (Como la cantidad de minas y nombre del jugador).
 
 	memset(infoPlayerName, 0, sizeof infoPlayerName); // Borra el array que muestra el nombre del jugador.
 	strcpy(infoPlayerName, PLAYER_NAME_INFO);
@@ -74,15 +83,15 @@ void waitInterval() {
 	if (win || lose) {
 		SDL_Delay(5000); // Espera 5 segundos.
 		Mix_HaltMusic(); // Detiene la música.
-		main_menu_is_running = true; // Vuelve al menú principal.
-		stage_is_running = false; // Finaliza la etapa de juego.
+		mainMenuRunning = true; // Vuelve al menú principal.
+		stageRunning = false; // Finaliza la etapa de juego.
 	}
 }
 
 // Actualiza el estado del juego por cada frame.
 void update() {
     // Calcula el tiempo restante hasta alcanzar el frame objetivo.
-    const int time_to_wait = FRAME_TARGET_TIME - (SDL_GetTicks() - last_frame_time);
+    const int time_to_wait = FRAME_TARGET_TIME - (SDL_GetTicks() - lastFrameTime);
 
     // Si el frame se ejecutó más rápido de lo esperado, espera para mantener una tasa de FPS estable.
     if (time_to_wait > 0 && time_to_wait <= FRAME_TARGET_TIME) {
@@ -90,12 +99,12 @@ void update() {
     }
 
     // Calcula el tiempo transcurrido (delta) entre frames en segundos.
-    last_frame_time = SDL_GetTicks();
+    lastFrameTime = SDL_GetTicks();
 
     // Si el juego está activo y los campos están cargados.
     if (f && c) {
         if (canInteract) {
-            openField(f, c, ij_selected[0], ij_selected[1], ij_selected[2], &mineRemainingInt);
+            openField(f, c, ijSelected[0], ijSelected[1], ijSelected[2], &mineRemainingInt);
         }
 
         // Actualiza el contador de minas restantes como cadena.
@@ -115,7 +124,7 @@ void update() {
 
         // Verifica si el jugador ganó o perdió.
         win = checkWin(f, c);
-        lose = checkLose(f, c, ij_selected);
+        lose = checkLose(f, c, ijSelected);
         canInteract = false;
     }
 
@@ -128,15 +137,12 @@ void update() {
     }
     bgScrollRect1.y += SLIDING_SPEED;
     bgScrollRect2.y += SLIDING_SPEED;
-
-    // Rota el ángulo del renderizado (Decorativo).
-    angle = (angle > 360) ? 0 : angle + 1;
 }
 
 // Procesar la representación de objetos en el juego.
 void render() {
 	// Si el menú principal está ejecutándose.
-	if (main_menu_is_running && !select_menu_is_running && !stage_is_running && !history_menu_is_running) {
+	if (mainMenuRunning && !selectMenuRunning && !stageRunning && !historyMenuRunning) {
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
@@ -165,8 +171,8 @@ void render() {
 			}
 			option = 0;
 			if (clickedL) {
-				main_menu_is_running = false;
-				select_menu_is_running = true;
+				mainMenuRunning = false;
+				selectMenuRunning = true;
 				clickedL = false;
 			}
 		} else if (xm >= menuButtonRect2.x && xm <= menuButtonRect2.x + menuButtonRect2.w && ym >= menuButtonRect2.y && ym <= menuButtonRect2.y + menuButtonRect2.h) {
@@ -178,10 +184,10 @@ void render() {
 			}
 			option = 1;
 			if (clickedL) {
-				game_is_running = false;
-				main_menu_is_running = false;
-				select_menu_is_running = false;
-				stage_is_running = false;
+				gameRunning = false;
+				mainMenuRunning = false;
+				selectMenuRunning = false;
+				stageRunning = false;
 				clickedL = false;
 			}
 		} else if (xm >= menuButtonRect3.x && xm <= menuButtonRect3.x + menuButtonRect3.w && ym >= menuButtonRect3.y && ym <= menuButtonRect3.y + menuButtonRect3.h) {
@@ -194,10 +200,10 @@ void render() {
 			option = 4;
 			if (clickedL) {
 				if (loadGame(&f, &c, paramInput1, elapsedTime, &mineRemainingInt, &h, &m)) {
-					main_menu_is_running = false;
-					select_menu_is_running = false;
-					stage_is_running = true;
-					restored_game = true;
+					mainMenuRunning = false;
+					selectMenuRunning = false;
+					stageRunning = true;
+					restoredGame = true;
 					option = 0;
 					showNoSaveMessage = false;
 					Mix_HaltMusic();
@@ -215,8 +221,8 @@ void render() {
 			}
 			option = 5;
 			if (clickedL) {
-				main_menu_is_running = false;
-				history_menu_is_running = true;
+				mainMenuRunning = false;
+				historyMenuRunning = true;
 				loadHistoryFile("historial.txt");
 				clickedL = false;
 			}
@@ -242,7 +248,7 @@ void render() {
 		}
 
 		SDL_RenderPresent(renderer);
-	} else if (!main_menu_is_running && select_menu_is_running && !stage_is_running && !history_menu_is_running) {
+	} else if (!mainMenuRunning && selectMenuRunning && !stageRunning && !historyMenuRunning) {
 		// Si el menú de selección está en ejecución.
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
@@ -402,8 +408,8 @@ void render() {
 				m = strtol(paramInput3, NULL, 10);
 				if (h >= FIELD_SIZE_MIN && h <= FIELD_SIZE_MAX && m >= MINE_MIN && m <= floor((double)(h * h) / 2)) {
 					mineRemainingInt = m;
-					select_menu_is_running = false;
-					stage_is_running = true;
+					selectMenuRunning = false;
+					stageRunning = true;
 					option = 0;
 					Mix_HaltMusic(); // Detiene la música del menú de fondo.
 				} else {
@@ -413,7 +419,7 @@ void render() {
 		}
 
 		SDL_RenderPresent(renderer);
-	} else if (!main_menu_is_running && !select_menu_is_running && stage_is_running && !history_menu_is_running) {
+	} else if (!mainMenuRunning && !selectMenuRunning && stageRunning && !historyMenuRunning) {
 		// Si el juego se está ejecutando.
 		SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
 		SDL_RenderClear(renderer);
@@ -467,9 +473,9 @@ void render() {
 							Mix_PlayChannel(-1, soundEffectL, 0);
 						}
 						canInteract = true;
-						ij_selected[0] = i;
-						ij_selected[1] = j;
-						ij_selected[2] = OPEN_F;
+						ijSelected[0] = i;
+						ijSelected[1] = j;
+						ijSelected[2] = OPEN_F;
 					}
 					if (clickedR) {
 						saveEventMouseLog("Mouse Click Derecho", i, j);
@@ -478,9 +484,9 @@ void render() {
 							Mix_PlayChannel(-1, soundEffectR, 0);
 						}
 						canInteract = true;
-						ij_selected[0] = i;
-						ij_selected[1] = j;
-						ij_selected[2] = FLAG_F;
+						ijSelected[0] = i;
+						ijSelected[1] = j;
+						ijSelected[2] = FLAG_F;
 					}
 					clickedL = false;
 					clickedR = false;
@@ -550,11 +556,11 @@ void render() {
 			printFinish(renderer, font_main, colorTip, true);
 			free(f); f = NULL;
 			free(c); c = NULL;
-			stage_is_running = false;
+			stageRunning = false;
 			saveEventGenericLog("Fin del Juego");
 			saveHistory(h, m, paramInput1, elapsedTime, "Victoria");
 			deleteSaveGame();
-			restored_game = false;
+			restoredGame = false;
 		}
 		// Si el jugador gana, muestra un cartel de derrota y desvincula los campos superiores e inferiores.
 		if (lose) {
@@ -563,15 +569,15 @@ void render() {
 			printFinish(renderer, font_main, colorTip, false);
 			free(f); f = NULL;
 			free(c); c = NULL;
-			stage_is_running = false;
+			stageRunning = false;
 			saveEventGenericLog("Fin del Juego");
 			saveHistory(h, m, paramInput1, elapsedTime, "Derrota");
 			deleteSaveGame();
-			restored_game = false;
+			restoredGame = false;
 		}
 
 		SDL_RenderPresent(renderer);
-	} else if (!main_menu_is_running && !select_menu_is_running && !stage_is_running && history_menu_is_running) {
+	} else if (!mainMenuRunning && !selectMenuRunning && !stageRunning && historyMenuRunning) {
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 

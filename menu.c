@@ -43,10 +43,10 @@ void setupMainMenu() {
 
 // Función auxiliar para cerrar el juego y salir de todos los estados.
 void handleQuit() {
-	game_is_running = false;
-	main_menu_is_running = false;
-	select_menu_is_running = false;
-	stage_is_running = false;
+	gameRunning = false;
+	mainMenuRunning = false;
+	selectMenuRunning = false;
+	stageRunning = false;
 }
 
 // Función auxiliar para manejar el estado de los botones del mouse.
@@ -66,10 +66,10 @@ void processInput() {
 
 	while (SDL_PollEvent(&event)) {
 		// Determinar en qué estado del juego estamos.
-		const bool in_main_menu = main_menu_is_running && !select_menu_is_running && !stage_is_running && !history_menu_is_running;
-		const bool in_select_menu = !main_menu_is_running && select_menu_is_running && !stage_is_running && !history_menu_is_running;
-		const bool in_stage = !main_menu_is_running && !select_menu_is_running && stage_is_running && !history_menu_is_running;
-		const bool in_history_menu = history_menu_is_running && !main_menu_is_running && !select_menu_is_running && !stage_is_running;
+		const bool in_main_menu = mainMenuRunning && !selectMenuRunning && !stageRunning && !historyMenuRunning;
+		const bool in_select_menu = !mainMenuRunning && selectMenuRunning && !stageRunning && !historyMenuRunning;
+		const bool in_stage = !mainMenuRunning && !selectMenuRunning && stageRunning && !historyMenuRunning;
+		const bool in_history_menu = historyMenuRunning && !mainMenuRunning && !selectMenuRunning && !stageRunning;
 
 		// Estado: Menú principal.
 		if (in_main_menu) {
@@ -77,7 +77,7 @@ void processInput() {
 			showMines = false;
 			resetIJ = true;
 			win = lose = false;
-			ij_selected[0] = ij_selected[1] = ij_selected[2] = 0;
+			ijSelected[0] = ijSelected[1] = ijSelected[2] = 0;
 			counter1 = counter2 = counter3 = formField = 0;
 
 			// Limpiar los campos de entrada.
@@ -95,7 +95,7 @@ void processInput() {
 		switch (event.type) {
 			// Evento: Cierre de ventana.
 			case SDL_QUIT:
-				if (stage_is_running) {
+				if (stageRunning) {
 					saveGame(f, c, paramInput1, elapsedTime, mineRemainingInt);
 				}
 				saveEventGenericLog("Cierre de Ventana");
@@ -107,15 +107,15 @@ void processInput() {
 				switch (event.key.keysym.sym) {
 					// Tecla ESCAPE.
 					case SDLK_ESCAPE:
-						if (stage_is_running) {
+						if (stageRunning) {
 							saveGame(f, c, paramInput1, elapsedTime, mineRemainingInt);
 						}
 						saveEventGenericLog("Tecla Presionada: Escape");
 						if (in_stage) {
 							Mix_HaltMusic(); // Detener música del escenario.
-							main_menu_is_running = true;
-							select_menu_is_running = false;
-							stage_is_running = false;
+							mainMenuRunning = true;
+							selectMenuRunning = false;
+							stageRunning = false;
 
 							// Reproducir música del menú.
 							if (!Mix_PlayingMusic()) {
@@ -123,11 +123,11 @@ void processInput() {
 							}
 						} else if (in_select_menu) {
 							option = 0;
-							main_menu_is_running = true;
-							select_menu_is_running = false;
+							mainMenuRunning = true;
+							selectMenuRunning = false;
 						} else if (in_history_menu) {
-							main_menu_is_running = true;
-							history_menu_is_running = false;
+							mainMenuRunning = true;
+							historyMenuRunning = false;
 						} else {
 							handleQuit();
 						}
@@ -164,13 +164,13 @@ void processInput() {
 						if (in_main_menu) {
 							if (option == 0) {
 								option = 0;
-								main_menu_is_running = false;
-								select_menu_is_running = true;
+								mainMenuRunning = false;
+								selectMenuRunning = true;
 							} else if (option == 1) {
 								handleQuit();
 							} else if (option == 5) {
-								main_menu_is_running = false;
-								history_menu_is_running = true;
+								mainMenuRunning = false;
+								historyMenuRunning = true;
 							}
 						}
 						break;
@@ -192,7 +192,7 @@ void processInput() {
 						break;
 					// Tecla 'T' (Para activar truco).
 					case SDLK_t:
-						if (stage_is_running) {
+						if (stageRunning) {
 							showMines = !showMines;
 						}
 						break;

@@ -2,6 +2,10 @@
 #include <time.h>
 #include "variables.h"
 
+time_t t;
+struct tm *info;
+char buffer[80];
+
 void saveEventGenericLog(const char *text) {
     time(&t);
     info = localtime(&t);
